@@ -185,7 +185,7 @@
     <ClInclude Include="Source\Game.h" />
     <ClInclude Include="Source\KeyInput.h" />
     <ClInclude Include="Source\Level.h" />
-    <ClInclude Include="Source\Math.h" />
+    <ClInclude Include="Source\Math.hpp" />
     <ClInclude Include="Source\Objects\BlockObject.h" />
     <ClInclude Include="Source\Objects\GameObject.h" />
     <ClInclude Include="Source\Objects\PlayerObject.h" />

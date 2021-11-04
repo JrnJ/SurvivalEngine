@@ -1,7 +1,7 @@
 #include "game.h"
 #include "resource_manager.h"
 
-#include "Math.h"
+#include "Math.hpp"
 #include "Razer/ChromaConnect.h"
 
 #include "Renderer/sprite_renderer.h"
@@ -12,7 +12,6 @@
 SpriteRenderer* Renderer;
 PlayerObject* Player;
 ChromaConnect* Chroma;
-//KeyInput* Input;
 
 glm::vec2 MoveDirection;
 

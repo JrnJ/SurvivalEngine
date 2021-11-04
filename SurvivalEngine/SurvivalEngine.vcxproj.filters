@@ -74,7 +74,7 @@
     <ClInclude Include="Source\KeyInput.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math.h">
+    <ClInclude Include="Source\Math.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\resource_manager.h">

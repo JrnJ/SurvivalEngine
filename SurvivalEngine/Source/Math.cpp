@@ -1,4 +1,4 @@
-#include "Math.h"
+#include "Math.hpp"
 
 glm::vec2 Math::Normalize(glm::vec2 vec2)
 {
