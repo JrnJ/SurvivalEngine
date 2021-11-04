@@ -1,6 +1,8 @@
 # SurvivalEngine
 C++ OpenGL 2D Survival Game
 
+Development updates at https://jeroenj.com
+
 [Controls]
 
 W = Up
