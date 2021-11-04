@@ -255,6 +255,8 @@ bool CheckCollision(PlayerObject& player, GameObject& object)
 
 		return true;
 	}
+
+	return false;
 }
 
 void Game::DoCollision(float dt)
