@@ -3,26 +3,23 @@ C++ OpenGL 2D Survival Game
 
 Development updates at https://jeroenj.com
 
-[Controls]
+[Controls]<br>
+// Game Input<br>
+W = Up<br>
+A = Left<br>
+S = Down<br>
+D = Right<br>
 
-W = Up
-
-A = Left
-
-S = Down
-
-D = Right
-
-
-1 -> 9 = Reset Level
-
-[/Controls]
+// General Input<br>
+ESC = Close Game<br>
+1 -> 9 = Reset Level<br>
+[/Controls]<br>
 
 Includes
--glad
--GLFW
--glm
--KHR
+-glad<br>
+-GLFW<br>
+-glm<br>
+-KHR<br>
 
 Libraries
 -glfw3
