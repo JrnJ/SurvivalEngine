@@ -6,9 +6,13 @@ Development updates at https://jeroenj.com
 [Controls]
 
 W = Up
+
 A = Left
+
 S = Down
+
 D = Right
+
 
 1 -> 9 = Reset Level
 
