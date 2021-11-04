@@ -1,11 +1,11 @@
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef GAMEOBJECT_HPP
+#define GAMEOBJECT_HPP
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "../Renderer/texture.h"
-#include "../Renderer/sprite_renderer.h"
+#include "../Renderer/texture.hpp"
+#include "../Renderer/sprite_renderer.hpp"
 
 class GameObject
 {

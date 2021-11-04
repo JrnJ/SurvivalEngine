@@ -1,13 +1,13 @@
-#ifndef RESOURCE_MANAGER_H
-#define RESOURCE_MANAGER_H
+#ifndef RESOURCE_MANAGER_HPP
+#define RESOURCE_MANAGER_HPP
 
 #include <map>
 #include <string>
 
 #include <glad/glad.h>
 
-#include "Renderer/shader.h"
-#include "Renderer/texture.h"
+#include "Renderer/shader.hpp"
+#include "Renderer/texture.hpp"
 
 
 // A static singleton ResourceManager class that hosts several

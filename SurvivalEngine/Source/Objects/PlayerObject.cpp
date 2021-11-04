@@ -1,4 +1,4 @@
-#include "PlayerObject.h"
+#include "PlayerObject.hpp"
 
 PlayerObject::PlayerObject()
 	: Velocity(glm::vec2(0.0f, 0.0f)), Restitution(0.0f), CanJump(false),

@@ -1,8 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Game.h"
-#include "resource_manager.h"
+#include "Game.hpp"
+#include "resource_manager.hpp"
 
 #include <iostream>
 

@@ -1,5 +1,5 @@
-#ifndef CHROMACONNECT_H
-#define CHROMACONNECT_H
+#ifndef CHROMACONNECT_HPP
+#define CHROMACONNECT_HPP
 
 class ChromaConnect
 {

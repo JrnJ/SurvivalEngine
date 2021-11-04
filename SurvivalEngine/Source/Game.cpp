@@ -1,12 +1,12 @@
-#include "game.h"
-#include "resource_manager.h"
+#include "game.hpp"
+#include "resource_manager.hpp"
 
 #include "Math.hpp"
-#include "Razer/ChromaConnect.h"
+#include "Razer/ChromaConnect.hpp"
 
-#include "Renderer/sprite_renderer.h"
-#include "Objects/GameObject.h"
-#include "Objects/PlayerObject.h"
+#include "Renderer/sprite_renderer.hpp"
+#include "Objects/GameObject.hpp"
+#include "Objects/PlayerObject.hpp"
 #include <iostream>
 
 SpriteRenderer* Renderer;

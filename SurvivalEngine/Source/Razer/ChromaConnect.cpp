@@ -1,6 +1,6 @@
 #define USE_ARRAY_EFFECTS true
 
-#include "ChromaConnect.h"
+#include "ChromaConnect.hpp"
 
 #include <iostream>
 #include <tchar.h>

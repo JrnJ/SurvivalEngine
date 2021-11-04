@@ -1,7 +1,7 @@
-#ifndef PLAYEROBJECT_H
-#define PLAYEROBJECT_H
+#ifndef PLAYEROBJECT_HPP
+#define PLAYEROBJECT_HPP
 
-#include "GameObject.h"
+#include "GameObject.hpp"
 
 class PlayerObject : public GameObject
 {

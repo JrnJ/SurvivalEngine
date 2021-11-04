@@ -1,7 +1,7 @@
-#ifndef BLOCKOBJECT_H
-#define BLOCKOBJECT_H
+#ifndef BLOCKOBJECT_HPP
+#define BLOCKOBJECT_HPP
 
-#include "GameObject.h"
+#include "GameObject.hpp"
 
 class BlockObject : public GameObject
 {

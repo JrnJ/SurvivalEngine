@@ -1,14 +1,14 @@
-#ifndef LEVEL_H
-#define LEVEL_H
+#ifndef LEVEL_HPP
+#define LEVEL_HPP
 
 #include <vector>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "Objects/GameObject.h"
-#include "resource_manager.h"
-#include "Renderer/sprite_renderer.h"
+#include "Objects/GameObject.hpp"
+#include "resource_manager.hpp"
+#include "Renderer/sprite_renderer.hpp"
 
 class Level
 {

@@ -1,4 +1,4 @@
-#include "GameObject.h"
+#include "GameObject.hpp"
 
 /// <summary>
 /// Default constructor

@@ -6,8 +6,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Level.h"
-#include "KeyInput.h"
+#include "Level.hpp"
+#include "KeyInput.hpp"
 
 // All Game States
 enum class GameState 

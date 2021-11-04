@@ -182,24 +182,24 @@
     <ClCompile Include="Source\resource_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Game.h" />
-    <ClInclude Include="Source\KeyInput.h" />
-    <ClInclude Include="Source\Level.h" />
+    <ClInclude Include="Source\Game.hpp" />
+    <ClInclude Include="Source\KeyInput.hpp" />
+    <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />
-    <ClInclude Include="Source\Objects\BlockObject.h" />
-    <ClInclude Include="Source\Objects\GameObject.h" />
-    <ClInclude Include="Source\Objects\PlayerObject.h" />
+    <ClInclude Include="Source\Objects\BlockObject.hpp" />
+    <ClInclude Include="Source\Objects\GameObject.hpp" />
+    <ClInclude Include="Source\Objects\PlayerObject.hpp" />
     <ClInclude Include="Source\Razer\ChromaAnimationAPI.h" />
-    <ClInclude Include="Source\Razer\ChromaConnect.h" />
+    <ClInclude Include="Source\Razer\ChromaConnect.hpp" />
     <ClInclude Include="Source\Razer\ChromaSDKPluginTypes.h" />
     <ClInclude Include="Source\Razer\RzChromaSDKDefines.h" />
     <ClInclude Include="Source\Razer\RzChromaSDKTypes.h" />
     <ClInclude Include="Source\Razer\RzErrors.h" />
-    <ClInclude Include="Source\Renderer\shader.h" />
-    <ClInclude Include="Source\Renderer\sprite_renderer.h" />
+    <ClInclude Include="Source\Renderer\shader.hpp" />
+    <ClInclude Include="Source\Renderer\sprite_renderer.hpp" />
     <ClInclude Include="Source\Renderer\stb_image.h" />
-    <ClInclude Include="Source\Renderer\texture.h" />
-    <ClInclude Include="Source\resource_manager.h" />
+    <ClInclude Include="Source\Renderer\texture.hpp" />
+    <ClInclude Include="Source\resource_manager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />

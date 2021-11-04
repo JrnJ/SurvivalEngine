@@ -1,12 +1,12 @@
-#ifndef SPRITE_RENDERER_H
-#define SPRITE_RENDERER_H
+#ifndef SPRITE_RENDERER_HPP
+#define SPRITE_RENDERER_HPP
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "texture.h"
-#include "shader.h"
+#include "texture.hpp"
+#include "shader.hpp"
 
 
 class SpriteRenderer
