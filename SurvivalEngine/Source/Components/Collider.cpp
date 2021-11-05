@@ -1,6 +1,6 @@
 #include "Collider.hpp"
 
-void Collider::Test(std::string text)
+Collider::Collider(int i)
 {
-	std::cout << text << std::endl;
+	std::cout << "Hello!" << std::endl;
 }

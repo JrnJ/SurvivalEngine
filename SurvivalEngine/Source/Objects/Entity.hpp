@@ -6,13 +6,15 @@
 
 class Entity : public GameObject
 {
+private:
+	Collider collider;
+
 public:
 	// Properties
 	glm::vec2 Velocity;
 	float Mass;
 	float Health;
 	float MaxHealth; // GET ONLY!!! - for now :D
-	//Collider Collision;
 
 	// Constructors
 	Entity();
