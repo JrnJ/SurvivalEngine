@@ -163,6 +163,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Objects\CowEntity.cpp" />
+    <ClCompile Include="Source\Objects\Entity.cpp" />
+    <ClCompile Include="Source\Components\Collider.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\KeyInput.cpp" />
@@ -171,7 +174,7 @@
     <ClCompile Include="Source\Math.cpp" />
     <ClCompile Include="Source\Objects\BlockObject.cpp" />
     <ClCompile Include="Source\Objects\GameObject.cpp" />
-    <ClCompile Include="Source\Objects\PlayerObject.cpp" />
+    <ClCompile Include="Source\Objects\PlayerEntity.cpp" />
     <ClCompile Include="Source\Razer\ChromaAnimationAPI.cpp" />
     <ClCompile Include="Source\Razer\ChromaConnect.cpp" />
     <ClCompile Include="Source\Razer\ChromaSDKPluginTypes.cpp" />
@@ -182,13 +185,16 @@
     <ClCompile Include="Source\resource_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Objects\CowEntity.hpp" />
+    <ClInclude Include="Source\Objects\Entity.hpp" />
+    <ClInclude Include="Source\Components\Collider.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />
     <ClInclude Include="Source\Objects\BlockObject.hpp" />
     <ClInclude Include="Source\Objects\GameObject.hpp" />
-    <ClInclude Include="Source\Objects\PlayerObject.hpp" />
+    <ClInclude Include="Source\Objects\PlayerEntity.hpp" />
     <ClInclude Include="Source\Razer\ChromaAnimationAPI.h" />
     <ClInclude Include="Source\Razer\ChromaConnect.hpp" />
     <ClInclude Include="Source\Razer\ChromaSDKPluginTypes.h" />

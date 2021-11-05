@@ -6,11 +6,15 @@
 
 #include "Renderer/sprite_renderer.hpp"
 #include "Objects/GameObject.hpp"
-#include "Objects/PlayerObject.hpp"
+#include "Objects/Entity.hpp"
+#include "Objects/PlayerEntity.hpp"
+#include "Objects/CowEntity.hpp"
+
 #include <iostream>
 
 SpriteRenderer* Renderer;
-PlayerObject* Player;
+PlayerEntity* Player;
+CowEntity* Cow;
 ChromaConnect* Chroma;
 
 glm::vec2 MoveDirection;
@@ -59,7 +63,8 @@ void Game::Init()
 
 	// Load Textures
 	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/background.png", false, "background");
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/block.png", true, "block");
+	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/player.png", true, "player");
+	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/enemy.png", true, "enemy");
 
 	// Texture loading
 	// ID : 0 -> Nothing
@@ -74,7 +79,10 @@ void Game::Init()
 
 	// Configure GameObjects
 	glm::vec2 spawnPos = glm::vec2(BlockSize.x * 2, this->Height - (BlockSize.y * (3 + 3)));
-	Player = new PlayerObject(spawnPos, BlockSize, ResourceManager::GetTexture("block"));
+	Player = new PlayerEntity(spawnPos, BlockSize, ResourceManager::GetTexture("player"));
+
+	glm::vec2 cowSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3 + 3)));
+	Cow = new CowEntity(cowSpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
 }
 
 bool idkk = false;
@@ -86,14 +94,32 @@ void Game::ProcessInput(float dt)
 {
 	if (this->State == GameState::GAME_ACTIVE)
 	{
-		float horizontal = Input.GetAxis(Axis::Horizontal);
-		float vertical = Input.GetAxis(Axis::Vertical);
-		Player->Velocity = glm::vec2(horizontal, vertical) * 300.0f;
+		float horizontal = Input.GetAxisRaw(Axis::Horizontal);
+		float vertical = Input.GetAxisRaw(Axis::Vertical);
+		Player->Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 300.0f;
+
+		float horizontal2 = Input.GetCustomAxisRaw(GLFW_KEY_L, GLFW_KEY_J);
+		float vertical2 = Input.GetCustomAxisRaw(GLFW_KEY_K, GLFW_KEY_I);
+		Cow->Velocity = Math::Normalize(glm::vec2(horizontal2, vertical2)) * 300.0f;
 
 		// Reset Down
 		if (Input.GetKey(GLFW_KEY_1))
 		{
 			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->ResetPlayer();
+			std::cout << "Level Loaded!" << std::endl;
+		}
+
+		if (Input.GetKey(GLFW_KEY_2))
+		{
+			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/line.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->ResetPlayer();
+			std::cout << "Level Loaded!" << std::endl;
+		}
+
+		if (Input.GetKey(GLFW_KEY_3))
+		{
+			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
@@ -111,8 +137,11 @@ void Game::Update(float dt)
 
 	// Move Player based on Velocity
 	Player->Position += Player->Velocity * dt;
+	Cow->Position += Cow->Velocity * dt;
 
 	DoCollision(dt);
+	//Player->Collision.Test("Test");
+	
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
 
@@ -134,6 +163,7 @@ void Game::Render()
 
 		// Layer 2
 		Player->Draw(*Renderer);
+		Cow->Draw(*Renderer);
 	}
 }
 
@@ -197,7 +227,7 @@ bool RectVsRect(GameObject& one, GameObject& two) // Axis Aligned Bounding Box(A
 	return isCollidingX && isCollidingY;
 }
 
-bool DynamicRectVsRect(const PlayerObject& in, const GameObject& target,
+bool DynamicRectVsRect(const Entity& in, const GameObject& target,
 	glm::vec2& contactPoint, glm::vec2& contactNormal, float& contactTime, const float dt)
 {
 	if (in.Velocity == glm::vec2(0.0f, 0.0f))
@@ -215,7 +245,8 @@ bool DynamicRectVsRect(const PlayerObject& in, const GameObject& target,
 	return false;
 }
 
-bool CheckCollision(PlayerObject& player, GameObject& object)
+// Move this to a class and than add to stuff
+bool CheckCollision(Entity& player, GameObject& object)
 {
 	float push = 0.0f;
 

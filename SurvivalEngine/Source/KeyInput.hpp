@@ -37,6 +37,8 @@ public:
 	bool GetKeyDown(int key);
 
 	float GetAxis(Axis axis);
+	float GetAxisRaw(Axis axis);
+	float GetCustomAxisRaw(int negative, int positive);
 };
 
 #endif
