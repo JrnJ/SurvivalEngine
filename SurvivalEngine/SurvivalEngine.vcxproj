@@ -163,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\CameraController.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Objects\CowEntity.cpp" />
     <ClCompile Include="Source\Objects\Entity.cpp" />
     <ClCompile Include="Source\Components\Collider.cpp" />
@@ -185,6 +187,8 @@
     <ClCompile Include="Source\resource_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\CameraController.hpp" />
+    <ClInclude Include="Source\Camera.hpp" />
     <ClInclude Include="Source\Objects\CowEntity.hpp" />
     <ClInclude Include="Source\Objects\Entity.hpp" />
     <ClInclude Include="Source\Components\Collider.hpp" />

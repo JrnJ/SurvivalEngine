@@ -8,6 +8,7 @@
 
 #include "Level.hpp"
 #include "KeyInput.hpp"
+#include "Camera.hpp"
 
 // All Game States
 enum class GameState 
@@ -18,6 +19,9 @@ enum class GameState
 
 class Game
 {
+private:
+
+
 public:
     // Game State
     GameState State;

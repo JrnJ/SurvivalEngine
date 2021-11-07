@@ -14,7 +14,7 @@
 
 SpriteRenderer* Renderer;
 PlayerEntity* Player;
-CowEntity* Cow;
+PlayerEntity* Player2;
 ChromaConnect* Chroma;
 
 glm::vec2 MoveDirection;
@@ -35,6 +35,7 @@ Game::~Game()
 {
 	delete Renderer;
 	delete Player;
+	delete Player2;
 
 	//delete Input;
 	delete Chroma;
@@ -81,8 +82,8 @@ void Game::Init()
 	glm::vec2 spawnPos = glm::vec2(BlockSize.x * 2, this->Height - (BlockSize.y * (3 + 3)));
 	Player = new PlayerEntity(spawnPos, BlockSize, ResourceManager::GetTexture("player"));
 
-	glm::vec2 cowSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3 + 3)));
-	Cow = new CowEntity(cowSpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
+	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3 + 3)));
+	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
 }
 
 bool idkk = false;
@@ -100,7 +101,7 @@ void Game::ProcessInput(float dt)
 
 		float horizontal2 = Input.GetCustomAxisRaw(GLFW_KEY_L, GLFW_KEY_J);
 		float vertical2 = Input.GetCustomAxisRaw(GLFW_KEY_K, GLFW_KEY_I);
-		Cow->Velocity = Math::Normalize(glm::vec2(horizontal2, vertical2)) * 300.0f;
+		Player2->Velocity = Math::Normalize(glm::vec2(horizontal2, vertical2)) * 300.0f;
 
 		// Reset Down
 		if (Input.GetKey(GLFW_KEY_1))
@@ -137,10 +138,9 @@ void Game::Update(float dt)
 
 	// Move Player based on Velocity
 	Player->Position += Player->Velocity * dt;
-	Cow->Position += Cow->Velocity * dt;
+	Player2->Position += Player2->Velocity * dt;
 
 	DoCollision(dt);
-	//Player->Collision.Test("Test");
 	
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
@@ -163,7 +163,7 @@ void Game::Render()
 
 		// Layer 2
 		Player->Draw(*Renderer);
-		Cow->Draw(*Renderer);
+		Player2->Draw(*Renderer);
 	}
 }
 
@@ -172,77 +172,6 @@ void Game::ResetPlayer()
 	// Reset Player
 	Player->Size = BlockSize;
 	Player->Position = glm::vec2(BlockSize.x * 2, this->Height - (BlockSize.y * (3 + 3)));
-}
-
-bool RayVsRect(const glm::vec2& rayOrigin, const glm::vec2& rayDirection, const GameObject& target,
-	glm::vec2& contactPoint, glm::vec2& contactNormal, const float& time_hit_near)
-{
-	glm::vec2 t_near = (target.Position - rayOrigin) / rayDirection;
-	glm::vec2 t_far = (target.Position + target.Size - rayOrigin) / rayDirection;
-
-	if (t_near.x > t_far.x)
-		std::swap(t_near.x, t_far.x);
-	if (t_near.y > t_far.y)
-		std::swap(t_near.y, t_far.y);
-
-	if (t_near.x > t_far.y || t_near.y > t_far.x)
-		return false;
-
-	float t_hit_near = std::max(t_near.x, t_near.y);
-	float t_hit_far = std::min(t_far.x, t_far.y);
-
-	if (t_hit_far < 0.0f)
-		return false;
-
-	contactPoint = rayOrigin + time_hit_near * rayDirection;
-
-	if (t_near.x > t_near.y)
-	{
-		if (rayDirection.x < 0.0f)
-			contactNormal = glm::vec2(1.0f, 0.0f);
-		else
-			contactNormal = glm::vec2(-1.0f, 0.0f);
-
-		//contactNormal = rayDirection.x < 0.0f ? glm::vec2(1.0f, 0.0f) : glm::vec2(-1.0f, 0.0f);
-	}
-	else if (t_near.x < t_near.y)
-	{
-		if (rayDirection.y < 0.0f)
-			contactNormal = glm::vec2(0.0f, 1.0f);
-		else
-			contactNormal = glm::vec2(0.0f, -1.0f);
-	}
-
-	return true;
-}
-
-// Static?
-bool RectVsRect(GameObject& one, GameObject& two) // Axis Aligned Bounding Box(AABB) both ways
-{
-	// Check for collision
-	bool isCollidingX = one.Position.x + one.Size.x >= two.Position.x && two.Position.x + two.Size.x >= one.Position.x;
-	bool isCollidingY = one.Position.y + one.Size.y >= two.Position.y && two.Position.y + two.Size.x >= one.Position.y;
-
-	// Return true if both are true
-	return isCollidingX && isCollidingY;
-}
-
-bool DynamicRectVsRect(const Entity& in, const GameObject& target,
-	glm::vec2& contactPoint, glm::vec2& contactNormal, float& contactTime, const float dt)
-{
-	if (in.Velocity == glm::vec2(0.0f, 0.0f))
-		return false;
-
-	GameObject expanded_target;
-	expanded_target.Position = target.Position - in.Size / 2.0f;
-	expanded_target.Size = target.Size + in.Size;
-
-	if (RayVsRect(in.Position + in.Size / 2.0f, in.Velocity * dt, expanded_target, contactPoint, contactNormal, contactTime))
-	{
-		return (contactTime >= 0.0f && contactTime < 1.0f);
-	}
-
-	return false;
 }
 
 // Move this to a class and than add to stuff
@@ -265,22 +194,22 @@ bool CheckCollision(Entity& player, GameObject& object)
 		{
 			if (deltaX > 0.0f)
 			{
-				Player->Position += glm::vec2(intersectX* (1.0f - push), 0.0f);
+				player.Position += glm::vec2(intersectX* (1.0f - push), 0.0f);
 			}
 			else
 			{
-				Player->Position += glm::vec2(-intersectX * (1.0f - push), 0.0f);
+				player.Position += glm::vec2(-intersectX * (1.0f - push), 0.0f);
 			}
 		}
 		else
 		{
 			if (deltaY > 0.0f)
 			{
-				Player->Position += glm::vec2(0.0f, intersectY * (1.0f - push));
+				player.Position += glm::vec2(0.0f, intersectY * (1.0f - push));
 			}
 			else
 			{
-				Player->Position += glm::vec2(0.0f, -intersectY * (1.0f - push));
+				player.Position += glm::vec2(0.0f, -intersectY * (1.0f - push));
 			}
 		}
 
@@ -294,31 +223,21 @@ void Game::DoCollision(float dt)
 {
 	int i = 0;
 
-	/*glm::vec2 cp = glm::vec2(0.0f, 0.0f);
-	glm::vec2 cn = glm::vec2(0.0f, 0.0f);
-	float ct = 0.0f;*/
-
 	for (GameObject& block : CurrentLevel.Blocks)
 	{
-		CheckCollision(*Player, block);
-		//if (DynamicRectVsRect(*Player, block, cp, cn, ct, dt))
-		//{
-		//	//std::cout << "Collision" << std::endl;
-		//	
-		//	Player->Velocity += cn * glm::vec2(std::abs(Player->Velocity.x), std::abs(Player->Velocity.y)) * (1.0f - ct);
-		//	// 43:50 => Collision not working properly
-		//	i++;
-		//}
+		/*Player->Collision.DoCollision(block);
+		Player2->Collision.DoCollision(block);*/
 
-		//Player->Position += Player->Velocity * dt;
+		CheckCollision(*Player, block);
+		CheckCollision(*Player2, block);
 	}
 
-	if (i > 0)
+	/*if (i > 0)
 	{
 		Player->Color = glm::vec3(1.0f, 0.0f, 0.0f);
 	}
 	else
 	{
 		Player->Color = glm::vec3(1.0f, 1.0f, 1.0f);
-	}
+	}*/
 }

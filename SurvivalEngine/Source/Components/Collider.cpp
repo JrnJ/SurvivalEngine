@@ -1,6 +1,11 @@
 #include "Collider.hpp"
 
-Collider::Collider(int i)
+Collider::Collider()
+{
+	
+}
+
+void Collider::DoCollision(GameObject& target)
 {
 	std::cout << "Hello!" << std::endl;
 }

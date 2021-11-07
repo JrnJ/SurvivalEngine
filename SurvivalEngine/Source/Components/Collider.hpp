@@ -2,12 +2,19 @@
 #define COLLIDER_HPP
 
 #include <iostream>
-#include <string>
+#include "../Objects/GameObject.hpp"
 
 class Collider
 {
 public:
-	Collider(int i);
+	// Properties
+	//GameObject Self;
+
+	// Constructor
+	Collider();
+
+	// Methods
+	void DoCollision(GameObject& target);
 };
 
 #endif
