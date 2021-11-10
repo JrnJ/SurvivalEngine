@@ -19,9 +19,6 @@ enum class GameState
 
 class Game
 {
-private:
-
-
 public:
     // Game State
     GameState State;
@@ -49,6 +46,9 @@ public:
     // Player
     void ResetPlayer();
     void DoCollision(float dt);
+
+private:
+    Camera _camera;
 };
 
 #endif

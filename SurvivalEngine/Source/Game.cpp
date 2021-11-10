@@ -9,6 +9,7 @@
 #include "Objects/Entity.hpp"
 #include "Objects/PlayerEntity.hpp"
 #include "Objects/CowEntity.hpp"
+#include "Inventory/Inventory.hpp"
 
 #include <iostream>
 
@@ -16,6 +17,7 @@ SpriteRenderer* Renderer;
 PlayerEntity* Player;
 PlayerEntity* Player2;
 ChromaConnect* Chroma;
+Inventory* PlayerInventory;
 
 glm::vec2 MoveDirection;
 
@@ -23,7 +25,8 @@ glm::vec2 MoveDirection;
 /// Constructor for Game class
 /// </summary>
 Game::Game(unsigned int width, unsigned int height)
-	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f)
+	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f), 
+		_camera(-1.6f, 1.6f, -0.9f, 0.9f)
 {
 	
 }
@@ -37,8 +40,8 @@ Game::~Game()
 	delete Player;
 	delete Player2;
 
-	//delete Input;
 	delete Chroma;
+	delete PlayerInventory;
 }
 
 /// <summary>
@@ -57,6 +60,7 @@ void Game::Init()
 		static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
+	//ResourceManager::GetShader("sprite").SetMatrix4("projection", _camera.GetViewProjectionMatrix());
 
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
@@ -84,6 +88,9 @@ void Game::Init()
 
 	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3 + 3)));
 	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
+
+	// Inventory
+	PlayerInventory = new Inventory(3, {1, 2, 3});
 }
 
 bool idkk = false;
@@ -124,6 +131,11 @@ void Game::ProcessInput(float dt)
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
+
+		if (Input.GetKey(GLFW_KEY_R))
+		{
+			PlayerInventory->DisplayInventory();
+		}
 	}
 }
 
@@ -134,7 +146,10 @@ void Game::ProcessInput(float dt)
 void Game::Update(float dt)
 {
 	// Chroma
-	Chroma->SingleColor();
+	if (Chroma->ChromaEnabled)
+	{
+		Chroma->Test();
+	}
 
 	// Move Player based on Velocity
 	Player->Position += Player->Velocity * dt;

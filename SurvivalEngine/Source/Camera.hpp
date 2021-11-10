@@ -7,6 +7,7 @@ class Camera
 {
 public:
 	// Constrcutor
+	// takes in the 4 floats for a matrix
 	Camera(float left, float right, float bottom, float top);
 
 	// Methods

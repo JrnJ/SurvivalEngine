@@ -6,16 +6,16 @@
 #include <tchar.h>
 #include <array>
 
-#include "ChromaAnimationAPI.h"
-#include "ChromaSDKPluginTypes.h"
-#include "RzChromaSDKDefines.h"
-#include "RzChromaSDKTypes.h"
-#include "RzErrors.h"
-
 // Statics maybe change later to be in .h
 static ChromaSDK::FChromaSDKScene _sScene;
 
-static int _sAmbientColor = 0;
+// Uhh
+int* colorsChromaLink;
+int* colorsHeadset;
+int* colorsKeyboard;
+int* colorsKeypad;
+int* colorsMouse;
+int* colorsMousepad;
 
 ChromaConnect::ChromaConnect(bool initialize)
 	: ChromaEnabled(true)
@@ -41,6 +41,13 @@ ChromaConnect::~ChromaConnect()
 		{
 			std::cout << "Failed to uninitialize ChromaAnimationAPI!" << std::endl;
 		}
+
+		delete colorsChromaLink;
+		delete colorsHeadset;
+		delete colorsKeyboard;
+		delete colorsKeypad;
+		delete colorsMouse;
+		delete colorsMousepad;
 	}
 }
 
@@ -62,8 +69,8 @@ void ChromaConnect::Init()
 
 		ChromaSDK::APPINFOTYPE appInfo = {};
 
-		_tcscpy_s(appInfo.Title, 256, _T("Platformer Engine"));
-		_tcscpy_s(appInfo.Description, 1024, _T("Platformer Engine made in C++"));
+		_tcscpy_s(appInfo.Title, 256, _T("Survival Engine"));
+		_tcscpy_s(appInfo.Description, 1024, _T("Survival Engine made in C++"));
 		_tcscpy_s(appInfo.Author.Name, 256, _T("Jeroen"));
 		_tcscpy_s(appInfo.Author.Contact, 256, _T("https://jeroenj.com"));
 
@@ -83,16 +90,25 @@ void ChromaConnect::Init()
 		{
 			// This is akward lol
 			Sleep(100);
+
+			// Setup variables
+			_sizeChromaLink = GetColorArraySize1D(ChromaSDK::EChromaSDKDevice1DEnum::DE_ChromaLink);
+			_sizeHeadset = GetColorArraySize1D(ChromaSDK::EChromaSDKDevice1DEnum::DE_Headset);
+			_sizeKeyboard = GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard);
+			_sizeKeypad = GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum::DE_Keypad);
+			_sizeMouse = GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum::DE_Mouse);
+			_sizeMousepad = GetColorArraySize1D(ChromaSDK::EChromaSDKDevice1DEnum::DE_Mousepad);
+
+			colorsChromaLink = new int[_sizeChromaLink];
+			colorsHeadset = new int[_sizeHeadset];
+			colorsKeyboard = new int[_sizeKeyboard];
+			colorsKeypad = new int[_sizeKeypad];
+			colorsMouse = new int[_sizeMouse];
+			colorsMousepad = new int[_sizeMousepad];
+
 			std::cout << "Succesfully initialized ChromaConnect" << std::endl << std::endl;
 		}
 	}
-}
-
-const int GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum device)
-{
-	const int maxRow = ChromaSDK::ChromaAnimationAPI::GetMaxRow((int)device);
-	const int maxColumn = ChromaSDK::ChromaAnimationAPI::GetMaxColumn((int)device);
-	return maxRow * maxColumn;
 }
 
 /// <summary>
@@ -104,17 +120,64 @@ void ChromaConnect::SetActive(bool state)
 
 }
 
-void ChromaConnect::SingleColor(/*int* colors, int color, int size*/)
+const int ChromaConnect::GetColorArraySize1D(ChromaSDK::EChromaSDKDevice1DEnum device)
 {
-	if (this->ChromaEnabled)
-	{
-		const int sizeKeyboard = GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard);
-		int* colorsKeyboard = new int[sizeKeyboard];
-		int* tempColorsKeyboard = new int[sizeKeyboard];
+	const int maxLeds = ChromaSDK::ChromaAnimationAPI::GetMaxLeds((int)device);
+	return maxLeds;
+}
 
-		for (int i = 0; i < sizeKeyboard; ++i)
-		{
-			colorsKeyboard[i] = _sAmbientColor;
-		}
+const int ChromaConnect::GetColorArraySize2D(ChromaSDK::EChromaSDKDevice2DEnum device)
+{
+	const int maxRow = ChromaSDK::ChromaAnimationAPI::GetMaxRow((int)device);
+	const int maxColumn = ChromaSDK::ChromaAnimationAPI::GetMaxColumn((int)device);
+	return maxRow * maxColumn;
+}
+
+int ChromaConnect::GetKeyColorIndex(int row, int column)
+{
+	return ChromaSDK::Keyboard::MAX_COLUMN * row + column;
+}
+
+void ChromaConnect::SetKeyColor(int* colors, int rzkey, int color)
+{
+	int row = HIBYTE(rzkey);
+	int column = LOBYTE(rzkey);
+	colors[ChromaConnect::GetKeyColorIndex(row, column)] = color;
+}
+
+void ChromaConnect::SetStaticColor(int* colors, int color, int size)
+{
+	for (int i = 0; i < size; ++i)
+	{
+		colors[i] = color;
 	}
+}
+
+void ChromaConnect::Test()
+{
+	SetStaticColor(colorsKeyboard, _sAmbientColor, _sizeKeyboard);
+
+	// Get needed keys
+	int keys[] = {
+		ChromaSDK::Keyboard::RZKEY::RZKEY_W,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_S,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_A,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_D,
+
+		ChromaSDK::Keyboard::RZKEY::RZKEY_1,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_3
+	};
+	int keysLength = sizeof(keys) / sizeof(int);
+
+	// Loop through keys
+	for (int i = 0; i < keysLength; i++)
+	{
+		int color = ChromaSDK::ChromaAnimationAPI::GetRGB(0, 255, 255);
+		int key = keys[i];
+		SetKeyColor(colorsKeyboard, key, color);
+		ChromaConnect::SetKeyColor(colorsKeyboard, key, color);
+	}
+
+	ChromaSDK::ChromaAnimationAPI::SetCustomColorFlag2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
+	ChromaSDK::ChromaAnimationAPI::SetEffectKeyboardCustom2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
 }
