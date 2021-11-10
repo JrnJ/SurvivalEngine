@@ -187,6 +187,8 @@
     <ClCompile Include="Source\Renderer\stb_image.cpp" />
     <ClCompile Include="Source\Renderer\texture.cpp" />
     <ClCompile Include="Source\resource_manager.cpp" />
+    <ClCompile Include="Source\Items\Tools\Axes\StoneAxe.cpp" />
+    <ClCompile Include="Source\Items\Tools\ToolItem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Items\Item.hpp" />
@@ -214,6 +216,8 @@
     <ClInclude Include="Source\Renderer\stb_image.h" />
     <ClInclude Include="Source\Renderer\texture.hpp" />
     <ClInclude Include="Source\resource_manager.hpp" />
+    <ClInclude Include="Source\Items\Tools\Axes\StoneAxe.hpp" />
+    <ClInclude Include="Source\Items\Tools\ToolItem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />

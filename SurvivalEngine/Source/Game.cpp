@@ -11,6 +11,8 @@
 #include "Objects/CowEntity.hpp"
 #include "Inventory/Inventory.hpp"
 
+#include "Items/Tools/Axes/StoneAxe.hpp"
+
 #include <iostream>
 
 SpriteRenderer* Renderer;
@@ -90,7 +92,7 @@ void Game::Init()
 	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
 
 	// Inventory
-	PlayerInventory = new Inventory(3, {1, 2, 3});
+	PlayerInventory = new Inventory(1, { new StoneAxe()});
 }
 
 bool idkk = false;
@@ -135,6 +137,11 @@ void Game::ProcessInput(float dt)
 		if (Input.GetKey(GLFW_KEY_R))
 		{
 			PlayerInventory->DisplayInventory();
+		}
+
+		if (Input.GetKey(GLFW_KEY_M))
+		{
+			PlayerInventory->Slots[0]->LeftClick();
 		}
 	}
 }

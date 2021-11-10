@@ -1,6 +1,7 @@
 #ifndef ITEM_HPP
 #define ITEM_HPP
 
+#include <iostream>
 #include <string>
 
 class Item
@@ -13,6 +14,10 @@ public:
 
 	// Constructor
 	Item(std::string name, std::string id, std::string spritePath);
+
+	// Methods
+	virtual void LeftClick();
 };
+
 
 #endif

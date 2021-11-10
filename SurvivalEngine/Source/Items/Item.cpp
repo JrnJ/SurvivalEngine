@@ -5,3 +5,8 @@ Item::Item(std::string name, std::string id, std::string spritePath)
 {
 
 }
+
+void Item::LeftClick()
+{
+	std::cout << "Item" << std::endl;
+}
