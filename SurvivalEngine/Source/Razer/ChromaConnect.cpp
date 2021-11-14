@@ -153,10 +153,19 @@ void ChromaConnect::SetStaticColor(int* colors, int color, int size)
 	}
 }
 
-void ChromaConnect::Test()
+void ChromaConnect::Clear()
 {
 	SetStaticColor(colorsKeyboard, _sAmbientColor, _sizeKeyboard);
+}
 
+void ChromaConnect::Draw()
+{
+	ChromaSDK::ChromaAnimationAPI::SetCustomColorFlag2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
+	ChromaSDK::ChromaAnimationAPI::SetEffectKeyboardCustom2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard); SetStaticColor(colorsKeyboard, _sAmbientColor, _sizeKeyboard);
+}
+
+void ChromaConnect::Test()
+{
 	// Get needed keys
 	int keys[] = {
 		ChromaSDK::Keyboard::RZKEY::RZKEY_W,
@@ -164,20 +173,44 @@ void ChromaConnect::Test()
 		ChromaSDK::Keyboard::RZKEY::RZKEY_A,
 		ChromaSDK::Keyboard::RZKEY::RZKEY_D,
 
-		ChromaSDK::Keyboard::RZKEY::RZKEY_1,
-		ChromaSDK::Keyboard::RZKEY::RZKEY_3
+		ChromaSDK::Keyboard::RZKEY::RZKEY_F1,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_F2
 	};
 	int keysLength = sizeof(keys) / sizeof(int);
 
 	// Loop through keys
-	for (int i = 0; i < keysLength; i++)
+	for (int i = 0; i < keysLength; ++i)
 	{
 		int color = ChromaSDK::ChromaAnimationAPI::GetRGB(0, 255, 255);
 		int key = keys[i];
-		SetKeyColor(colorsKeyboard, key, color);
 		ChromaConnect::SetKeyColor(colorsKeyboard, key, color);
 	}
+}
 
-	ChromaSDK::ChromaAnimationAPI::SetCustomColorFlag2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
-	ChromaSDK::ChromaAnimationAPI::SetEffectKeyboardCustom2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
+void ChromaConnect::Inventory(int selectedKey)
+{
+	// Get needed keys
+	int keys[] = {
+		ChromaSDK::Keyboard::RZKEY::RZKEY_1,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_2,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_3,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_4,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_5,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_6,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_7,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_8,
+		ChromaSDK::Keyboard::RZKEY::RZKEY_9
+	};
+	int keysLength = sizeof(keys) / sizeof(int);
+
+	// Loop through keys
+	for (int i = 0; i < keysLength; ++i)
+	{
+		int color = ChromaSDK::ChromaAnimationAPI::GetRGB(0, 255, 255);
+		if (i == selectedKey)
+			color = ChromaSDK::ChromaAnimationAPI::GetRGB(255, 255, 255);
+
+		int key = keys[i];
+		ChromaConnect::SetKeyColor(colorsKeyboard, key, color);
+	}
 }

@@ -23,7 +23,11 @@ public:
 	void SetActive(bool state);
 
 	// Methods
+	void Clear();
+	void Draw();
+
 	void Test();
+	void Inventory(int selectedKey);
 
 private:
 	static const int _sAmbientColor = 0;

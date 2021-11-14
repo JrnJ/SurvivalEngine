@@ -163,10 +163,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Items\Materials\MaterialItem.cpp" />
     <ClCompile Include="Source\Items\Item.cpp" />
     <ClCompile Include="Source\Inventory\Inventory.cpp" />
     <ClCompile Include="Source\CameraController.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Items\Items.hpp" />
     <ClCompile Include="Source\Objects\CowEntity.cpp" />
     <ClCompile Include="Source\Objects\Entity.cpp" />
     <ClCompile Include="Source\Components\Collider.cpp" />
@@ -189,8 +191,11 @@
     <ClCompile Include="Source\resource_manager.cpp" />
     <ClCompile Include="Source\Items\Tools\Axes\StoneAxe.cpp" />
     <ClCompile Include="Source\Items\Tools\ToolItem.cpp" />
+    <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Items\Materials\MaterialItem.hpp" />
+    <ClInclude Include="Source\Inventory\PlayerInventory.hpp" />
     <ClInclude Include="Source\Items\Item.hpp" />
     <ClInclude Include="Source\Inventory\Inventory.hpp" />
     <ClInclude Include="Source\CameraController.hpp" />
@@ -218,6 +223,7 @@
     <ClInclude Include="Source\resource_manager.hpp" />
     <ClInclude Include="Source\Items\Tools\Axes\StoneAxe.hpp" />
     <ClInclude Include="Source\Items\Tools\ToolItem.hpp" />
+    <ClInclude Include="Source\Items\Materials\Stone\Stone.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />

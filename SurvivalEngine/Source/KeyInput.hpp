@@ -18,7 +18,8 @@ enum class KeyCode
 enum class Axis
 {
 	Horizontal, 
-	Vertical
+	Vertical,
+	MouseScrollWheel
 };
 
 class KeyInput
@@ -28,14 +29,27 @@ public:
 	bool Keys[1024];
 	bool PressedKeys[1024];
 
+	bool MouseButtons[1024];
+	bool PressedMouseButtons[1024];
+
+	double ScrollX;
+	double ScrollY;
+
 	// Constructor
 	KeyInput();
 
 	// Methods
+	// Keyboard
 	bool GetKey(int key);
-	bool GetKeyUp(int key);
 	bool GetKeyDown(int key);
+	bool GetKeyUp(int key);
 
+	// Mouse
+	bool GetMouseButton(int button);
+	bool GetMouseButtonDown(int button);
+	bool GetMouseButtonUp(int button);
+
+	// Axis
 	float GetAxis(Axis axis);
 	float GetAxisRaw(Axis axis);
 	float GetCustomAxisRaw(int negative, int positive);

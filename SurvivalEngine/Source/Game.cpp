@@ -9,9 +9,9 @@
 #include "Objects/Entity.hpp"
 #include "Objects/PlayerEntity.hpp"
 #include "Objects/CowEntity.hpp"
-#include "Inventory/Inventory.hpp"
 
-#include "Items/Tools/Axes/StoneAxe.hpp"
+// Also includes all items
+#include "Inventory/PlayerInventory.hpp"
 
 #include <iostream>
 
@@ -19,9 +19,10 @@ SpriteRenderer* Renderer;
 PlayerEntity* Player;
 PlayerEntity* Player2;
 ChromaConnect* Chroma;
-Inventory* PlayerInventory;
+PlayerInventory* Inventory;
 
 glm::vec2 MoveDirection;
+int SelectedHotbarSlot = 0;
 
 /// <summary>
 /// Constructor for Game class
@@ -43,7 +44,9 @@ Game::~Game()
 	delete Player2;
 
 	delete Chroma;
-	delete PlayerInventory;
+	delete Inventory;
+
+	std::cout << "Game Deconstrcuted!" << std::endl;
 }
 
 /// <summary>
@@ -52,7 +55,7 @@ Game::~Game()
 void Game::Init()
 {
 	// Initialize Razer ChromaConnect
-	Chroma = new ChromaConnect(false);
+	Chroma = new ChromaConnect(true);
 
 	// Load Shaders
 	ResourceManager::LoadShader("C:/Dev/Resources/SurvivalEngine/shaders/sprite.vs", "C:/Dev/Resources/SurvivalEngine/shaders/sprite.fs", nullptr, "sprite");
@@ -92,7 +95,7 @@ void Game::Init()
 	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
 
 	// Inventory
-	PlayerInventory = new Inventory(1, { new StoneAxe()});
+	Inventory = new PlayerInventory();
 }
 
 bool idkk = false;
@@ -113,36 +116,57 @@ void Game::ProcessInput(float dt)
 		Player2->Velocity = Math::Normalize(glm::vec2(horizontal2, vertical2)) * 300.0f;
 
 		// Reset Down
-		if (Input.GetKey(GLFW_KEY_1))
+		if (Input.GetKeyDown(GLFW_KEY_F1))
 		{
 			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
-		if (Input.GetKey(GLFW_KEY_2))
-		{
-			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/line.txt", glm::vec2(this->Width, this->Height), BlockSize);
-			this->ResetPlayer();
-			std::cout << "Level Loaded!" << std::endl;
-		}
-
-		if (Input.GetKey(GLFW_KEY_3))
+		if (Input.GetKeyDown(GLFW_KEY_F2))
 		{
 			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
-		if (Input.GetKey(GLFW_KEY_R))
+		// Inventory
+
+		// Show all things needed for ivenntory idk really
+		if (Input.GetKeyDown(GLFW_KEY_E))
 		{
-			PlayerInventory->DisplayInventory();
+			Inventory->DisplayInventory();
 		}
 
-		if (Input.GetKey(GLFW_KEY_M))
-		{
-			PlayerInventory->Slots[0]->LeftClick();
-		}
+		// Check for Inventory things
+		if (Input.GetKeyDown(GLFW_KEY_1))
+			SelectedHotbarSlot = 0;
+		if (Input.GetKeyDown(GLFW_KEY_2))
+			SelectedHotbarSlot = 1;
+		if (Input.GetKeyDown(GLFW_KEY_3))
+			SelectedHotbarSlot = 2;
+		if (Input.GetKeyDown(GLFW_KEY_4))
+			SelectedHotbarSlot = 3;
+		if (Input.GetKeyDown(GLFW_KEY_5))
+			SelectedHotbarSlot = 4;
+		if (Input.GetKeyDown(GLFW_KEY_6))
+			SelectedHotbarSlot = 5;
+		if (Input.GetKeyDown(GLFW_KEY_7))
+			SelectedHotbarSlot = 6;
+		if (Input.GetKeyDown(GLFW_KEY_8))
+			SelectedHotbarSlot = 7;
+		if (Input.GetKeyDown(GLFW_KEY_9))
+			SelectedHotbarSlot = 8;
+
+		// Got to reset to 0 if not scrolling idk how tbh
+		if (Input.GetAxisRaw(Axis::MouseScrollWheel) > 0)
+			SelectedHotbarSlot = SelectedHotbarSlot <= 0 ? 8 : SelectedHotbarSlot - 1;
+		else if (Input.GetAxisRaw(Axis::MouseScrollWheel) < 0)
+			SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
+
+		if (Input.GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
+			if (Inventory->Slots[SelectedHotbarSlot] != NULL)
+				Inventory->Slots[SelectedHotbarSlot]->LeftClick();
 	}
 }
 
@@ -155,7 +179,14 @@ void Game::Update(float dt)
 	// Chroma
 	if (Chroma->ChromaEnabled)
 	{
+		// Clear lights first
+		Chroma->Clear();
+
 		Chroma->Test();
+		Chroma->Inventory(SelectedHotbarSlot);
+
+		// Draw changes last
+		Chroma->Draw();
 	}
 
 	// Move Player based on Velocity

@@ -9,6 +9,8 @@
 // GLFW function declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 const unsigned int SCREEN_WIDTH = 1280;
 const unsigned int SCREEN_HEIGHT = 720;
@@ -55,9 +57,11 @@ int main(int argc, char* argv[])
 	}
 	std::cout << "Window created succesfully" << std::endl;
 
-	// Set GLFW functions
-	glfwSetKeyCallback(window, key_callback);
+	// Set GLFW callbacks
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetKeyCallback(window, key_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 
 	// Configurate OpenGL
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -87,12 +91,15 @@ int main(int argc, char* argv[])
 
 		// Update
 		Survival.Update(deltaTime);
-		//std::cout << "A Key: " << Input::GetKey(KeyCode::A) << std::endl;
 
 		// Render
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		Survival.Render();
+
+		// Reset scrollwheel
+		Survival.Input.ScrollX = 0;
+		Survival.Input.ScrollY = 0;
 
 		glfwSwapBuffers(window);
 	}
@@ -105,6 +112,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+// GLFW Callbacks
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	// make sure the viewport matches the new window dimensions; note that width and 
@@ -118,6 +126,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	// Keyboard
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
@@ -130,4 +139,27 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			Survival.Input.PressedKeys[key] = false;
 		}
 	}
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button >= 0 && button < 1024)
+	{
+		if (action == GLFW_PRESS)
+		{
+			Survival.Input.MouseButtons[button] = true;
+		}
+		else if (action == GLFW_RELEASE)
+		{
+			Survival.Input.MouseButtons[button] = false;
+			Survival.Input.PressedMouseButtons[button] = false;
+		}
+	}
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	// Mouse Scrollwheel
+	Survival.Input.ScrollX = xoffset;
+	Survival.Input.ScrollY = yoffset;
 }

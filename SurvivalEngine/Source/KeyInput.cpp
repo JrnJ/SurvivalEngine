@@ -5,12 +5,27 @@
 #include <iostream>
 
 KeyInput::KeyInput()
-	: Keys(), PressedKeys()
+	: Keys(), PressedKeys(), ScrollX(0), ScrollY(0), MouseButtons(), PressedMouseButtons()
 {
 
 }
 
+/// <summary>
+/// Returns the state of pressed key
+/// </summary>
+/// <param name="key">Key to check for</param>
+/// <returns></returns>
 bool KeyInput::GetKey(int key)
+{
+	return this->Keys[key];
+}
+
+/// <summary>
+/// Returns the state of the pressed key, if true the key has to be released to return true again
+/// </summary>
+/// <param name="key">Key to check for</param>
+/// <returns></returns>
+bool KeyInput::GetKeyDown(int key)
 {
 	if (this->Keys[key] && !PressedKeys[key])
 	{
@@ -25,10 +40,28 @@ bool KeyInput::GetKeyUp(int key)
 	return false;
 }
 
-bool KeyInput::GetKeyDown(int key)
+
+
+bool KeyInput::GetMouseButton(int button)
 {
-	return this->Keys[key];
+	return this->MouseButtons[button];
 }
+
+bool KeyInput::GetMouseButtonDown(int button)
+{
+	if (this->MouseButtons[button] && !PressedMouseButtons[button])
+	{
+		PressedMouseButtons[button] = true;
+		return true;
+	} return false;
+}
+
+bool KeyInput::GetMouseButtonUp(int button)
+{
+	std::cout << "Not Working!" << std::endl;
+	return false;
+}
+// Mouse //
 
 float KeyInput::GetAxis(Axis axis)
 {
@@ -53,12 +86,14 @@ float KeyInput::GetAxisRaw(Axis axis)
 	{
 		case Axis::Horizontal:
 			return 
-				(float)std::max((int)GetKeyDown(GLFW_KEY_D), (int)GetKeyDown(GLFW_KEY_RIGHT)) - 
-				(float)std::max((int)GetKeyDown(GLFW_KEY_A), (int)GetKeyDown(GLFW_KEY_LEFT));
+				(float)std::max((int)GetKey(GLFW_KEY_D), (int)GetKey(GLFW_KEY_RIGHT)) -
+				(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT));
 		case Axis::Vertical:
 			return
-				(float)std::max((int)GetKeyDown(GLFW_KEY_S), (int)GetKeyDown(GLFW_KEY_DOWN)) -
-				(float)std::max((int)GetKeyDown(GLFW_KEY_W), (int)GetKeyDown(GLFW_KEY_UP));
+				(float)std::max((int)GetKey(GLFW_KEY_S), (int)GetKey(GLFW_KEY_DOWN)) - 
+				(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP));
+		case Axis::MouseScrollWheel:
+			return (float)ScrollY;
 		default:
 			std::cout << "Axis not added" << std::endl;
 			break;

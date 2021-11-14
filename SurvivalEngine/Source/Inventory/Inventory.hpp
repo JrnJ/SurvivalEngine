@@ -1,7 +1,7 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
 
-#include "../Items/Item.hpp"
+#include "../Items/Items.hpp"
 #include <vector>
 
 class Inventory
