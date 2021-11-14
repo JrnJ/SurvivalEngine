@@ -7,7 +7,7 @@ class ToolItem : public Item
 {
 public:
 	// Constructor
-	ToolItem(std::string name, std::string id, std::string spritePath,
+	ToolItem(std::string name, std::string id, std::string spritePath, int maxItemStack, 
 		int maxDurability, int durability);
 
 	// Overrides

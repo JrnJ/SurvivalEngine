@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Inventory::Inventory(int slotAmount, std::vector<Item*> slots)
+Inventory::Inventory(int slotAmount, std::vector<ItemInstance*> slots)
 	: SlotAmount(slotAmount), Slots(slots)
 {
 	
@@ -13,9 +13,16 @@ Inventory::Inventory(int slotAmount, std::vector<Item*> slots)
 /// </summary>
 /// <param name="item">Item to add</param>
 /// <param name="amount">Amount of item</param>
-void Inventory::AddItem(Item item, int amount)
+void Inventory::AddItem(ItemInstance* itemInstance)
 {
-	 
+	for (int i = 0; i < SlotAmount; i++)
+	{
+		if (Slots[i] == NULL)
+		{
+			Slots[i] = itemInstance;
+			return;
+		}
+	}
 }
 
 /// <summary>
@@ -23,7 +30,7 @@ void Inventory::AddItem(Item item, int amount)
 /// </summary>
 /// <param name="item">Item to set</param>
 /// <param name="amount">Amount of item</param>
-void Inventory::SetItemAt(Item item, int amount)
+void Inventory::SetItemAt(ItemInstance* itemInstance)
 {
 
 }
@@ -50,9 +57,12 @@ void Inventory::RemoveAmountFromItem(int index, int amount)
 void Inventory::DisplayInventory()
 {
 	std::cout << "==[ Inventory ]==" << std::endl;
-	for (int i = 0; i < Slots.size(); i++)
+	for (int i = 0; i < SlotAmount; i++)
 	{
-		std::cout << "Slot " << i << ": " << Slots[i]->Name << std::endl;
+		if (Slots[i] != NULL)
+		{
+			std::cout << "Slot " << i << ": " << Slots[i]->_amount << "x " << Slots[i]->_item->Name << std::endl;
+		}
 	}
 	std::cout << "==[ /Inventory ]==" << std::endl;
 }

@@ -1,9 +1,9 @@
 #include "ToolItem.hpp"
 
-ToolItem::ToolItem(std::string name, std::string id, std::string spritePath, 
+ToolItem::ToolItem(std::string name, std::string id, std::string spritePath, int maxItemStack,
 	int maxDurability, int durability)
 	: _maxDurability(maxDurability), _durability(durability),
-		Item::Item(name, id, spritePath)
+		Item::Item(name, id, spritePath, maxItemStack)
 {
 
 }

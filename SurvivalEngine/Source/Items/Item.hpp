@@ -12,8 +12,10 @@ public:
 	std::string Id;
 	std::string SpritePath; // C:/Dev/Resources/SurvivalEngine/textures/Items/
 
+	int MaxItemStack;
+
 	// Constructor
-	Item(std::string name, std::string id, std::string spritePath);
+	Item(std::string name, std::string id, std::string spritePath, int maxItemStack);
 
 	// Methods
 	virtual void LeftClick();

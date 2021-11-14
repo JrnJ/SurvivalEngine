@@ -10,7 +10,8 @@ public:
 		: MaterialItem::MaterialItem(
 			"Stone",
 			"stone",
-			"C:/Dev/Resources/SurvivalEngine/Textures/"
+			"C:/Dev/Resources/SurvivalEngine/Textures/",
+			999
 		) {}
 };
 

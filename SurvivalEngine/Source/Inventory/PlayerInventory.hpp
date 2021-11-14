@@ -12,7 +12,7 @@ public:
 		: Inventory::Inventory(
 			9,
 			{ 
-				new StoneAxe(), new Stone(), new StoneAxe(),
+				new ItemInstance(new StoneAxe(), 1), new ItemInstance(new Stone(), 33), new ItemInstance(new StoneAxe(), 1),
 				NULL, NULL, NULL, NULL, NULL, NULL 
 			}
 		) {}

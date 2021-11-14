@@ -11,6 +11,7 @@ public:
 			"Stone Axe",
 			"stone_axe",
 			"C:/Dev/Resources/SurvivalEngine/textures/Items/Tools/Axes/stone_axe.png",
+			1,
 			100,
 			100
 		) { }

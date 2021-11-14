@@ -130,14 +130,6 @@ void Game::ProcessInput(float dt)
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
-		// Inventory
-
-		// Show all things needed for ivenntory idk really
-		if (Input.GetKeyDown(GLFW_KEY_E))
-		{
-			Inventory->DisplayInventory();
-		}
-
 		// Check for Inventory things
 		if (Input.GetKeyDown(GLFW_KEY_1))
 			SelectedHotbarSlot = 0;
@@ -166,7 +158,17 @@ void Game::ProcessInput(float dt)
 
 		if (Input.GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
 			if (Inventory->Slots[SelectedHotbarSlot] != NULL)
-				Inventory->Slots[SelectedHotbarSlot]->LeftClick();
+				Inventory->Slots[SelectedHotbarSlot]->_item->LeftClick();
+
+		if (Input.GetKeyDown(GLFW_KEY_M))
+		{
+			Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
+		}
+
+		if (Input.GetKeyDown(GLFW_KEY_E))
+		{
+			Inventory->DisplayInventory();
+		}
 	}
 }
 

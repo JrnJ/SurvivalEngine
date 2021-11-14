@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Items\ItemInstance.cpp" />
     <ClCompile Include="Source\Items\Materials\MaterialItem.cpp" />
     <ClCompile Include="Source\Items\Item.cpp" />
     <ClCompile Include="Source\Inventory\Inventory.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Items\ItemInstance.hpp" />
     <ClInclude Include="Source\Items\Materials\MaterialItem.hpp" />
     <ClInclude Include="Source\Inventory\PlayerInventory.hpp" />
     <ClInclude Include="Source\Items\Item.hpp" />

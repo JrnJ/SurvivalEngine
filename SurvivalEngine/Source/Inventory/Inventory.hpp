@@ -1,7 +1,7 @@
 #ifndef INVENTORY_HPP
 #define INVENTORY_HPP
 
-#include "../Items/Items.hpp"
+#include "../Items/ItemInstance.hpp"
 #include <vector>
 
 class Inventory
@@ -9,14 +9,14 @@ class Inventory
 public:
 	// Properties
 	int SlotAmount;
-	std::vector<Item*> Slots;
+	std::vector<ItemInstance*> Slots;
 
 	// Constructor
-	Inventory(int slotAmount, std::vector<Item*> items);
+	Inventory(int slotAmount, std::vector<ItemInstance*> items);
 
 	// Methods
-	void AddItem(Item item, int amount);
-	void SetItemAt(Item item, int amount);
+	void AddItem(ItemInstance*);
+	void SetItemAt(ItemInstance*);
 	void AddAmountToItem(int index, int amount);
 	void RemoveAmountFromItem(int index, int amount);
 	const void ClearInventory() { Slots.clear(); }
