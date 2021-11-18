@@ -15,8 +15,8 @@ public:
 	Inventory(int slotAmount, std::vector<ItemInstance*> items);
 
 	// Methods
-	void AddItem(ItemInstance*);
-	void SetItemAt(ItemInstance*);
+	void AddItem(ItemInstance* item);
+	void SetItemAt(ItemInstance* item, int index);
 	void AddAmountToItem(int index, int amount);
 	void RemoveAmountFromItem(int index, int amount);
 	const void ClearInventory() { Slots.clear(); }
@@ -25,7 +25,7 @@ public:
 	void DisplayInventory();
 
 private:
-
+	int FillItemStack(int index, int amount);
 
 };
 

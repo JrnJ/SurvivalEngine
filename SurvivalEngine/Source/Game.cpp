@@ -157,10 +157,14 @@ void Game::ProcessInput(float dt)
 			SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
 
 		if (Input.GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
-			if (Inventory->Slots[SelectedHotbarSlot] != NULL)
+			if (Inventory->Slots[SelectedHotbarSlot]->_item != NULL)
 				Inventory->Slots[SelectedHotbarSlot]->_item->LeftClick();
 
 		if (Input.GetKeyDown(GLFW_KEY_M))
+		{
+			Inventory->AddItem(new ItemInstance(new Stone(), 300));
+		}
+		if (Input.GetKeyDown(GLFW_KEY_N))
 		{
 			Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
 		}

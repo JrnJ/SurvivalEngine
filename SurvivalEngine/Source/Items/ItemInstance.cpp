@@ -6,10 +6,10 @@ ItemInstance::ItemInstance(Item* item, int amount)
 
 }
 
-void ItemInstance::SetInstance(ItemInstance itemInstance)
+void ItemInstance::SetInstance(ItemInstance* itemInstance)
 {
-	this->_item = itemInstance._item;
-	this->_amount = itemInstance._amount;
+	this->_item = itemInstance->_item;
+	this->_amount = itemInstance->_amount;
 }
 
 void ItemInstance::ClearInstance()
@@ -21,4 +21,14 @@ void ItemInstance::ClearInstance()
 void ItemInstance::SetAmount(int amount)
 {
 	this->_amount = amount;
+}
+
+void ItemInstance::AddAmount(int amount)
+{
+	this->_amount += amount;
+}
+
+void ItemInstance::RemoveAmount(int amount)
+{
+	this->_amount -= amount;
 }

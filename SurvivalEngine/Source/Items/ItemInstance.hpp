@@ -14,9 +14,12 @@ public:
 	ItemInstance(Item* item, int amount);
 
 	// Methods
-	void SetInstance(ItemInstance itemInstance);
+	void SetInstance(ItemInstance* itemInstance);
 	void ClearInstance();
+
 	void SetAmount(int amount);
+	void AddAmount(int amount);
+	void RemoveAmount(int amount);
 
 	// Getters
 

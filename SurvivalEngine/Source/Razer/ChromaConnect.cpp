@@ -42,12 +42,12 @@ ChromaConnect::~ChromaConnect()
 			std::cout << "Failed to uninitialize ChromaAnimationAPI!" << std::endl;
 		}
 
-		delete colorsChromaLink;
-		delete colorsHeadset;
-		delete colorsKeyboard;
-		delete colorsKeypad;
-		delete colorsMouse;
-		delete colorsMousepad;
+		delete[] colorsChromaLink;
+		delete[] colorsHeadset;
+		delete[] colorsKeyboard;
+		delete[] colorsKeypad;
+		delete[] colorsMouse;
+		delete[] colorsMousepad;
 	}
 }
 
@@ -161,7 +161,7 @@ void ChromaConnect::Clear()
 void ChromaConnect::Draw()
 {
 	ChromaSDK::ChromaAnimationAPI::SetCustomColorFlag2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
-	ChromaSDK::ChromaAnimationAPI::SetEffectKeyboardCustom2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard); SetStaticColor(colorsKeyboard, _sAmbientColor, _sizeKeyboard);
+	ChromaSDK::ChromaAnimationAPI::SetEffectKeyboardCustom2D((int)ChromaSDK::EChromaSDKDevice2DEnum::DE_Keyboard, colorsKeyboard);
 }
 
 void ChromaConnect::Test()
