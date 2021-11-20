@@ -13,7 +13,7 @@ public:
 	// Properties
 	glm::vec2 Position;
 	glm::vec2 Size;
-	glm::vec3 Color;
+	glm::vec4 Color;
 	float Rotation;
 	bool IsSolid;
 	bool Destroyed;
@@ -24,7 +24,7 @@ public:
 	// Structs
 	GameObject(); // Default
 	GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, 
-		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::vec4 color = glm::vec4(1.0f));
 
 	// Draw Sprite
 	virtual void Draw(SpriteRenderer& renderer);

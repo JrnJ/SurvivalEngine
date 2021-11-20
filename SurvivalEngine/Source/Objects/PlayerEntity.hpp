@@ -10,7 +10,7 @@ private:
 public:
 	// Constrcutors
 	PlayerEntity();
-	PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f));
+	PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color = glm::vec4(1.0f));
 };
 
 #endif

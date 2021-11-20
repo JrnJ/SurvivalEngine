@@ -6,7 +6,7 @@ PlayerEntity::PlayerEntity()
 
 }
 
-PlayerEntity::PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec3 color)
+PlayerEntity::PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color)
 	: Entity::Entity(pos, size, sprite, color)
 {
 

@@ -104,5 +104,5 @@ float KeyInput::GetAxisRaw(Axis axis)
 
 float KeyInput::GetCustomAxisRaw(int negative, int positive)
 {
-	return (float)((int)GetKeyDown(negative) - (int)GetKeyDown(positive));
+	return (float)((int)GetKey(negative) - (int)GetKey(positive));
 }

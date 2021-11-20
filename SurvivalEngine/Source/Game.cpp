@@ -58,32 +58,32 @@ void Game::Init()
 	Chroma = new ChromaConnect(true);
 
 	// Load Shaders
-	ResourceManager::LoadShader("C:/Dev/Resources/SurvivalEngine/shaders/sprite.vs", "C:/Dev/Resources/SurvivalEngine/shaders/sprite.fs", nullptr, "sprite");
+	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/shaders/chernoo_sprite.vs", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/shaders/chernoo_sprite.fs", nullptr, "sprite");
 
 	// Configure Shaders
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
 		static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	ResourceManager::GetShader("sprite").SetMatrix4("projection", projection);
-	//ResourceManager::GetShader("sprite").SetMatrix4("projection", _camera.GetViewProjectionMatrix());
+	ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
+	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
 	Renderer = new SpriteRenderer(shader);
 
 	// Load Textures
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/background.png", false, "background");
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/player.png", true, "player");
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/enemy.png", true, "enemy");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/background.png", false, "background");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", true, "player");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/enemy.png", true, "enemy");
 
 	// Texture loading
 	// ID : 0 -> Nothing
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/Unknown.png", false, ""); // ID : - 
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/Grass.png", false, "Grass"); // ID : 1
-	ResourceManager::LoadTexture("C:/Dev/Resources/SurvivalEngine/textures/Dirt.png", false, "Dirt"); // ID : 2
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/Unknown.png", false, ""); // ID : - 
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/Grass.png", false, "Grass"); // ID : 1
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/textures/Dirt.png", false, "Dirt"); // ID : 2
 
 	// Load Levels
-	Level test; test.Load("C:/Dev/Resources/SurvivalEngine/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
 
 	CurrentLevel = test;
 
@@ -118,14 +118,14 @@ void Game::ProcessInput(float dt)
 		// Reset Down
 		if (Input.GetKeyDown(GLFW_KEY_F1))
 		{
-			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
 		if (Input.GetKeyDown(GLFW_KEY_F2))
 		{
-			this->CurrentLevel.Load("C:/Dev/Resources/SurvivalEngine/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
