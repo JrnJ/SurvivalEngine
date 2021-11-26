@@ -204,5 +204,34 @@
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />
     <None Include="CChromaEditorLibrary64.dll" />
+    <None Include="Assets\shaders\cherno_sprite.fs" />
+    <None Include="Assets\shaders\cherno_sprite.vs" />
+    <None Include="Assets\shaders\cherno_spriteCam.fs" />
+    <None Include="Assets\shaders\cherno_spriteCam.vs" />
+    <None Include="Assets\shaders\chernoo_sprite.fs" />
+    <None Include="Assets\shaders\chernoo_sprite.vs" />
+    <None Include="Assets\shaders\sprite.fs" />
+    <None Include="Assets\shaders\sprite.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\levels\cage.txt" />
+    <Text Include="Assets\levels\test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\textures\background.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\textures\bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\textures\enemy.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\textures\player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Assets\textures\Unknown.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

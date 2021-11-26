@@ -228,8 +228,27 @@
     <ClInclude Include="Source\Items\Materials\Stone\Stone.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\shaders\chernoo_sprite.fs" />
+    <None Include="Assets\shaders\chernoo_sprite.vs" />
+    <None Include="Assets\shaders\cherno_sprite.fs" />
+    <None Include="Assets\shaders\cherno_sprite.vs" />
+    <None Include="Assets\shaders\cherno_spriteCam.fs" />
+    <None Include="Assets\shaders\cherno_spriteCam.vs" />
+    <None Include="Assets\shaders\sprite.fs" />
+    <None Include="Assets\shaders\sprite.vs" />
     <None Include="CChromaEditorLibrary.dll" />
     <None Include="CChromaEditorLibrary64.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Assets\levels\cage.txt" />
+    <Text Include="Assets\levels\test.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\textures\background.png" />
+    <Image Include="Assets\textures\bg.png" />
+    <Image Include="Assets\textures\enemy.png" />
+    <Image Include="Assets\textures\player.png" />
+    <Image Include="Assets\textures\Unknown.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
