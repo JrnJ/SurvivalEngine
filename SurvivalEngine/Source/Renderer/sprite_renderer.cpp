@@ -11,10 +11,11 @@ SpriteRenderer::~SpriteRenderer()
     glDeleteVertexArrays(1, &this->quadVAO);
 }
 
-void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 size, float rotate, glm::vec4 color)
+void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::mat4 projectionMatrix, glm::vec2 size, float rotate, glm::vec4 color)
 {
     // prepare transformations
     this->shader.Use();
+
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(position, 0.0f));  // first translate (transformations are: scale happens first, then rotation, and then final translation happens; reversed order)
 
@@ -24,7 +25,8 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
 
     model = glm::scale(model, glm::vec3(size, 1.0f)); // last scale
 
-    this->shader.SetMatrix4("model", model);
+    this->shader.SetMatrix4("u_ViewProjection", projectionMatrix);
+    this->shader.SetMatrix4("u_Model", model);
 
     // render textured quad
     this->shader.SetVector4f("spriteColor", color);
@@ -65,10 +67,7 @@ void SpriteRenderer::initRenderData()
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-
+    // Unbind VBO/VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }

@@ -16,7 +16,6 @@ public:
 	glm::vec4 Color;
 	float Rotation;
 	bool IsSolid;
-	bool Destroyed;
 
 	// Rendering
 	Texture2D Sprite;
@@ -27,7 +26,7 @@ public:
 		glm::vec4 color = glm::vec4(1.0f));
 
 	// Draw Sprite
-	virtual void Draw(SpriteRenderer& renderer);
+	virtual void Draw(SpriteRenderer& renderer, glm::mat4 projectionMatrix);
 };
 
 #endif

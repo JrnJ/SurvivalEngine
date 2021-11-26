@@ -21,6 +21,8 @@ PlayerEntity* Player2;
 ChromaConnect* Chroma;
 PlayerInventory* Inventory;
 
+GameObject* Dummy;
+
 glm::vec2 MoveDirection;
 int SelectedHotbarSlot = 0;
 
@@ -29,7 +31,7 @@ int SelectedHotbarSlot = 0;
 /// </summary>
 Game::Game(unsigned int width, unsigned int height)
 	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f), 
-		_camera(-1.6f, 1.6f, -0.9f, 0.9f)
+		_camera(width / 2.0f, width / 2.0f, height / 2.0f, height / 2.0f, glm::vec2(0.0f, 0.0f))
 {
 	
 }
@@ -45,6 +47,8 @@ Game::~Game()
 
 	delete Chroma;
 	delete Inventory;
+
+	delete Dummy;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
@@ -64,7 +68,7 @@ void Game::Init()
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
 		static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
+	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
 	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 
 	// set render-specific controls
@@ -96,6 +100,11 @@ void Game::Init()
 
 	// Inventory
 	Inventory = new PlayerInventory();
+
+	// Dummy
+	glm::vec2 dummySize = glm::vec2(200.0f, 200.0f);
+	//Dummy = new GameObject(glm::vec2(this->Width / 2.0f - dummySize.x / 2.0f, this->Height / 2.0f - dummySize.y / 2.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
+	Dummy = new GameObject(glm::vec2(400.0f, 300.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
 }
 
 bool idkk = false;
@@ -211,18 +220,22 @@ void Game::Render()
 {
 	if (this->State == GameState::GAME_ACTIVE)
 	{
+		// Camera (I think this needs to be here)
+
+
 		// Draw calls
 		
 		// Layer 0 : Background / Skybox
-		Texture2D background = ResourceManager::GetTexture("background");
-		Renderer->DrawSprite(background, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
+		//Texture2D background = ResourceManager::GetTexture("background");
+		//Renderer->DrawSprite(background, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
 		
 		// Layer 1 : Level Blocks
-		CurrentLevel.Draw(*Renderer);
+		//CurrentLevel.Draw(*Renderer);
 
 		// Layer 2
-		Player->Draw(*Renderer);
-		Player2->Draw(*Renderer);
+		//Player->Draw(*Renderer);
+		//Player2->Draw(*Renderer);
+		Dummy->Draw(*Renderer, _camera.GetProjectionMatrix());
 	}
 }
 

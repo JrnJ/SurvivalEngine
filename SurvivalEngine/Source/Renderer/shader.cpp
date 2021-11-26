@@ -10,43 +10,49 @@ Shader& Shader::Use()
 
 void Shader::Compile(const char* vertexSource, const char* fragmentSource, const char* geometrySource)
 {
-    unsigned int sVertex, sFragment, gShader;
+    unsigned int vs, fs, gs;
     
     // vertex Shader
-    sVertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(sVertex, 1, &vertexSource, NULL);
-    glCompileShader(sVertex);
-    checkCompileErrors(sVertex, "VERTEX");
+    vs = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vs, 1, &vertexSource, NULL);
+    glCompileShader(vs);
+    checkCompileErrors(vs, "VERTEX");
 
     // fragment Shader
-    sFragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(sFragment, 1, &fragmentSource, NULL);
-    glCompileShader(sFragment);
-    checkCompileErrors(sFragment, "FRAGMENT");
+    fs = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fs, 1, &fragmentSource, NULL);
+    glCompileShader(fs);
+    checkCompileErrors(fs, "FRAGMENT");
 
     // if geometry shader source code is given, also compile geometry shader
     if (geometrySource != nullptr)
     {
-        gShader = glCreateShader(GL_GEOMETRY_SHADER);
-        glShaderSource(gShader, 1, &geometrySource, NULL);
-        glCompileShader(gShader);
-        checkCompileErrors(gShader, "GEOMETRY");
+        gs = glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(gs, 1, &geometrySource, NULL);
+        glCompileShader(gs);
+        checkCompileErrors(gs, "GEOMETRY");
     }
 
     // shader program
     this->Id = glCreateProgram();
-    glAttachShader(this->Id, sVertex);
-    glAttachShader(this->Id, sFragment);
+    glAttachShader(this->Id, vs);
+    glAttachShader(this->Id, fs);
     if (geometrySource != nullptr)
-        glAttachShader(this->Id, gShader);
+        glAttachShader(this->Id, gs);
     glLinkProgram(this->Id);
     checkCompileErrors(this->Id, "PROGRAM");
 
     // delete the shaders as they're linked into our program now and no longer necessary
-    glDeleteShader(sVertex);
-    glDeleteShader(sFragment);
+
+    glDetachShader(this->Id, vs);
+    glDeleteShader(vs);
+
+    glDetachShader(this->Id, fs);
+    glDeleteShader(fs);
+
     if (geometrySource != nullptr)
-        glDeleteShader(gShader);
+        //glDetachShader(this->Id, gs);
+        glDeleteShader(gs);
 }
 
 void Shader::SetFloat(const char* name, float value, bool useShader)
