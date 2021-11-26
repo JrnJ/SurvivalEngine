@@ -103,8 +103,8 @@ void Game::Init()
 
 	// Dummy
 	glm::vec2 dummySize = glm::vec2(200.0f, 200.0f);
-	//Dummy = new GameObject(glm::vec2(this->Width / 2.0f - dummySize.x / 2.0f, this->Height / 2.0f - dummySize.y / 2.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
-	Dummy = new GameObject(glm::vec2(400.0f, 300.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
+	Dummy = new GameObject(glm::vec2(this->Width / 2.0f - dummySize.x / 2.0f, this->Height / 2.0f - dummySize.y / 2.0f), dummySize, ResourceManager::GetTexture("player"));
+	//Dummy = new GameObject(glm::vec2(400.0f, 300.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
 }
 
 bool idkk = false;
