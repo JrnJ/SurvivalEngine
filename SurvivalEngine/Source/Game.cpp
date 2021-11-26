@@ -62,11 +62,11 @@ void Game::Init()
 	Chroma = new ChromaConnect(true);
 
 	// Load Shaders
-	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/chernoo_sprite.vs", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/chernoo_sprite.fs", nullptr, "sprite");
+	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
 
 	// Configure Shaders
-	glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
-		static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
+	//glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
+	//	static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
 	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
@@ -220,9 +220,6 @@ void Game::Render()
 {
 	if (this->State == GameState::GAME_ACTIVE)
 	{
-		// Camera (I think this needs to be here)
-
-
 		// Draw calls
 		
 		// Layer 0 : Background / Skybox
