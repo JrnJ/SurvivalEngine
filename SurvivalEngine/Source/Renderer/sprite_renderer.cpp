@@ -27,7 +27,7 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::mat
 
     model = glm::scale(model, glm::vec3(size, 1.0f)); // last scale
 
-    this->shader.SetMatrix4("u_ViewProjection", projectionMatrix);
+    //this->shader.SetMatrix4("u_ViewProjection", projectionMatrix);
     this->shader.SetMatrix4("u_Model", model);
 
     // render textured quad

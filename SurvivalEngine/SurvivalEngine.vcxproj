@@ -75,14 +75,14 @@
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>C:\Dev\cpp\SurvivalEngine\OpenGL\includes;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Dev\cpp\PlatformerEngine\OpenGL\libs;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Dev\cpp\SurvivalEngine\OpenGL\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>C:\Dev\cpp\SurvivalEngine\OpenGL\includes;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Dev\cpp\PlatformerEngine\OpenGL\libs;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Dev\cpp\SurvivalEngine\OpenGL\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -188,6 +188,7 @@
     <ClCompile Include="Source\Renderer\sprite_renderer.cpp" />
     <ClCompile Include="Source\Renderer\stb_image.cpp" />
     <ClCompile Include="Source\Renderer\texture.cpp" />
+    <ClCompile Include="Source\Renderer\View.cpp" />
     <ClCompile Include="Source\resource_manager.cpp" />
     <ClCompile Include="Source\Items\Tools\Axes\StoneAxe.cpp" />
     <ClCompile Include="Source\Items\Tools\ToolItem.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="Source\Renderer\sprite_renderer.hpp" />
     <ClInclude Include="Source\Renderer\stb_image.h" />
     <ClInclude Include="Source\Renderer\texture.hpp" />
+    <ClInclude Include="Source\Renderer\View.h" />
     <ClInclude Include="Source\resource_manager.hpp" />
     <ClInclude Include="Source\Items\Tools\Axes\StoneAxe.hpp" />
     <ClInclude Include="Source\Items\Tools\ToolItem.hpp" />

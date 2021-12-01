@@ -22,6 +22,7 @@ ChromaConnect* Chroma;
 PlayerInventory* Inventory;
 
 GameObject* Dummy;
+GameObject* Dummy2;
 
 glm::vec2 MoveDirection;
 int SelectedHotbarSlot = 0;
@@ -31,7 +32,7 @@ int SelectedHotbarSlot = 0;
 /// </summary>
 Game::Game(unsigned int width, unsigned int height)
 	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f), 
-		_camera(width / 2.0f, width / 2.0f, height / 2.0f, height / 2.0f, glm::vec2(0.0f, 0.0f))
+		_camera((width / 2.0f), -(width / 2.0f), (height / 2.0f), -(height / 2.0f), glm::vec2(0.0f, 0.0f))
 {
 	
 }
@@ -49,6 +50,7 @@ Game::~Game()
 	delete Inventory;
 
 	delete Dummy;
+	delete Dummy2;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
@@ -59,7 +61,7 @@ Game::~Game()
 void Game::Init()
 {
 	// Initialize Razer ChromaConnect
-	Chroma = new ChromaConnect(true);
+	Chroma = new ChromaConnect(false);
 
 	// Load Shaders
 	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
@@ -69,7 +71,7 @@ void Game::Init()
 	//	static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
-	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
+	ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
@@ -83,8 +85,9 @@ void Game::Init()
 	// Texture loading
 	// ID : 0 -> Nothing
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Unknown.png", false, ""); // ID : - 
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Grass.png", false, "Grass"); // ID : 1
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Dirt.png", false, "Dirt"); // ID : 2
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Grass.png", false, "Grass"); // ID : 1
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", false, "Dirt"); // ID : 2
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", false, "Water"); // ID : 3
 
 	// Load Levels
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
@@ -104,10 +107,10 @@ void Game::Init()
 	// Dummy
 	glm::vec2 dummySize = glm::vec2(200.0f, 200.0f);
 	Dummy = new GameObject(glm::vec2(this->Width / 2.0f - dummySize.x / 2.0f, this->Height / 2.0f - dummySize.y / 2.0f), dummySize, ResourceManager::GetTexture("player"));
+	Dummy2 = new GameObject(glm::vec2(0.0f, 0.0f), dummySize, ResourceManager::GetTexture("player"));
 	//Dummy = new GameObject(glm::vec2(400.0f, 300.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
 }
 
-bool idkk = false;
 /// <summary>
 /// Take user input each frame
 /// </summary>
@@ -233,6 +236,10 @@ void Game::Render()
 		//Player->Draw(*Renderer);
 		//Player2->Draw(*Renderer);
 		Dummy->Draw(*Renderer, _camera.GetProjectionMatrix());
+		Dummy2->Draw(*Renderer, _camera.GetProjectionMatrix());
+
+		Dummy->Draw(*Renderer, _camera.GetViewProjectionMatrix());
+		Dummy2->Draw(*Renderer, _camera.GetViewProjectionMatrix());
 	}
 }
 
