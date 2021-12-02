@@ -1,10 +1,10 @@
 #include "game.hpp"
-#include "resource_manager.hpp"
+#include "ResourceManager.hpp"
 
 #include "Math.hpp"
 #include "Razer/ChromaConnect.hpp"
 
-#include "Renderer/sprite_renderer.hpp"
+#include "Renderer/SpriteRenderer.hpp"
 #include "Objects/GameObject.hpp"
 #include "Objects/Entity.hpp"
 #include "Objects/PlayerEntity.hpp"
@@ -32,7 +32,7 @@ int SelectedHotbarSlot = 0;
 /// </summary>
 Game::Game(unsigned int width, unsigned int height)
 	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f), 
-		_camera((width / 2.0f), -(width / 2.0f), (height / 2.0f), -(height / 2.0f), glm::vec2(0.0f, 0.0f))
+		_camera(0.0f, width, height, 0.0f)
 {
 	
 }
@@ -71,23 +71,23 @@ void Game::Init()
 	//	static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
 	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
-	ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
+	/*ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());*/
 
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
 	Renderer = new SpriteRenderer(shader);
 
 	// Load Textures
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/background.png", false, "background");
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", true, "player");
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/enemy.png", true, "enemy");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/background.png", "background");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", "player");
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/enemy.png", "enemy");
 
 	// Texture loading
 	// ID : 0 -> Nothing
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Unknown.png", false, ""); // ID : - 
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Grass.png", false, "Grass"); // ID : 1
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", false, "Dirt"); // ID : 2
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", false, "Water"); // ID : 3
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Unknown.png", ""); // ID : - 
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Grass.png", "Grass"); // ID : 1
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", "Dirt"); // ID : 2
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", "Water"); // ID : 3
 
 	// Load Levels
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
@@ -95,20 +95,14 @@ void Game::Init()
 	CurrentLevel = test;
 
 	// Configure GameObjects
-	glm::vec2 spawnPos = glm::vec2(BlockSize.x * 2, this->Height - (BlockSize.y * (3 + 3)));
+	glm::vec2 spawnPos = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
 	Player = new PlayerEntity(spawnPos, BlockSize, ResourceManager::GetTexture("player"));
 
-	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3 + 3)));
+	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3.0f + 3.0f)));
 	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
 
 	// Inventory
 	Inventory = new PlayerInventory();
-
-	// Dummy
-	glm::vec2 dummySize = glm::vec2(200.0f, 200.0f);
-	Dummy = new GameObject(glm::vec2(this->Width / 2.0f - dummySize.x / 2.0f, this->Height / 2.0f - dummySize.y / 2.0f), dummySize, ResourceManager::GetTexture("player"));
-	Dummy2 = new GameObject(glm::vec2(0.0f, 0.0f), dummySize, ResourceManager::GetTexture("player"));
-	//Dummy = new GameObject(glm::vec2(400.0f, 300.0f), glm::vec2(200.0f, 200.0f), ResourceManager::GetTexture("player"));
 }
 
 /// <summary>
@@ -210,8 +204,9 @@ void Game::Update(float dt)
 	// Move Player based on Velocity
 	Player->Position += Player->Velocity * dt;
 	Player2->Position += Player2->Velocity * dt;
+	_camera.SetPosition(glm::vec3(Player->Position.x - this->Width / 2.0f, Player->Position.y - this->Height / 2.0f, 0.0f));
 
-	DoCollision(dt);
+	//DoCollision(dt);
 	
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
@@ -223,6 +218,9 @@ void Game::Render()
 {
 	if (this->State == GameState::GAME_ACTIVE)
 	{
+		// Update camera
+		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
+
 		// Draw calls
 		
 		// Layer 0 : Background / Skybox
@@ -230,16 +228,11 @@ void Game::Render()
 		//Renderer->DrawSprite(background, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f);
 		
 		// Layer 1 : Level Blocks
-		//CurrentLevel.Draw(*Renderer);
+		CurrentLevel.Draw(*Renderer);
 
 		// Layer 2
-		//Player->Draw(*Renderer);
-		//Player2->Draw(*Renderer);
-		Dummy->Draw(*Renderer, _camera.GetProjectionMatrix());
-		Dummy2->Draw(*Renderer, _camera.GetProjectionMatrix());
-
-		Dummy->Draw(*Renderer, _camera.GetViewProjectionMatrix());
-		Dummy2->Draw(*Renderer, _camera.GetViewProjectionMatrix());
+		Player->Draw(*Renderer);
+		Player2->Draw(*Renderer);
 	}
 }
 

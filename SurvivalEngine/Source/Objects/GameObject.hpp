@@ -4,8 +4,8 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "../Renderer/texture.hpp"
-#include "../Renderer/sprite_renderer.hpp"
+#include "../Renderer/Texture2D.hpp"
+#include "../Renderer/SpriteRenderer.hpp"
 
 class GameObject
 {
@@ -26,7 +26,7 @@ public:
 		glm::vec4 color = glm::vec4(1.0f));
 
 	// Draw Sprite
-	virtual void Draw(SpriteRenderer& renderer, glm::mat4 projectionMatrix);
+	virtual void Draw(SpriteRenderer& renderer);
 };
 
 #endif

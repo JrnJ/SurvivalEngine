@@ -13,7 +13,7 @@ GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec
 /// Draws the GameObject.Sprite to the screen
 /// </summary>
 /// <param name="renderer"></param>
-void GameObject::Draw(SpriteRenderer& renderer, glm::mat4 projectionMatrix)
+void GameObject::Draw(SpriteRenderer& renderer)
 {
-	renderer.DrawSprite(this->Sprite, this->Position, projectionMatrix, this->Size, this->Rotation, this->Color);
+	renderer.DrawSprite(this->Sprite, this->Position, this->Size, this->Rotation, this->Color);
 }

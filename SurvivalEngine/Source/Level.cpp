@@ -70,11 +70,11 @@ void Level::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 	}
 }
 
-void Level::Draw(SpriteRenderer& renderer, glm::mat4 projectionMatrix)
+void Level::Draw(SpriteRenderer& renderer)
 {
 	// Draw level
 	for (GameObject& block : this->Blocks)
-		block.Draw(renderer, projectionMatrix);
+		block.Draw(renderer);
 }
 
 void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 screenSize, glm::vec2 blockSize)

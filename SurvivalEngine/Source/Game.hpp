@@ -8,7 +8,7 @@
 
 #include "Level.hpp"
 #include "KeyInput.hpp"
-#include "Camera.hpp"
+#include "Renderer/Camera.hpp"
 
 // All Game States
 enum class GameState 
