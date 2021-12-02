@@ -208,7 +208,7 @@ void Game::Update(float dt)
 	DoCollision(dt);
 
 	_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
-	
+
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
 
@@ -241,7 +241,7 @@ void Game::ResetPlayer()
 {
 	// Reset Player
 	Player->Size = BlockSize;
-	Player->Position = glm::vec2(BlockSize.x * 2, this->Height - (BlockSize.y * (3 + 3)));
+	Player->Position = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
 }
 
 // Move this to a class and than add to stuff
