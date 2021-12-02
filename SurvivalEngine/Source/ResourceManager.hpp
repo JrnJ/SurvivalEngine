@@ -27,14 +27,14 @@ public:
     static Shader GetShader(std::string name);
     
     // Textures
-    static Texture2D LoadTexture(const char* file, std::string name);
+    static Texture2D LoadTexture(const char* file, std::string name, bool alpha);
     static Texture2D GetTexture(std::string name);
     
     static void Clear();
 
 private:
     static Shader loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile = nullptr);
-    static Texture2D loadTextureFromFile(const char* file);
+    static Texture2D loadTextureFromFile(const char* file, bool alpha);
 };
 
 #endif

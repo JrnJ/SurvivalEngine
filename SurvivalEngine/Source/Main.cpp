@@ -102,7 +102,8 @@ int main(int argc, char* argv[])
 		Survival.Update(deltaTime);
 
 		// Render
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.13f, 0.56f, 0.56f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		Survival.Render();
 

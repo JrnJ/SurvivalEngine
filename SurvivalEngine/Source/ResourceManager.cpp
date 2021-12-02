@@ -13,12 +13,12 @@ std::map<std::string, Texture2D> ResourceManager::Textures;
 void ResourceManager::Clear()
 {
     // Delete Shaders	
-    for (auto i : Shaders)
-        glDeleteProgram(i.second.Id);
+    for (auto iS : Shaders)
+        glDeleteProgram(iS.second.Id);
 
     // Delete Textures
-    for (auto i : Textures)
-        glDeleteProgram(i.second.Id);
+    for (auto iT : Textures)
+        glDeleteProgram(iT.second.Id);
 }
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
@@ -32,9 +32,9 @@ Shader ResourceManager::GetShader(std::string name)
     return Shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const char* file, std::string name)
+Texture2D ResourceManager::LoadTexture(const char* file, std::string name, bool alpha)
 {
-    Textures[name] = loadTextureFromFile(file);
+    Textures[name] = loadTextureFromFile(file, alpha);
     return Textures[name];
 }
 
@@ -98,14 +98,17 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 	return shader;
 }
 
-Texture2D ResourceManager::loadTextureFromFile(const char* file)
+Texture2D ResourceManager::loadTextureFromFile(const char* file, bool alpha)
 {
 	// Create texture
 	Texture2D texture;
 
 	// Allow Alpfa
-	texture.Internal_Format = GL_RGBA;
-	texture.Image_Format = GL_RGBA;
+	if (alpha)
+	{
+		texture.Internal_Format = GL_RGBA;
+		texture.Image_Format = GL_RGBA;
+	}
 
 	// Load Image
 	int width, height, nrChannels;
