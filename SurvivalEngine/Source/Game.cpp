@@ -206,7 +206,7 @@ void Game::Update(float dt)
 	Player2->Position += Player2->Velocity * dt;
 	_camera.SetPosition(glm::vec3(Player->Position.x - this->Width / 2.0f, Player->Position.y - this->Height / 2.0f, 0.0f));
 
-	//DoCollision(dt);
+	DoCollision(dt);
 	
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
