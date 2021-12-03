@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
 
 	//GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Platformer Engine", monitors[1], NULL);
 	glfwMakeContextCurrent(window);
+	glfwSwapInterval(0);
 
 	// Load Glad with OpenGL function pointers
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -85,7 +86,7 @@ int main(int argc, char* argv[])
 	float deltaTime = 0.0f;
 	float lastFrame = 0.0f;
 
-	// Game Loop essentially - I think
+	// Game Loop
 	while (!glfwWindowShouldClose(window))
 	{
 		// Calculate deltaTime
