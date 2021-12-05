@@ -2,6 +2,7 @@
 #include "ResourceManager.hpp"
 
 #include "Math.hpp"
+
 #include "Razer/ChromaConnect.hpp"
 
 #include "Renderer/SpriteRenderer.hpp"
@@ -21,8 +22,8 @@ PlayerEntity* Player2;
 ChromaConnect* Chroma;
 PlayerInventory* Inventory;
 
-GameObject* Dummy;
-GameObject* Dummy2;
+GameObject* Turret;
+GameObject* TurretBullet;
 
 glm::vec2 MoveDirection;
 int SelectedHotbarSlot = 0;
@@ -49,8 +50,8 @@ Game::~Game()
 	delete Chroma;
 	delete Inventory;
 
-	delete Dummy;
-	delete Dummy2;
+	delete Turret;
+	delete TurretBullet;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
@@ -65,13 +66,7 @@ void Game::Init()
 
 	// Load Shaders
 	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
-
-	// Configure Shaders
-	//glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(this->Width),
-	//	static_cast<float>(this->Height), 0.0f, -1.0f, 1.0f);
 	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-	//ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", projection);
-	/*ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());*/
 
 	// set render-specific controls
 	Shader shader = ResourceManager::GetShader("sprite");
@@ -100,6 +95,11 @@ void Game::Init()
 
 	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3.0f + 3.0f)));
 	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
+
+	glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
+	Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
+
+	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Water"));
 
 	// Inventory
 	Inventory = new PlayerInventory();
@@ -182,6 +182,7 @@ void Game::ProcessInput(float dt)
 	}
 }
 
+float xxx = 0.0f;
 /// <summary>
 /// Each frame this void is called
 /// </summary>
@@ -204,6 +205,18 @@ void Game::Update(float dt)
 	// Move Player based on Velocity
 	Player->Position += Player->Velocity * dt;
 	Player2->Position += Player2->Velocity * dt;
+
+	float radius = BlockSize.x + BlockSize.x / 2.0f;
+
+	if (xxx <= 4.0f)
+	{
+		std::cout << "X: " << xxx << std::endl;
+		xxx += dt;
+		xxx += Math::PI;
+	}
+
+	//TurretBullet->Position = Turret->Position + radius;
+	TurretBullet->Position = glm::vec2(Turret->Position.x, Turret->Position.y - radius);
 	
 	DoCollision(dt);
 
@@ -230,6 +243,8 @@ void Game::Render()
 		
 		// Layer 1 : Level Blocks
 		CurrentLevel.Draw(*Renderer);
+		Turret->Draw(*Renderer);
+		TurretBullet->Draw(*Renderer);
 
 		// Layer 2
 		Player->Draw(*Renderer);
