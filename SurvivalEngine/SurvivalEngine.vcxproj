@@ -188,7 +188,6 @@
     <ClCompile Include="Source\Renderer\SpriteRenderer.cpp" />
     <ClCompile Include="Source\Renderer\stb_image.cpp" />
     <ClCompile Include="Source\Renderer\Texture2D.cpp" />
-    <ClCompile Include="Source\Renderer\View.cpp" />
     <ClCompile Include="Source\ResourceManager.cpp" />
     <ClCompile Include="Source\Items\Tools\Axes\StoneAxe.cpp" />
     <ClCompile Include="Source\Items\Tools\ToolItem.cpp" />
@@ -221,7 +220,6 @@
     <ClInclude Include="Source\Renderer\SpriteRenderer.hpp" />
     <ClInclude Include="Source\Renderer\stb_image.h" />
     <ClInclude Include="Source\Renderer\Texture2D.hpp" />
-    <ClInclude Include="Source\Renderer\View.h" />
     <ClInclude Include="Source\ResourceManager.hpp" />
     <ClInclude Include="Source\Items\Tools\Axes\StoneAxe.hpp" />
     <ClInclude Include="Source\Items\Tools\ToolItem.hpp" />

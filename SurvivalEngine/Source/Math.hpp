@@ -1,14 +1,17 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef MATH_HPP
+#define MATH_HPP
 
 #include <glm/glm.hpp>
 
-class Math
+namespace Math 
 {
-public:
-	// Methods
-	static glm::vec2 Normalize(glm::vec2 vec2);
-	static float Dot(glm::vec2 vec2);
-};
+	const float PI = 3.14159265359f;
+
+	const glm::vec2 Normalize(glm::vec2 vec2);
+
+	// Degrees
+	const float RadToDeg(float radians);
+	const float DegToRad(float degrees);
+}
 
 #endif
