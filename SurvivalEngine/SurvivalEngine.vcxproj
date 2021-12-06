@@ -192,6 +192,8 @@
     <ClCompile Include="Source\Items\Tools\Axes\StoneAxe.cpp" />
     <ClCompile Include="Source\Items\Tools\ToolItem.cpp" />
     <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
+    <ClCompile Include="Source\Spells\Spawning\Turret.cpp" />
+    <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Renderer\Camera.hpp" />
@@ -224,6 +226,9 @@
     <ClInclude Include="Source\Items\Tools\Axes\StoneAxe.hpp" />
     <ClInclude Include="Source\Items\Tools\ToolItem.hpp" />
     <ClInclude Include="Source\Items\Materials\Stone\Stone.hpp" />
+    <ClInclude Include="Source\Spells\Spells.hpp" />
+    <ClInclude Include="Source\Spells\Spawning\Turret.hpp" />
+    <ClInclude Include="Source\Items\Weapon\Spellbook.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\shaders\sprite.fs.glsl" />

@@ -22,7 +22,7 @@ public:
 	const void ClearInventory() { Slots.clear(); }
 
 	// UI Methods
-	void DisplayInventory();
+	void DisplayInventory(int selectedSlot);
 
 private:
 	int FillItemStack(int index, int amount);

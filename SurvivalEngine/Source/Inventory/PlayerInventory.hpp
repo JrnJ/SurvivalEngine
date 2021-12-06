@@ -12,10 +12,10 @@ public:
 		: Inventory::Inventory(
 			9,
 			{ 
+				new ItemInstance(new Spellbook, 1),
 				new ItemInstance(new StoneAxe(), 1), 
 				new ItemInstance(new Stone(), 33), 
 				new ItemInstance(new StoneAxe(), 1),
-				new ItemInstance(NULL, 0), 
 				new ItemInstance(NULL, 0), 
 				new ItemInstance(NULL, 0), 
 				new ItemInstance(NULL, 0), 

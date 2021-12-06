@@ -14,6 +14,9 @@
 /// Axes
 #include "Tools/Axes/StoneAxe.hpp"
 
+// Weapons
+#include "Weapon/Spellbook.hpp"
+
 // Materials
 #include "Materials/MaterialItem.hpp"
 /// Wood

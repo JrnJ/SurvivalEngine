@@ -24,6 +24,8 @@ PlayerInventory* Inventory;
 
 GameObject* Turret;
 GameObject* TurretBullet;
+GameObject* TurretBullet2;
+GameObject* TurretBullet3;
 
 glm::vec2 MoveDirection;
 int SelectedHotbarSlot = 0;
@@ -52,6 +54,8 @@ Game::~Game()
 
 	delete Turret;
 	delete TurretBullet;
+	delete TurretBullet2;
+	delete TurretBullet3;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
@@ -85,6 +89,9 @@ void Game::Init()
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", "Water", false); // ID : 3
 
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/TurretBullet.png", "TurretBullet", true); // ID : 3
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/8x8.png", "8", false); 
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/16x16.png", "16", false);
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/64x64.png", "64", false);
 
 	// Load Levels
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
@@ -102,6 +109,8 @@ void Game::Init()
 	Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
 
 	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	TurretBullet2 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	TurretBullet3 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
 
 	// Inventory
 	Inventory = new PlayerInventory();
@@ -179,7 +188,7 @@ void Game::ProcessInput(float dt)
 
 		if (Input.GetKeyDown(GLFW_KEY_E))
 		{
-			Inventory->DisplayInventory();
+			Inventory->DisplayInventory(SelectedHotbarSlot);
 		}
 	}
 }
@@ -208,14 +217,24 @@ void Game::Update(float dt)
 	Player->Position += Player->Velocity * dt;
 	Player2->Position += Player2->Velocity * dt;
 
-	float radius = BlockSize.x + BlockSize.x / 2.0f;
-
-	angle -= dt;
+	angle -= dt / 2.0f;
 	float tdegrees = std::remainder(angle * 360.0f, 360.0f);
 	float tradius = BlockSize.x * 1.5f; // Get difference in positions instead
-	glm::vec2 newPos = Turret->Position - glm::vec2((tradius + BlockSize.x ) * glm::sin(Math::DegToRad(tdegrees)), tradius * glm::cos(Math::DegToRad(tdegrees)));
+	glm::vec2 newPos = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees)), tradius * glm::cos(Math::DegToRad(tdegrees)));
 	TurretBullet->Position = newPos;
 	TurretBullet->Rotation = -tdegrees;
+
+	float offset2 = 120.0f;
+	float tdegrees2 = std::remainder(angle * 360.0f + offset2, 360.0f);
+	glm::vec2 newPos2 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees2)), tradius * glm::cos(Math::DegToRad(tdegrees2)));
+	TurretBullet2->Position = newPos2;
+	TurretBullet2->Rotation = -tdegrees2;
+
+	float offset3 = 240.0f;
+	float tdegrees3 = std::remainder(angle * 360.0f + offset3, 360.0f);
+	glm::vec2 newPos3 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees3)), tradius * glm::cos(Math::DegToRad(tdegrees3)));
+	TurretBullet3->Position = newPos3;
+	TurretBullet3->Rotation = -tdegrees3;
 	
 	DoCollision(dt);
 
@@ -244,6 +263,8 @@ void Game::Render()
 		CurrentLevel.Draw(*Renderer);
 		Turret->Draw(*Renderer);
 		TurretBullet->Draw(*Renderer);
+		TurretBullet2->Draw(*Renderer);
+		TurretBullet3->Draw(*Renderer);
 
 		// Layer 2
 		Player->Draw(*Renderer);
@@ -314,8 +335,6 @@ void Game::DoCollision(float dt)
 
 		CheckCollision(*Player, block);
 		CheckCollision(*Player2, block);
-		CheckCollision(*Player, *TurretBullet);
-		CheckCollision(*Player2, *TurretBullet);
 	}
 
 	/*if (i > 0)

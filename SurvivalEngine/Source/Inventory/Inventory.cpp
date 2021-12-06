@@ -106,14 +106,21 @@ void Inventory::RemoveAmountFromItem(int index, int amount)
 	Slots[index]->RemoveAmount(amount);
 }
 
-void Inventory::DisplayInventory()
+void Inventory::DisplayInventory(int selectedSlot)
 {
 	std::cout << "==[ Inventory ]==" << std::endl;
 	for (int i = 0; i < SlotAmount; i++)
 	{
+		if (i == selectedSlot)
+			std::cout << "SELECTED => ";
+
 		if (Slots[i]->_item != NULL)
 		{
 			std::cout << "Slot " << i << ": " << Slots[i]->_amount << "x " << Slots[i]->_item->Name << std::endl;
+		}
+		else
+		{
+			std::cout << "Slot " << i << ": " << std::endl;
 		}
 	}
 	std::cout << "==[ /Inventory ]==" << std::endl;
