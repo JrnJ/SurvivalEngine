@@ -84,6 +84,8 @@ void Game::Init()
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", "Dirt", false); // ID : 2
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", "Water", false); // ID : 3
 
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/TurretBullet.png", "TurretBullet", true); // ID : 3
+
 	// Load Levels
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
 
@@ -99,7 +101,7 @@ void Game::Init()
 	glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
 	Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
 
-	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Water"));
+	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
 
 	// Inventory
 	Inventory = new PlayerInventory();
@@ -182,7 +184,7 @@ void Game::ProcessInput(float dt)
 	}
 }
 
-float xxx = 0.0f;
+float angle = 0.0f;
 /// <summary>
 /// Each frame this void is called
 /// </summary>
@@ -208,15 +210,12 @@ void Game::Update(float dt)
 
 	float radius = BlockSize.x + BlockSize.x / 2.0f;
 
-	if (xxx <= 4.0f)
-	{
-		std::cout << "X: " << xxx << std::endl;
-		xxx += dt;
-		xxx += Math::PI;
-	}
-
-	//TurretBullet->Position = Turret->Position + radius;
-	TurretBullet->Position = glm::vec2(Turret->Position.x, Turret->Position.y - radius);
+	angle -= dt;
+	float tdegrees = std::remainder(angle * 360.0f, 360.0f);
+	float tradius = BlockSize.x * 1.5f; // Get difference in positions instead
+	glm::vec2 newPos = Turret->Position - glm::vec2((tradius + BlockSize.x ) * glm::sin(Math::DegToRad(tdegrees)), tradius * glm::cos(Math::DegToRad(tdegrees)));
+	TurretBullet->Position = newPos;
+	TurretBullet->Rotation = -tdegrees;
 	
 	DoCollision(dt);
 
@@ -315,6 +314,8 @@ void Game::DoCollision(float dt)
 
 		CheckCollision(*Player, block);
 		CheckCollision(*Player2, block);
+		CheckCollision(*Player, *TurretBullet);
+		CheckCollision(*Player2, *TurretBullet);
 	}
 
 	/*if (i > 0)
