@@ -20,10 +20,13 @@ enum class GameState
 class Game
 {
 public:
+    // Storage
+    //static std::map<GameObject, int> GameObjects;
+    static std::vector<GameObject*> GameObjects;
+    
     // Game State
     GameState State;
     Level CurrentLevel;
-    KeyInput Input;
 
     // Window Dimensions
     unsigned int Width, Height;

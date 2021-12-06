@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\KeyInput.cpp" />
     <ClCompile Include="Source\Renderer\Camera.cpp" />
     <ClCompile Include="Source\Items\ItemInstance.cpp" />
     <ClCompile Include="Source\Items\Materials\MaterialItem.cpp" />
@@ -174,7 +175,6 @@
     <ClCompile Include="Source\Components\Collider.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\glad.c" />
-    <ClCompile Include="Source\KeyInput.cpp" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Math.cpp" />
@@ -196,6 +196,7 @@
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Renderer\Camera.hpp" />
     <ClInclude Include="Source\Items\ItemInstance.hpp" />
     <ClInclude Include="Source\Items\Materials\MaterialItem.hpp" />
@@ -206,7 +207,6 @@
     <ClInclude Include="Source\Objects\Entity.hpp" />
     <ClInclude Include="Source\Components\Collider.hpp" />
     <ClInclude Include="Source\Game.hpp" />
-    <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />
     <ClInclude Include="Source\Objects\BlockObject.hpp" />

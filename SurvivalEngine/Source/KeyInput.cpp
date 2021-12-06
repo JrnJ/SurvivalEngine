@@ -1,23 +1,23 @@
 #include "KeyInput.hpp"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <iostream>
+// Instantiate Extern variables
+bool KeyInput::Keys[1024];
+bool KeyInput::PressedKeys[1024];
 
-KeyInput::KeyInput()
-	: Keys(), PressedKeys(), ScrollX(0), ScrollY(0), MouseButtons(), PressedMouseButtons()
-{
+bool KeyInput::MouseButtons[1024];
+bool KeyInput::PressedMouseButtons[1024];
 
-}
+double KeyInput::ScrollX = 0;
+double KeyInput::ScrollY = 0;
 
 /// <summary>
 /// Returns the state of pressed key
 /// </summary>
 /// <param name="key">Key to check for</param>
 /// <returns></returns>
-bool KeyInput::GetKey(int key)
+const bool KeyInput::GetKey(int key)
 {
-	return this->Keys[key];
+	return KeyInput::Keys[key];
 }
 
 /// <summary>
@@ -25,16 +25,16 @@ bool KeyInput::GetKey(int key)
 /// </summary>
 /// <param name="key">Key to check for</param>
 /// <returns></returns>
-bool KeyInput::GetKeyDown(int key)
+const bool KeyInput::GetKeyDown(int key)
 {
-	if (this->Keys[key] && !PressedKeys[key])
+	if (KeyInput::Keys[key] && !PressedKeys[key])
 	{
 		PressedKeys[key] = true;
 		return true;
 	} return false;
 }
 
-bool KeyInput::GetKeyUp(int key)
+const bool KeyInput::GetKeyUp(int key)
 {
 	std::cout << "Not Working!" << std::endl;
 	return false;
@@ -42,37 +42,37 @@ bool KeyInput::GetKeyUp(int key)
 
 
 
-bool KeyInput::GetMouseButton(int button)
+const bool KeyInput::GetMouseButton(int button)
 {
-	return this->MouseButtons[button];
+	return KeyInput::MouseButtons[button];
 }
 
-bool KeyInput::GetMouseButtonDown(int button)
+const bool KeyInput::GetMouseButtonDown(int button)
 {
-	if (this->MouseButtons[button] && !PressedMouseButtons[button])
+	if (KeyInput::MouseButtons[button] && !PressedMouseButtons[button])
 	{
 		PressedMouseButtons[button] = true;
 		return true;
 	} return false;
 }
 
-bool KeyInput::GetMouseButtonUp(int button)
+const bool KeyInput::GetMouseButtonUp(int button)
 {
 	std::cout << "Not Working!" << std::endl;
 	return false;
 }
-// Mouse //
 
-float KeyInput::GetAxis(Axis axis)
+// Mouse //
+const float KeyInput::GetAxis(Axis axis)
 {
 	switch (axis)
 	{
-		case Axis::Horizontal:
+	case Axis::Horizontal:
 
-			break;
-		case Axis::Vertical:
+		break;
+	case Axis::Vertical:
 
-			break;
+		break;
 	}
 
 	std::cout << "FUNCTION NOT WORKING! Use GetAxisRaw instead!" << std::endl;
@@ -80,29 +80,29 @@ float KeyInput::GetAxis(Axis axis)
 	return 0.0f;
 }
 
-float KeyInput::GetAxisRaw(Axis axis)
+const float KeyInput::GetAxisRaw(Axis axis)
 {
 	switch (axis)
 	{
-		case Axis::Horizontal:
-			return 
-				(float)std::max((int)GetKey(GLFW_KEY_D), (int)GetKey(GLFW_KEY_RIGHT)) -
-				(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT));
-		case Axis::Vertical:
-			return
-				(float)std::max((int)GetKey(GLFW_KEY_S), (int)GetKey(GLFW_KEY_DOWN)) - 
-				(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP));
-		case Axis::MouseScrollWheel:
-			return (float)ScrollY;
-		default:
-			std::cout << "Axis not added" << std::endl;
-			break;
+	case Axis::Horizontal:
+		return
+			(float)std::max((int)GetKey(GLFW_KEY_D), (int)GetKey(GLFW_KEY_RIGHT)) -
+			(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT));
+	case Axis::Vertical:
+		return
+			(float)std::max((int)GetKey(GLFW_KEY_S), (int)GetKey(GLFW_KEY_DOWN)) -
+			(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP));
+	case Axis::MouseScrollWheel:
+		return (float)ScrollY;
+	default:
+		std::cout << "Axis not added" << std::endl;
+		break;
 	}
 
 	return 0.0f;
 }
 
-float KeyInput::GetCustomAxisRaw(int negative, int positive)
+const float KeyInput::GetCustomAxisRaw(int negative, int positive)
 {
 	return (float)((int)GetKey(negative) - (int)GetKey(positive));
 }

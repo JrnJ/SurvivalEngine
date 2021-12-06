@@ -26,6 +26,8 @@ public:
 		glm::vec4 color = glm::vec4(1.0f));
 
 	// Draw Sprite
+	virtual void Input(float dt);
+	virtual void Update(float dt);
 	virtual void Draw(SpriteRenderer& renderer);
 };
 

@@ -2,15 +2,24 @@
 #define PLAYERENTITY_HPP
 
 #include "Entity.hpp"
+#include "../Inventory/PlayerInventory.hpp"
 
 class PlayerEntity : public Entity
 {
 private:
 	const float _maxHealth = 20.0f;
 public:
+	// Variables
+	int SelectedHotbarSlot = 0;
+	PlayerInventory* Inventory;
+	
 	// Constrcutors
-	PlayerEntity();
 	PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color = glm::vec4(1.0f));
+	~PlayerEntity();
+
+	// Overrides
+	virtual void Input(float dt);
+	virtual void Update(float dt);
 };
 
 #endif

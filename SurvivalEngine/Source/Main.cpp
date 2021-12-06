@@ -4,6 +4,8 @@
 #include "Game.hpp"
 #include "ResourceManager.hpp"
 
+#include "KeyInput.hpp"
+
 #include <iostream>
 
 // GL Debugging
@@ -109,8 +111,8 @@ int main(int argc, char* argv[])
 		Survival.Render();
 
 		// Reset scrollwheel
-		Survival.Input.ScrollX = 0;
-		Survival.Input.ScrollY = 0;
+		KeyInput::ScrollX = 0;
+		KeyInput::ScrollY = 0;
 
 		glfwSwapBuffers(window);
 	}
@@ -142,12 +144,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		if (action == GLFW_PRESS)
 		{
-			Survival.Input.Keys[key] = true;
+			KeyInput::Keys[key] = true;
 		}
 		else if (action == GLFW_RELEASE)
 		{
-			Survival.Input.Keys[key] = false;
-			Survival.Input.PressedKeys[key] = false;
+			KeyInput::Keys[key] = false;
+			KeyInput::PressedKeys[key] = false;
 		}
 	}
 }
@@ -158,12 +160,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	{
 		if (action == GLFW_PRESS)
 		{
-			Survival.Input.MouseButtons[button] = true;
+			KeyInput::MouseButtons[button] = true;
 		}
 		else if (action == GLFW_RELEASE)
 		{
-			Survival.Input.MouseButtons[button] = false;
-			Survival.Input.PressedMouseButtons[button] = false;
+			KeyInput::MouseButtons[button] = false;
+			KeyInput::PressedMouseButtons[button] = false;
 		}
 	}
 }
@@ -171,6 +173,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	// Mouse Scrollwheel
-	Survival.Input.ScrollX = xoffset;
-	Survival.Input.ScrollY = yoffset;
+	KeyInput::ScrollX = xoffset;
+	KeyInput::ScrollY = yoffset;
 }

@@ -2,6 +2,7 @@
 #include "ResourceManager.hpp"
 
 #include "Math.hpp"
+#include "KeyInput.hpp"
 
 #include "Razer/ChromaConnect.hpp"
 
@@ -18,14 +19,16 @@
 
 SpriteRenderer* Renderer;
 PlayerEntity* Player;
-PlayerEntity* Player2;
 ChromaConnect* Chroma;
-PlayerInventory* Inventory;
 
 GameObject* Turret;
 GameObject* TurretBullet;
 GameObject* TurretBullet2;
 GameObject* TurretBullet3;
+
+// Instantiate static variables
+//std::map<GameObject, int> Game::GameObjects;
+std::vector<GameObject*> Game::GameObjects;
 
 glm::vec2 MoveDirection;
 int SelectedHotbarSlot = 0;
@@ -47,10 +50,8 @@ Game::~Game()
 {
 	delete Renderer;
 	delete Player;
-	delete Player2;
 
 	delete Chroma;
-	delete Inventory;
 
 	delete Turret;
 	delete TurretBullet;
@@ -101,94 +102,48 @@ void Game::Init()
 	// Configure GameObjects
 	glm::vec2 spawnPos = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
 	Player = new PlayerEntity(spawnPos, BlockSize, ResourceManager::GetTexture("player"));
-
-	glm::vec2 player2SpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (3.0f + 3.0f)));
-	Player2 = new PlayerEntity(player2SpawnPos, BlockSize, ResourceManager::GetTexture("enemy"));
+	GameObjects.push_back(Player);
 
 	glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
 	Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
+	GameObjects.push_back(Turret);
 
 	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	GameObjects.push_back(TurretBullet);
 	TurretBullet2 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	GameObjects.push_back(TurretBullet2);
 	TurretBullet3 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
-
-	// Inventory
-	Inventory = new PlayerInventory();
+	GameObjects.push_back(TurretBullet3);
 }
 
+//#include "KeyInput.hpp"
 /// <summary>
 /// Take user input each frame
 /// </summary>
 /// <param name="dt">Deltatime</param>
 void Game::ProcessInput(float dt)
 {
+	// Loop through GameObjects and call their Update function
+	for (int i = GameObjects.size() - 1; i > -1; --i)
+	{
+		GameObjects[i]->Input(dt);
+	}
+
 	if (this->State == GameState::GAME_ACTIVE)
 	{
-		float horizontal = Input.GetAxisRaw(Axis::Horizontal);
-		float vertical = Input.GetAxisRaw(Axis::Vertical);
-		Player->Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 300.0f;
-
-		float horizontal2 = Input.GetCustomAxisRaw(GLFW_KEY_L, GLFW_KEY_J);
-		float vertical2 = Input.GetCustomAxisRaw(GLFW_KEY_K, GLFW_KEY_I);
-		Player2->Velocity = Math::Normalize(glm::vec2(horizontal2, vertical2)) * 300.0f;
-
-		// Reset Down
-		if (Input.GetKeyDown(GLFW_KEY_F1))
+		// Load Levels
+		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
 			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
-		if (Input.GetKeyDown(GLFW_KEY_F2))
+		if (KeyInput::GetKeyDown(GLFW_KEY_F2))
 		{
 			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
-		}
-
-		// Check for Inventory things
-		if (Input.GetKeyDown(GLFW_KEY_1))
-			SelectedHotbarSlot = 0;
-		if (Input.GetKeyDown(GLFW_KEY_2))
-			SelectedHotbarSlot = 1;
-		if (Input.GetKeyDown(GLFW_KEY_3))
-			SelectedHotbarSlot = 2;
-		if (Input.GetKeyDown(GLFW_KEY_4))
-			SelectedHotbarSlot = 3;
-		if (Input.GetKeyDown(GLFW_KEY_5))
-			SelectedHotbarSlot = 4;
-		if (Input.GetKeyDown(GLFW_KEY_6))
-			SelectedHotbarSlot = 5;
-		if (Input.GetKeyDown(GLFW_KEY_7))
-			SelectedHotbarSlot = 6;
-		if (Input.GetKeyDown(GLFW_KEY_8))
-			SelectedHotbarSlot = 7;
-		if (Input.GetKeyDown(GLFW_KEY_9))
-			SelectedHotbarSlot = 8;
-
-		// Got to reset to 0 if not scrolling idk how tbh
-		if (Input.GetAxisRaw(Axis::MouseScrollWheel) > 0)
-			SelectedHotbarSlot = SelectedHotbarSlot <= 0 ? 8 : SelectedHotbarSlot - 1;
-		else if (Input.GetAxisRaw(Axis::MouseScrollWheel) < 0)
-			SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
-
-		if (Input.GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
-			if (Inventory->Slots[SelectedHotbarSlot]->_item != NULL)
-				Inventory->Slots[SelectedHotbarSlot]->_item->LeftClick();
-
-		if (Input.GetKeyDown(GLFW_KEY_M))
-		{
-			Inventory->AddItem(new ItemInstance(new Stone(), 300));
-		}
-		if (Input.GetKeyDown(GLFW_KEY_N))
-		{
-			Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
-		}
-
-		if (Input.GetKeyDown(GLFW_KEY_E))
-		{
-			Inventory->DisplayInventory(SelectedHotbarSlot);
 		}
 	}
 }
@@ -200,6 +155,12 @@ float angle = 0.0f;
 /// <param name="dt">Deltatime</param>
 void Game::Update(float dt)
 {
+	// Loop through GameObjects and call their Update function
+	for (int i = GameObjects.size() - 1; i > -1; --i)
+	{
+		GameObjects[i]->Update(dt);
+	}
+
 	// Chroma
 	if (Chroma->ChromaEnabled)
 	{
@@ -207,15 +168,11 @@ void Game::Update(float dt)
 		Chroma->Clear();
 
 		Chroma->Test();
-		Chroma->Inventory(SelectedHotbarSlot);
+		Chroma->Inventory(Player->SelectedHotbarSlot);
 
 		// Draw changes last
 		Chroma->Draw();
 	}
-
-	// Move Player based on Velocity
-	Player->Position += Player->Velocity * dt;
-	Player2->Position += Player2->Velocity * dt;
 
 	angle -= dt / 2.0f;
 	float tdegrees = std::remainder(angle * 360.0f, 360.0f);
@@ -254,21 +211,26 @@ void Game::Render()
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 
 		// Draw calls
-		
+		// Loop trhough GameObjects and draw them
+		for (int i = GameObjects.size() - 1; i > -1; --i)
+		{
+			GameObjects[i]->Draw(*Renderer);
+		}
+
 		// Layer 0 : Background / Skybox - NOW CLEAR COLOR IN Main.cpp
 		//Texture2D background = ResourceManager::GetTexture("background");
 		//Renderer->DrawSprite(background, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f, glm::vec4(1.0f));
 		
 		// Layer 1 : Level Blocks
 		CurrentLevel.Draw(*Renderer);
-		Turret->Draw(*Renderer);
-		TurretBullet->Draw(*Renderer);
-		TurretBullet2->Draw(*Renderer);
-		TurretBullet3->Draw(*Renderer);
+		//Turret->Draw(*Renderer);
+		//TurretBullet->Draw(*Renderer);
+		//TurretBullet2->Draw(*Renderer);
+		//TurretBullet3->Draw(*Renderer);
 
 		// Layer 2
-		Player->Draw(*Renderer);
-		Player2->Draw(*Renderer);
+		//Player->Draw(*Renderer);
+		//Player2->Draw(*Renderer);
 	}
 }
 
@@ -334,7 +296,6 @@ void Game::DoCollision(float dt)
 		Player2->Collision.DoCollision(block);*/
 
 		CheckCollision(*Player, block);
-		CheckCollision(*Player2, block);
 	}
 
 	/*if (i > 0)
