@@ -2,9 +2,10 @@
 #define COLLIDER_HPP
 
 #include <iostream>
+#include "Component.hpp"
 #include "../Objects/GameObject.hpp"
 
-class Collider
+class Collider : public Component
 {
 public:
 	// Properties

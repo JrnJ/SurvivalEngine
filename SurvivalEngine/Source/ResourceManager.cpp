@@ -16,9 +16,10 @@ void ResourceManager::Clear()
     for (auto iS : Shaders)
         glDeleteProgram(iS.second.Id);
 
-    // Delete Textures
-    for (auto iT : Textures)
-        glDeleteProgram(iT.second.Id);
+	// Delete Textures
+	// But not like this, i thnk
+	/*for (auto iT : Textures)
+		glDeleteProgram(iT.second.Id);*/
 }
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)

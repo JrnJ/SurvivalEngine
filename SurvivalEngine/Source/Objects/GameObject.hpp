@@ -17,6 +17,8 @@ public:
 	float Rotation;
 	bool IsSolid;
 
+	// Components
+
 	// Rendering
 	Texture2D Sprite;
 

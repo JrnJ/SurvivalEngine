@@ -163,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Components\Rigidbody.cpp" />
+    <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\KeyInput.cpp" />
     <ClCompile Include="Source\Renderer\Camera.cpp" />
     <ClCompile Include="Source\Items\ItemInstance.cpp" />
@@ -194,8 +196,11 @@
     <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
     <ClCompile Include="Source\Spells\Spawning\Turret.cpp" />
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
+    <ClCompile Include="Source\Components\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Components\Rigidbody.hpp" />
+    <ClInclude Include="Source\Components\Component.hpp" />
     <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Renderer\Camera.hpp" />
     <ClInclude Include="Source\Items\ItemInstance.hpp" />
@@ -229,6 +234,7 @@
     <ClInclude Include="Source\Spells\Spells.hpp" />
     <ClInclude Include="Source\Spells\Spawning\Turret.hpp" />
     <ClInclude Include="Source\Items\Weapon\Spellbook.hpp" />
+    <ClInclude Include="Source\Components\Transform.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\shaders\sprite.fs.glsl" />
