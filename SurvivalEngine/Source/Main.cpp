@@ -41,10 +41,11 @@ int main(int argc, char* argv[])
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	glfwWindowHint(GLFW_RESIZABLE, false);
+	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, 1);
+	glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
 
 	// Create Window
 	std::cout << "Creating Window..." << std::endl;
@@ -108,7 +109,7 @@ int main(int argc, char* argv[])
 
 		// Render
 		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClearColor(0.13f, 0.56f, 0.56f, 1.0f);
+		//glClearColor(0.13f, 0.56f, 0.56f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		Survival.Render();
 
