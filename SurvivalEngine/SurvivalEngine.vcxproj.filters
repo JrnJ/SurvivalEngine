@@ -239,6 +239,9 @@
     <ClInclude Include="Source\ECS\Types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ECS\System.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />

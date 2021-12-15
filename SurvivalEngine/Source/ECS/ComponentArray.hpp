@@ -11,7 +11,7 @@ class IComponentArray
 {
 public:
 	virtual ~IComponentArray() = default; // ?
-	virtual void GameObjectDestroyed(Entity entity) = 0;
+	virtual void EntityDestroyed(Entity entity) = 0;
 };
 
 template<typename T> // ?
@@ -64,7 +64,7 @@ public:
 		return mComponentArray[mEntityToIndexMap[entity]];
 	}
 
-	void EntityDestroyed()
+	void EntityDestroyed(Entity entity) override
 	{
 		if (mEntityToIndexMap.find(entity) != mEntityToIndexMap.end())
 		{
