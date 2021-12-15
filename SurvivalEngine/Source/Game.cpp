@@ -184,6 +184,8 @@ void Game::Update(float dt)
 			KeyInput::MouseY + _camera.GetPosition().y - Turret->Size.x / 2.0f
 		};
 	}
+	if (KeyInput::GetKeyDown(GLFW_KEY_K))
+		_camera.SetRotation(0.0f);
 
 	//if (KeyInput::GetKey(GLFW_KEY_L))
 	//	_camera.SetRotation(_camera.GetRotation() + 0.025f * dt);
