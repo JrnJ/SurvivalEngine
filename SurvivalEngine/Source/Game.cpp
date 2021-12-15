@@ -173,6 +173,24 @@ void Game::Update(float dt)
 		Chroma->Draw();
 	}
 
+	// Mouse to world pos MAKE THIS A FUNCTION OR ELSE
+	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
+	{
+		std::cout << "Mouse : X: " << KeyInput::MouseX << " Y: " << KeyInput::MouseY << std::endl;
+		std::cout << "Camera: X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
+
+		Turret->Position = { 
+			KeyInput::MouseX + _camera.GetPosition().x - Turret->Size.x / 2.0f,
+			KeyInput::MouseY + _camera.GetPosition().y - Turret->Size.x / 2.0f
+		};
+	}
+
+	//if (KeyInput::GetKey(GLFW_KEY_L))
+	//	_camera.SetRotation(_camera.GetRotation() + 0.025f * dt);
+
+	// Rotate camera around center insteaf of top left
+	_camera.SetRotation(_camera.GetRotation() + KeyInput::GetCustomAxisRaw(GLFW_KEY_J, GLFW_KEY_L) * 0.015 * dt);
+
 	angle -= dt / 2.0f;
 	float tdegrees = std::remainder(angle * 360.0f, 360.0f);
 	float tradius = BlockSize.x * 1.5f; // Get difference in positions instead

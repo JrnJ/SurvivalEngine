@@ -46,9 +46,9 @@ void PlayerEntity::Input(float dt)
 	else if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) < 0)
 		SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
 
-	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
-		if (this->Inventory->Slots[SelectedHotbarSlot]->_item != NULL)
-			this->Inventory->Slots[SelectedHotbarSlot]->_item->LeftClick();
+	//if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
+	//	if (this->Inventory->Slots[SelectedHotbarSlot]->_item != NULL)
+	//		this->Inventory->Slots[SelectedHotbarSlot]->_item->LeftClick();
 
 	if (KeyInput::GetKeyDown(GLFW_KEY_M))
 	{

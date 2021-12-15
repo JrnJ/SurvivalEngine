@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Math.hpp"
+
 enum class KeyCode
 {
 	A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
@@ -34,6 +36,10 @@ namespace KeyInput
 	extern double ScrollX;
 	extern double ScrollY;
 
+	extern double MouseX;
+	extern double MouseY;
+	extern Math::Vector2 MousePosition;
+
 	// Methods
 	// Keyboard
 	const bool GetKey(int key);
@@ -44,6 +50,7 @@ namespace KeyInput
 	const bool GetMouseButton(int button);
 	const bool GetMouseButtonDown(int button);
 	const bool GetMouseButtonUp(int button);
+	const Math::Vector2 MouseToWorldPos();
 
 	// Axis
 	const float GetAxis(Axis axis);

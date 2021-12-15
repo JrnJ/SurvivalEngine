@@ -10,6 +10,9 @@ bool KeyInput::PressedMouseButtons[1024];
 double KeyInput::ScrollX = 0;
 double KeyInput::ScrollY = 0;
 
+double KeyInput::MouseX = 0;
+double KeyInput::MouseY = 0;
+
 /// <summary>
 /// Returns the state of pressed key
 /// </summary>
@@ -60,6 +63,18 @@ const bool KeyInput::GetMouseButtonUp(int button)
 {
 	std::cout << "Not Working!" << std::endl;
 	return false;
+}
+
+const Math::Vector2 KeyInput::MouseToWorldPos()
+{
+	std::cout << "Function not working due to camera now accesible by any object, see comments for info" << std::endl;
+	// Calculation:
+	// return Math::Vector2(KeyInput::MouseX + _camera.GetPosition().x, KeyInput::MouseY + _camera.GetPosition().y); 
+
+	// Camera has to become a namespace in which everything can acces it in order to allow the getting of the camera position
+	// Or create a reference to here from the camera :)
+
+	return Math::Vector2();
 }
 
 // Mouse //

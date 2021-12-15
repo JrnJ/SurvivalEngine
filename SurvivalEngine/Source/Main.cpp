@@ -23,6 +23,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void cursor_move_callback(GLFWwindow* window, double cursorX, double cursorY);
 
 const unsigned int SCREEN_WIDTH = 1280;
 const unsigned int SCREEN_HEIGHT = 720;
@@ -72,6 +73,7 @@ int main(int argc, char* argv[])
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetCursorPosCallback(window, cursor_move_callback);
 
 	// Configurate OpenGL
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -175,4 +177,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	// Mouse Scrollwheel
 	KeyInput::ScrollX = xoffset;
 	KeyInput::ScrollY = yoffset;
+}
+
+void cursor_move_callback(GLFWwindow* window, double cursorX, double cursorY)
+{
+	KeyInput::MouseX = cursorX;
+	KeyInput::MouseY = cursorY;
 }

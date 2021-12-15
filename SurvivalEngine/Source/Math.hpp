@@ -12,19 +12,20 @@ namespace Math
 	// Degrees
 	const float RadToDeg(float radians);
 	const float DegToRad(float degrees);
+
+	// Types
+	struct Vector2
+	{
+		float x;
+		float y;
+	};
+
+	struct Vector3
+	{
+		float x;
+		float y;
+		float z;
+	};
 }
 
 #endif
-
-struct Vector2
-{
-	float x;
-	float y;
-};
-
-struct Vector3
-{
-	float x;
-	float y;
-	float z;
-};

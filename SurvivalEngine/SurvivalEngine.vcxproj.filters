@@ -251,6 +251,7 @@
   <ItemGroup>
     <Text Include="Assets\levels\cage.txt" />
     <Text Include="Assets\levels\test.txt" />
+    <Text Include="Assets\Bugs.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\textures\background.png">
