@@ -1,9 +1,9 @@
-#ifndef ENTITY_HPP
-#define ENTITY_HPP
+#ifndef ENTITYOLD_HPP
+#define ENTITYOLD_HPP
 
 #include "GameObject.hpp"
 
-class Entity : public GameObject
+class EntityOld : public GameObject
 {
 public:
 	// Properties
@@ -13,8 +13,8 @@ public:
 	float MaxHealth; // GET ONLY!!! - for now :D
 
 	// Constructors
-	Entity();
-	Entity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color = glm::vec4(1.0f));
+	EntityOld();
+	EntityOld(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color = glm::vec4(1.0f));
 
 	// Components
 

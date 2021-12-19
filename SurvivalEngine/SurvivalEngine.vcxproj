@@ -171,7 +171,7 @@
     <ClCompile Include="Source\Inventory\Inventory.cpp" />
     <ClCompile Include="Source\Items\Items.hpp" />
     <ClCompile Include="Source\Objects\CowEntity.cpp" />
-    <ClCompile Include="Source\Objects\Entity.cpp" />
+    <ClCompile Include="Source\Objects\EntityOld.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Level.cpp" />
@@ -195,8 +195,9 @@
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Components\Components.hpp" />
     <ClInclude Include="Source\Components\Rigidbody.hpp" />
-    <ClInclude Include="Source\Components\SpriteRenderer.hpp" />
+    <ClInclude Include="Source\Components\Renderable.hpp" />
     <ClInclude Include="Source\Components\Transform.hpp" />
     <ClInclude Include="Source\ECS\ComponentArray.hpp" />
     <ClInclude Include="Source\ECS\ComponentManager.hpp" />
@@ -213,7 +214,7 @@
     <ClInclude Include="Source\Items\Item.hpp" />
     <ClInclude Include="Source\Inventory\Inventory.hpp" />
     <ClInclude Include="Source\Objects\CowEntity.hpp" />
-    <ClInclude Include="Source\Objects\Entity.hpp" />
+    <ClInclude Include="Source\Objects\EntityOld.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />

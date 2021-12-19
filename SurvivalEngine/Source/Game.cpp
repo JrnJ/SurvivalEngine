@@ -8,9 +8,10 @@
 
 #include "Renderer/SpriteRenderer.hpp"
 #include "Objects/GameObject.hpp"
-#include "Objects/Entity.hpp"
+#include "Objects/EntityOld.hpp"
 #include "Objects/PlayerEntity.hpp"
 #include "Objects/CowEntity.hpp"
+#include "Components/Components.hpp"
 
 // Also includes all items
 #include "Inventory/PlayerInventory.hpp"
@@ -113,6 +114,36 @@ void Game::Init()
 	GameObjects.push_back(TurretBullet2);
 	TurretBullet3 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
 	GameObjects.push_back(TurretBullet3);
+
+	// // //
+	// ESC  
+	// // //
+
+	// Initialize coordinator
+	_coordinator.Init();
+
+	// Register Components
+	_coordinator.RegisterComponent<Transform>();
+	_coordinator.RegisterComponent<Rigidbody>();
+	_coordinator.RegisterComponent<Renderable>();
+
+	// Signature
+	_signature.set(_coordinator.GetComponentType<Transform>());
+	_signature.set(_coordinator.GetComponentType<Rigidbody>());
+	_signature.set(_coordinator.GetComponentType<Renderable>());
+
+	Entity entity = _coordinator.CreateEntity();
+
+	_coordinator.AddComponent(entity, Transform
+		{
+			.Position = glm::vec2(0.0f, 0.0f),
+			.Scale = BlockSize,
+			.Rotation = 0.0f
+		});
+
+	// // //
+	// /ESC  
+	// // //
 }
 
 //#include "KeyInput.hpp"
@@ -261,7 +292,7 @@ void Game::ResetPlayer()
 }
 
 // Move this to a class and than add to stuff
-bool CheckCollision(Entity& player, GameObject& object)
+bool CheckCollision(EntityOld& player, GameObject& object)
 {
 	float push = 0.0f;
 

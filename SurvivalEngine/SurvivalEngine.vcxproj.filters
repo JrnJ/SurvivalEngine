@@ -63,7 +63,7 @@
     <ClCompile Include="Source\Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Objects\Entity.cpp">
+    <ClCompile Include="Source\Objects\EntityOld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Objects\CowEntity.cpp">
@@ -158,7 +158,7 @@
     <ClInclude Include="Source\Level.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Objects\Entity.hpp">
+    <ClInclude Include="Source\Objects\EntityOld.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Objects\CowEntity.hpp">
@@ -230,7 +230,10 @@
     <ClInclude Include="Source\Components\Rigidbody.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\SpriteRenderer.hpp">
+    <ClInclude Include="Source\Components\Renderable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Components.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,10 @@
 #ifndef PLAYERENTITY_HPP
 #define PLAYERENTITY_HPP
 
-#include "Entity.hpp"
+#include "EntityOld.hpp"
 #include "../Inventory/PlayerInventory.hpp"
 
-class PlayerEntity : public Entity
+class PlayerEntity : public EntityOld
 {
 private:
 	const float _maxHealth = 20.0f;

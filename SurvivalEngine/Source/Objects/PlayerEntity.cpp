@@ -3,7 +3,7 @@
 #include "../KeyInput.hpp"
 
 PlayerEntity::PlayerEntity(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec4 color)
-	: Entity::Entity(pos, size, sprite, color)
+	: EntityOld::EntityOld(pos, size, sprite, color)
 {
 	this->Inventory = new PlayerInventory();
 }

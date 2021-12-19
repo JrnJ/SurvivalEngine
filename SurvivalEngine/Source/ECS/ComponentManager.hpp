@@ -34,7 +34,7 @@ public:
 
 		assert(mComponentTypes.find(typeName) != mComponentTypes.end() && "Component not registered before use.");
 
-		return mComponentType[typeName];
+		return mComponentTypes[typeName];
 	}
 
 	template<typename T>

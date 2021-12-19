@@ -10,6 +10,8 @@
 #include "KeyInput.hpp"
 #include "Renderer/Camera.hpp"
 
+#include "ECS/Coordinator.hpp"
+
 // All Game States
 enum class GameState 
 {
@@ -52,6 +54,9 @@ public:
 
 private:
     Camera _camera;
+
+    Coordinator _coordinator;
+    Signature _signature;
 };
 
 #endif

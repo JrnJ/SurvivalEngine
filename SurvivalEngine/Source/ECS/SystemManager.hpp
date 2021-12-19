@@ -19,7 +19,7 @@ public:
 
 		// Create a pointer to the system and return it so it can be used externally
 		auto system = std::make_shared<T>();
-		mSystem.insert({ typeName, system });
+		mSystems.insert({ typeName, system });
 
 		return system;
 	}

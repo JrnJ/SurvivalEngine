@@ -1,10 +1,10 @@
-#ifndef SPRITERENDERER_HPP
-#define SPRITERENDERER_HPP
+#ifndef RENDERABLE_HPP
+#define RENDERABLE_HPP
 
 #include <glm/glm.hpp>
 #include "../Renderer/Texture2D.hpp"
 
-struct SpriteRenderer
+struct Renderable
 {
 	Texture2D Texture;
 	glm::vec4 Color;

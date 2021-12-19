@@ -42,7 +42,7 @@ public:
 		// Update map to point moved spot
 		Entity entityOfLastElement = mIndexToEntityMap[indexOfLastElement];
 		mEntityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
-		mIndexToEntityMap[indexPfRemovedEntity] = entityOfLastElement;
+		mIndexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
 
 		// Erease removed data/entity
 		mEntityToIndexMap.erase(entity);

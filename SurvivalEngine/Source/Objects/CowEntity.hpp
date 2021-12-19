@@ -1,9 +1,9 @@
 #ifndef COWENTITY_HPP
 #define COWENTITY_HPP
 
-#include "Entity.hpp"
+#include "EntityOld.hpp"
 
-class CowEntity : public Entity
+class CowEntity : public EntityOld
 {
 public:
 	// Constructors
