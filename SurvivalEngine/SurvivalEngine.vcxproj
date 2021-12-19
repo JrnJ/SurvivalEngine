@@ -201,10 +201,12 @@
   <ItemGroup>
     <ClInclude Include="Source\ECS\ComponentArray.hpp" />
     <ClInclude Include="Source\ECS\ComponentManager.hpp" />
+    <ClInclude Include="Source\ECS\Coordinator.hpp" />
     <ClInclude Include="Source\ECS\EntityManager.hpp" />
     <ClInclude Include="Source\Components\Rigidbody.hpp" />
     <ClInclude Include="Source\Components\Component.hpp" />
     <ClInclude Include="Source\ECS\System.hpp" />
+    <ClInclude Include="Source\ECS\SystemManager.hpp" />
     <ClInclude Include="Source\ECS\Types.hpp" />
     <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Renderer\Camera.hpp" />
