@@ -2,7 +2,6 @@
 #define ENTITY_HPP
 
 #include "GameObject.hpp"
-#include "../Components/Collider.hpp"
 
 class Entity : public GameObject
 {
@@ -12,8 +11,6 @@ public:
 	float Mass;
 	float Health;
 	float MaxHealth; // GET ONLY!!! - for now :D
-
-	Collider Collision;
 
 	// Constructors
 	Entity();

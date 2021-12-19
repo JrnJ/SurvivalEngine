@@ -163,8 +163,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Components\Rigidbody.cpp" />
-    <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\KeyInput.cpp" />
     <ClCompile Include="Source\Renderer\Camera.cpp" />
     <ClCompile Include="Source\Items\ItemInstance.cpp" />
@@ -174,7 +172,6 @@
     <ClCompile Include="Source\Items\Items.hpp" />
     <ClCompile Include="Source\Objects\CowEntity.cpp" />
     <ClCompile Include="Source\Objects\Entity.cpp" />
-    <ClCompile Include="Source\Components\Collider.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Level.cpp" />
@@ -196,15 +193,15 @@
     <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
     <ClCompile Include="Source\Spells\Spawning\Turret.cpp" />
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
-    <ClCompile Include="Source\Components\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Components\Rigidbody.hpp" />
+    <ClInclude Include="Source\Components\SpriteRenderer.hpp" />
+    <ClInclude Include="Source\Components\Transform.hpp" />
     <ClInclude Include="Source\ECS\ComponentArray.hpp" />
     <ClInclude Include="Source\ECS\ComponentManager.hpp" />
     <ClInclude Include="Source\ECS\Coordinator.hpp" />
     <ClInclude Include="Source\ECS\EntityManager.hpp" />
-    <ClInclude Include="Source\Components\Rigidbody.hpp" />
-    <ClInclude Include="Source\Components\Component.hpp" />
     <ClInclude Include="Source\ECS\System.hpp" />
     <ClInclude Include="Source\ECS\SystemManager.hpp" />
     <ClInclude Include="Source\ECS\Types.hpp" />
@@ -217,7 +214,6 @@
     <ClInclude Include="Source\Inventory\Inventory.hpp" />
     <ClInclude Include="Source\Objects\CowEntity.hpp" />
     <ClInclude Include="Source\Objects\Entity.hpp" />
-    <ClInclude Include="Source\Components\Collider.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />
@@ -241,7 +237,6 @@
     <ClInclude Include="Source\Spells\Spells.hpp" />
     <ClInclude Include="Source\Spells\Spawning\Turret.hpp" />
     <ClInclude Include="Source\Items\Weapon\Spellbook.hpp" />
-    <ClInclude Include="Source\Components\Transform.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\shaders\sprite.fs.glsl" />
