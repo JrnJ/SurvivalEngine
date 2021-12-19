@@ -20,6 +20,7 @@
 
 SpriteRenderer* Renderer;
 PlayerEntity* Player;
+Entity NewEntity;
 ChromaConnect* Chroma;
 
 GameObject* Turret;
@@ -132,13 +133,19 @@ void Game::Init()
 	_signature.set(_coordinator.GetComponentType<Rigidbody>());
 	_signature.set(_coordinator.GetComponentType<Renderable>());
 
-	Entity entity = _coordinator.CreateEntity();
+	NewEntity = _coordinator.CreateEntity();
 
-	_coordinator.AddComponent(entity, Transform
+	_coordinator.AddComponent(NewEntity, Transform
 		{
-			.Position = glm::vec2(0.0f, 0.0f),
+			.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
 			.Scale = BlockSize,
 			.Rotation = 0.0f
+		});
+
+	_coordinator.AddComponent(NewEntity, Renderable
+		{
+			.Sprite = ResourceManager::GetTexture("TurretBullet"),
+			.Color = glm::vec4(1.0f)
 		});
 
 	// // //
@@ -281,6 +288,15 @@ void Game::Render()
 		// Layer 2
 		//Player->Draw(*Renderer);
 		//Player2->Draw(*Renderer);
+
+		// ECS temp draw
+		Renderer->DrawSprite(
+			_coordinator.GetComponent<Renderable>(NewEntity).Sprite,
+			_coordinator.GetComponent<Transform>(NewEntity).Position,
+			_coordinator.GetComponent<Transform>(NewEntity).Scale,
+			_coordinator.GetComponent<Transform>(NewEntity).Rotation,
+			_coordinator.GetComponent<Renderable>(NewEntity).Color
+			);
 	}
 }
 

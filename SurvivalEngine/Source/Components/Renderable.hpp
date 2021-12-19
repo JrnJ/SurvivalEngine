@@ -6,10 +6,8 @@
 
 struct Renderable
 {
-	Texture2D Texture;
+	Texture2D Sprite;
 	glm::vec4 Color;
-	
-	// Draw function of some sort
 };
 
 #endif
