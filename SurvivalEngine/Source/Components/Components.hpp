@@ -5,5 +5,6 @@
 #include "Transform.hpp"
 #include "Rigidbody.hpp"
 #include "Renderable.hpp"
+#include "Camera2D.hpp"
 
 #endif

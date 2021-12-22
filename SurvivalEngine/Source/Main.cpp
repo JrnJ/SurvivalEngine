@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClearColor(0.13f, 0.56f, 0.56f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		Survival.Render();
+		Survival.Render(deltaTime);
 
 		// Reset scrollwheel
 		KeyInput::ScrollX = 0;

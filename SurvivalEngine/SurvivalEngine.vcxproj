@@ -163,6 +163,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Systems\PhysicsSystem.cpp" />
+    <ClCompile Include="Source\Systems\RenderSystem.cpp" />
     <ClCompile Include="Source\KeyInput.cpp" />
     <ClCompile Include="Source\Renderer\Camera.cpp" />
     <ClCompile Include="Source\Items\ItemInstance.cpp" />
@@ -195,6 +197,8 @@
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Systems\PhysicsSystem.hpp" />
+    <ClInclude Include="Source\Components\Camera2D.hpp" />
     <ClInclude Include="Source\Components\Components.hpp" />
     <ClInclude Include="Source\Components\Rigidbody.hpp" />
     <ClInclude Include="Source\Components\Renderable.hpp" />
@@ -205,6 +209,7 @@
     <ClInclude Include="Source\ECS\EntityManager.hpp" />
     <ClInclude Include="Source\ECS\System.hpp" />
     <ClInclude Include="Source\ECS\SystemManager.hpp" />
+    <ClInclude Include="Source\Systems\RenderSystem.hpp" />
     <ClInclude Include="Source\ECS\Types.hpp" />
     <ClInclude Include="Source\KeyInput.hpp" />
     <ClInclude Include="Source\Renderer\Camera.hpp" />

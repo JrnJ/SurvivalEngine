@@ -66,12 +66,14 @@ public:
 		}
 	}
 
-private:
 	// Map from system type string pointer to a signature
 	std::unordered_map<const char*, Signature> mSignatures{};
 
 	// Map from system type string pointer to a system pointer
 	std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
+
+private:
+	
 };
 
 #endif

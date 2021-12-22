@@ -92,8 +92,11 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 
 				switch (blockData[y][x])
 				{
-					case 1:
-						block = "";
+					case 2:
+						block = "RailStraight";
+						break;
+					case 3:
+						block = "RailAngled";
 						break;
 				}
 

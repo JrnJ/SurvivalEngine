@@ -1,8 +1,8 @@
 #ifndef RENDERABLE_HPP
 #define RENDERABLE_HPP
 
-#include <glm/glm.hpp>
 #include "../Renderer/Texture2D.hpp"
+#include <glm/glm.hpp>
 
 struct Renderable
 {

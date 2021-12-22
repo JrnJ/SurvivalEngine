@@ -1,4 +1,8 @@
 #include "game.hpp"
+
+#include <iostream>
+#include <queue>
+
 #include "ResourceManager.hpp"
 
 #include "Math.hpp"
@@ -16,8 +20,6 @@
 // Also includes all items
 #include "Inventory/PlayerInventory.hpp"
 
-#include <iostream>
-
 SpriteRenderer* Renderer;
 PlayerEntity* Player;
 Entity NewEntity;
@@ -27,6 +29,10 @@ GameObject* Turret;
 GameObject* TurretBullet;
 GameObject* TurretBullet2;
 GameObject* TurretBullet3;
+
+Entity Rail1;
+Entity Rail2;
+Entity Rail3;
 
 // Instantiate static variables
 //std::map<GameObject, int> Game::GameObjects;
@@ -90,10 +96,10 @@ void Game::Init()
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", "Dirt", false); // ID : 2
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", "Water", false); // ID : 3
 
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/TurretBullet.png", "TurretBullet", true); // ID : 3
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/8x8.png", "8", false); 
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/16x16.png", "16", false);
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/64x64.png", "64", false);
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/TurretBullet.png", "TurretBullet", true);
+
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailStraight.png", "RailStraight", true);
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailAngled.png", "RailAngled", true);
 
 	// Load Levels
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
@@ -127,11 +133,31 @@ void Game::Init()
 	_coordinator.RegisterComponent<Transform>();
 	_coordinator.RegisterComponent<Rigidbody>();
 	_coordinator.RegisterComponent<Renderable>();
+	_coordinator.RegisterComponent<Camera2D>();
 
-	// Signature
-	_signature.set(_coordinator.GetComponentType<Transform>());
-	_signature.set(_coordinator.GetComponentType<Rigidbody>());
-	_signature.set(_coordinator.GetComponentType<Renderable>());
+	// Render System
+	_renderSystem = _coordinator.RegisterSystem<RenderSystem>();
+	{
+		Signature signature;
+		signature.set(_coordinator.GetComponentType<Transform>());
+		signature.set(_coordinator.GetComponentType<Renderable>());
+		signature.set(_coordinator.GetComponentType<Camera2D>());
+		_coordinator.SetSystemSignature<RenderSystem>(signature);
+	}
+	_renderSystem->Init();
+
+	// Physics System
+	_physicsSystem = _coordinator.RegisterSystem<PhysicsSystem>();
+	{
+		Signature signature;
+		signature.set(_coordinator.GetComponentType<Transform>());
+		signature.set(_coordinator.GetComponentType<Renderable>());
+		signature.set(_coordinator.GetComponentType<Rigidbody>());
+		_coordinator.SetSystemSignature<PhysicsSystem>(signature);
+	}
+	_physicsSystem->Init();
+
+	//std::vector<Entity> entities(MAX_ENTITIES - 1);
 
 	NewEntity = _coordinator.CreateEntity();
 
@@ -145,6 +171,46 @@ void Game::Init()
 	_coordinator.AddComponent(NewEntity, Renderable
 		{
 			.Sprite = ResourceManager::GetTexture("TurretBullet"),
+			.Color = glm::vec4(1.0f)
+		});
+
+	// Just 3 fking rails holy fk
+	Rail1 = _coordinator.CreateEntity();
+	_coordinator.AddComponent(Rail1, Transform
+		{
+			.Position = glm::vec2(BlockSize.x * 3.0f, BlockSize.y * 5.0f),
+			.Scale = BlockSize,
+			.Rotation = 0.0f
+		});
+	_coordinator.AddComponent(Rail1, Renderable
+		{
+			.Sprite = ResourceManager::GetTexture("RailStraight"),
+			.Color = glm::vec4(1.0f)
+		});
+
+	Rail2 = _coordinator.CreateEntity();
+	_coordinator.AddComponent(Rail2, Transform
+		{
+			.Position = glm::vec2(BlockSize.x * 3.0f, BlockSize.y * 6.0f),
+			.Scale = BlockSize,
+			.Rotation = 0.0f
+		});
+	_coordinator.AddComponent(Rail2, Renderable
+		{
+			.Sprite = ResourceManager::GetTexture("RailStraight"),
+			.Color = glm::vec4(1.0f)
+		});
+
+	Rail3 = _coordinator.CreateEntity();
+	_coordinator.AddComponent(Rail3, Transform
+		{
+			.Position = glm::vec2(BlockSize.x * 4.0f, BlockSize.y * 6.0f),
+			.Scale = BlockSize,
+			.Rotation = 0.0f
+		});
+	_coordinator.AddComponent(Rail3, Renderable
+		{
+			.Sprite = ResourceManager::GetTexture("RailStraight"),
 			.Color = glm::vec4(1.0f)
 		});
 
@@ -182,6 +248,13 @@ void Game::ProcessInput(float dt)
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
+
+		if (KeyInput::GetKeyDown(GLFW_KEY_F3))
+		{
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/world.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->ResetPlayer();
+			std::cout << "Level Loaded!" << std::endl;
+		}
 	}
 }
 
@@ -214,14 +287,51 @@ void Game::Update(float dt)
 	// Mouse to world pos MAKE THIS A FUNCTION OR ELSE
 	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
 	{
-		std::cout << "Mouse : X: " << KeyInput::MouseX << " Y: " << KeyInput::MouseY << std::endl;
-		std::cout << "Camera: X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
+		//std::cout << "Mouse : X: " << KeyInput::MouseX << " Y: " << KeyInput::MouseY << std::endl;
+		//std::cout << "Mouse Grid Snapped: X: " << std::floor(KeyInput::MouseX / BlockSize.x) << " Y: " << std::floor(KeyInput::MouseY / BlockSize.y) << std::endl;
+		//std::cout << "Camera: X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
 
-		Turret->Position = { 
+		// On mouse
+		/*Turret->Position = { 
 			KeyInput::MouseX + _camera.GetPosition().x - Turret->Size.x / 2.0f,
 			KeyInput::MouseY + _camera.GetPosition().y - Turret->Size.x / 2.0f
+		};*/
+
+		// Grid Snapped
+		//Turret->Position = {
+		//	std::floor((KeyInput::MouseX + _camera.GetPosition().x) / BlockSize.x) * BlockSize.x,
+		//	std::floor((KeyInput::MouseY + _camera.GetPosition().y) / BlockSize.y) * BlockSize.y
+		//};
+
+		glm::vec2 newPos = {
+			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / BlockSize.x) * BlockSize.x,
+			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / BlockSize.y) * BlockSize.y
 		};
+
+		// Try create a rail
+		Entity entity = _coordinator.CreateEntity();
+		_coordinator.AddComponent(entity, Transform
+			{
+				.Position = glm::vec2(newPos),
+				.Scale = BlockSize,
+				.Rotation = 0.0f
+			});
+		_coordinator.AddComponent(entity, Renderable
+			{
+				.Sprite = ResourceManager::GetTexture("RailStraight"),
+				.Color = glm::vec4(1.0f)
+			});
 	}
+
+	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
+	{
+		// Try delete the rail
+		
+		// TODO
+		// Get block info on click
+		// Fuck it you need a grid system OOF
+	}
+
 	if (KeyInput::GetKeyDown(GLFW_KEY_K))
 		_camera.SetRotation(0.0f);
 
@@ -260,12 +370,15 @@ void Game::Update(float dt)
 /// <summary>
 /// Render all graphics to screen each frame
 /// </summary>
-void Game::Render()
+void Game::Render(float dt)
 {
 	if (this->State == GameState::GAME_ACTIVE)
 	{
 		// Update Camera
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
+
+		// RenderSystem
+		_renderSystem->Update(dt);
 
 		// Draw calls
 		// Loop trhough GameObjects and draw them
@@ -297,6 +410,30 @@ void Game::Render()
 			_coordinator.GetComponent<Transform>(NewEntity).Rotation,
 			_coordinator.GetComponent<Renderable>(NewEntity).Color
 			);
+
+		Renderer->DrawSprite(
+			_coordinator.GetComponent<Renderable>(Rail1).Sprite,
+			_coordinator.GetComponent<Transform>(Rail1).Position,
+			_coordinator.GetComponent<Transform>(Rail1).Scale,
+			_coordinator.GetComponent<Transform>(Rail1).Rotation,
+			_coordinator.GetComponent<Renderable>(Rail1).Color
+		);
+
+		Renderer->DrawSprite(
+			_coordinator.GetComponent<Renderable>(Rail2).Sprite,
+			_coordinator.GetComponent<Transform>(Rail2).Position,
+			_coordinator.GetComponent<Transform>(Rail2).Scale,
+			_coordinator.GetComponent<Transform>(Rail2).Rotation,
+			_coordinator.GetComponent<Renderable>(Rail2).Color
+		);
+
+		Renderer->DrawSprite(
+			_coordinator.GetComponent<Renderable>(Rail3).Sprite,
+			_coordinator.GetComponent<Transform>(Rail3).Position,
+			_coordinator.GetComponent<Transform>(Rail3).Scale,
+			_coordinator.GetComponent<Transform>(Rail3).Rotation,
+			_coordinator.GetComponent<Renderable>(Rail3).Color
+		);
 	}
 }
 

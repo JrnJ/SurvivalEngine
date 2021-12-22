@@ -87,10 +87,12 @@ public:
 		mSystemManager->SetSignature<T>(signature);
 	}
 
-private:
 	std::unique_ptr<ComponentManager> mComponentManager;
 	std::unique_ptr<EntityManager> mEntityManager;
 	std::unique_ptr<SystemManager> mSystemManager;
+
+private:
+	
 };
 
 #endif // !COORDINATOR_HPP

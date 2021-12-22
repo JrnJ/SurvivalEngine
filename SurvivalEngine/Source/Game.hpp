@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <queue>
+
 #include <glm/glm.hpp>
 
 #include "Level.hpp"
@@ -11,6 +13,10 @@
 #include "Renderer/Camera.hpp"
 
 #include "ECS/Coordinator.hpp"
+
+// Systems
+#include "Systems/RenderSystem.hpp"
+#include "Systems/PhysicsSystem.hpp"
 
 // All Game States
 enum class GameState 
@@ -46,7 +52,7 @@ public:
     // Game Loop
     void ProcessInput(float dt);
     void Update(float dt);
-    void Render();
+    void Render(float dt);
 
     // Player
     void ResetPlayer();
@@ -56,7 +62,10 @@ private:
     Camera _camera;
 
     Coordinator _coordinator;
-    Signature _signature;
+    std::shared_ptr<RenderSystem> _renderSystem;
+    std::shared_ptr<PhysicsSystem> _physicsSystem;
+
+    std::vector<Entity> _entities;
 };
 
 #endif

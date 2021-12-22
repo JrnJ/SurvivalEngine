@@ -1,6 +1,7 @@
 #ifndef COMPONENTARRAY_HPP
 #define COMPONENTARRAY_HPP
 
+#include <iostream>
 #include <array>
 #include <cassert>
 #include <unordered_map>
@@ -28,6 +29,20 @@ public:
 		mIndexToEntityMap[newIndex] = entity;
 		mComponentArray[newIndex] = component;
 		++mSize;
+
+		//if (mEntityToIndexMap.find(entity) == mEntityToIndexMap.end())
+		//{
+		//	std::cout << "Component " << typeid(component).name() << " already present on Entity with id " << entity << std::endl;
+		//}
+		//else
+		//{
+		//	// Put new entry at end and update the maps
+		//	size_t newIndex = mSize;
+		//	mEntityToIndexMap[entity] = newIndex;
+		//	mIndexToEntityMap[newIndex] = entity;
+		//	mComponentArray[newIndex] = component;
+		//	++mSize;
+		//}
 	}
 
 	void RemoveData(Entity entity)

@@ -27,7 +27,7 @@ public:
 		// https://www.cplusplus.com/reference/cassert/assert/
 		assert(mLivingEntityCount < MAX_ENTITIES && "Too many entities in existence.");
 
-		// Take an ID from the front of the queue
+		// Take an ID from the newest of the queue
 		Entity id = mAvailableEntities.front();
 		mAvailableEntities.pop(); // Removes the next element in the queue
 		++mLivingEntityCount;
@@ -63,7 +63,6 @@ public:
 		return mSignatures[entity];
 	}
 
-private:
 	// Queue of unused entity IDs
 	std::queue<Entity> mAvailableEntities{};
 
@@ -72,6 +71,9 @@ private:
 
 	// Total living entities - used to keep limits on how many exist
 	uint32_t mLivingEntityCount{};
+
+private:
+	
 };
 
 #endif
