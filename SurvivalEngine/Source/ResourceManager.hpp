@@ -1,5 +1,5 @@
-#ifndef RESOURCE_MANAGER_HPP
-#define RESOURCE_MANAGER_HPP
+#ifndef RESOURCEMANAGER_HPP
+#define RESOURCEMANAGER_HPP
 
 #include <map>
 #include <string>

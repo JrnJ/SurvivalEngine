@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "Game.hpp"
 
 #include <iostream>
 #include <queue>
@@ -22,7 +22,6 @@
 
 SpriteRenderer* Renderer;
 PlayerEntity* Player;
-Entity NewEntity;
 ChromaConnect* Chroma;
 
 GameObject* Turret;
@@ -30,9 +29,7 @@ GameObject* TurretBullet;
 GameObject* TurretBullet2;
 GameObject* TurretBullet3;
 
-Entity Rail1;
-Entity Rail2;
-Entity Rail3;
+Coordinator _coordinator;
 
 // Instantiate static variables
 //std::map<GameObject, int> Game::GameObjects;
@@ -141,7 +138,6 @@ void Game::Init()
 		Signature signature;
 		signature.set(_coordinator.GetComponentType<Transform>());
 		signature.set(_coordinator.GetComponentType<Renderable>());
-		signature.set(_coordinator.GetComponentType<Camera2D>());
 		_coordinator.SetSystemSignature<RenderSystem>(signature);
 	}
 	_renderSystem->Init();
@@ -157,62 +153,25 @@ void Game::Init()
 	}
 	_physicsSystem->Init();
 
-	//std::vector<Entity> entities(MAX_ENTITIES - 1);
+	std::vector<Entity> entities(MAX_ENTITIES - 4500);
 
-	NewEntity = _coordinator.CreateEntity();
+	for (auto& entity : entities)
+	{
+		entity = _coordinator.CreateEntity();
 
-	_coordinator.AddComponent(NewEntity, Transform
-		{
-			.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
-			.Scale = BlockSize,
-			.Rotation = 0.0f
-		});
+		_coordinator.AddComponent(entity, Transform
+			{
+				.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
+				.Scale = BlockSize,
+				.Rotation = 0.0f
+			});
 
-	_coordinator.AddComponent(NewEntity, Renderable
-		{
-			.Sprite = ResourceManager::GetTexture("TurretBullet"),
-			.Color = glm::vec4(1.0f)
-		});
-
-	// Just 3 fking rails holy fk
-	Rail1 = _coordinator.CreateEntity();
-	_coordinator.AddComponent(Rail1, Transform
-		{
-			.Position = glm::vec2(BlockSize.x * 3.0f, BlockSize.y * 5.0f),
-			.Scale = BlockSize,
-			.Rotation = 0.0f
-		});
-	_coordinator.AddComponent(Rail1, Renderable
-		{
-			.Sprite = ResourceManager::GetTexture("RailStraight"),
-			.Color = glm::vec4(1.0f)
-		});
-
-	Rail2 = _coordinator.CreateEntity();
-	_coordinator.AddComponent(Rail2, Transform
-		{
-			.Position = glm::vec2(BlockSize.x * 3.0f, BlockSize.y * 6.0f),
-			.Scale = BlockSize,
-			.Rotation = 0.0f
-		});
-	_coordinator.AddComponent(Rail2, Renderable
-		{
-			.Sprite = ResourceManager::GetTexture("RailStraight"),
-			.Color = glm::vec4(1.0f)
-		});
-
-	Rail3 = _coordinator.CreateEntity();
-	_coordinator.AddComponent(Rail3, Transform
-		{
-			.Position = glm::vec2(BlockSize.x * 4.0f, BlockSize.y * 6.0f),
-			.Scale = BlockSize,
-			.Rotation = 0.0f
-		});
-	_coordinator.AddComponent(Rail3, Renderable
-		{
-			.Sprite = ResourceManager::GetTexture("RailStraight"),
-			.Color = glm::vec4(1.0f)
-		});
+		_coordinator.AddComponent(entity, Renderable
+			{
+				.Sprite = ResourceManager::GetTexture("TurretBullet"),
+				.Color = glm::vec4(1.0f)
+			});
+	}
 
 	// // //
 	// /ESC  
@@ -393,47 +352,6 @@ void Game::Render(float dt)
 		
 		// Layer 1 : Level Blocks
 		CurrentLevel.Draw(*Renderer);
-		//Turret->Draw(*Renderer);
-		//TurretBullet->Draw(*Renderer);
-		//TurretBullet2->Draw(*Renderer);
-		//TurretBullet3->Draw(*Renderer);
-
-		// Layer 2
-		//Player->Draw(*Renderer);
-		//Player2->Draw(*Renderer);
-
-		// ECS temp draw
-		Renderer->DrawSprite(
-			_coordinator.GetComponent<Renderable>(NewEntity).Sprite,
-			_coordinator.GetComponent<Transform>(NewEntity).Position,
-			_coordinator.GetComponent<Transform>(NewEntity).Scale,
-			_coordinator.GetComponent<Transform>(NewEntity).Rotation,
-			_coordinator.GetComponent<Renderable>(NewEntity).Color
-			);
-
-		Renderer->DrawSprite(
-			_coordinator.GetComponent<Renderable>(Rail1).Sprite,
-			_coordinator.GetComponent<Transform>(Rail1).Position,
-			_coordinator.GetComponent<Transform>(Rail1).Scale,
-			_coordinator.GetComponent<Transform>(Rail1).Rotation,
-			_coordinator.GetComponent<Renderable>(Rail1).Color
-		);
-
-		Renderer->DrawSprite(
-			_coordinator.GetComponent<Renderable>(Rail2).Sprite,
-			_coordinator.GetComponent<Transform>(Rail2).Position,
-			_coordinator.GetComponent<Transform>(Rail2).Scale,
-			_coordinator.GetComponent<Transform>(Rail2).Rotation,
-			_coordinator.GetComponent<Renderable>(Rail2).Color
-		);
-
-		Renderer->DrawSprite(
-			_coordinator.GetComponent<Renderable>(Rail3).Sprite,
-			_coordinator.GetComponent<Transform>(Rail3).Position,
-			_coordinator.GetComponent<Transform>(Rail3).Scale,
-			_coordinator.GetComponent<Transform>(Rail3).Rotation,
-			_coordinator.GetComponent<Renderable>(Rail3).Color
-		);
 	}
 }
 

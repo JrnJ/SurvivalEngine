@@ -61,7 +61,6 @@ public:
 private:
     Camera _camera;
 
-    Coordinator _coordinator;
     std::shared_ptr<RenderSystem> _renderSystem;
     std::shared_ptr<PhysicsSystem> _physicsSystem;
 

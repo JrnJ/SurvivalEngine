@@ -19,7 +19,7 @@ public:
 
 		// Create a pointer to the system and return it so it can be used externally
 		auto system = std::make_shared<T>();
-		mSystems.insert({ typeName, system });
+		mSystems.insert({typeName, system});
 
 		return system;
 	}
@@ -47,6 +47,7 @@ public:
 
 	void EntitySignatureChanged(Entity entity, Signature entitySignature)
 	{
+		// Notify each system that an entity's signature changed
 		for (auto const& pair : mSystems)
 		{
 			auto const& type = pair.first;
@@ -66,14 +67,12 @@ public:
 		}
 	}
 
+private:
 	// Map from system type string pointer to a signature
 	std::unordered_map<const char*, Signature> mSignatures{};
 
 	// Map from system type string pointer to a system pointer
 	std::unordered_map<const char*, std::shared_ptr<System>> mSystems{};
-
-private:
-	
 };
 
 #endif

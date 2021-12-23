@@ -63,6 +63,7 @@ public:
 		return mSignatures[entity];
 	}
 
+private:
 	// Queue of unused entity IDs
 	std::queue<Entity> mAvailableEntities{};
 
@@ -71,9 +72,6 @@ public:
 
 	// Total living entities - used to keep limits on how many exist
 	uint32_t mLivingEntityCount{};
-
-private:
-	
 };
 
 #endif
