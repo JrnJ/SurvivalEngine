@@ -11,32 +11,26 @@
 #include "Razer/ChromaConnect.hpp"
 
 #include "Renderer/SpriteRenderer.hpp"
-#include "Objects/GameObject.hpp"
-#include "Objects/EntityOld.hpp"
-#include "Objects/PlayerEntity.hpp"
-#include "Objects/CowEntity.hpp"
 #include "Components/Components.hpp"
 
 // Also includes all items
 #include "Inventory/PlayerInventory.hpp"
 
 SpriteRenderer* Renderer;
-PlayerEntity* Player;
 ChromaConnect* Chroma;
-
-GameObject* Turret;
-GameObject* TurretBullet;
-GameObject* TurretBullet2;
-GameObject* TurretBullet3;
-
 Coordinator _coordinator;
 
-// Instantiate static variables
-//std::map<GameObject, int> Game::GameObjects;
-std::vector<GameObject*> Game::GameObjects;
+//GameObject* Turret;
+//GameObject* TurretBullet;
+//GameObject* TurretBullet2;
+//GameObject* TurretBullet3;
+
+// Player things
+Entity Player;
+PlayerInventory* Inventory;
+int SelectedHotbarSlot = 0;
 
 glm::vec2 MoveDirection;
-int SelectedHotbarSlot = 0;
 
 /// <summary>
 /// Constructor for Game class
@@ -54,14 +48,10 @@ Game::Game(unsigned int width, unsigned int height)
 Game::~Game()
 {
 	delete Renderer;
-	delete Player;
 
 	delete Chroma;
 
-	delete Turret;
-	delete TurretBullet;
-	delete TurretBullet2;
-	delete TurretBullet3;
+	delete Inventory;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
@@ -83,7 +73,7 @@ void Game::Init()
 	Renderer = new SpriteRenderer(shader);
 
 	// Load Textures
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", "player", true);
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", "Player", true);
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/enemy.png", "enemy", true);
 
 	// Texture loading
@@ -98,30 +88,17 @@ void Game::Init()
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailStraight.png", "RailStraight", true);
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailAngled.png", "RailAngled", true);
 
-	// Load Levels
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
-
-	CurrentLevel = test;
-
 	// Configure GameObjects
-	glm::vec2 spawnPos = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
-	Player = new PlayerEntity(spawnPos, BlockSize, ResourceManager::GetTexture("player"));
-	GameObjects.push_back(Player);
+	//glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
+	//Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
+	//GameObjects.push_back(Turret);
 
-	glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
-	Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
-	GameObjects.push_back(Turret);
-
-	TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
-	GameObjects.push_back(TurretBullet);
-	TurretBullet2 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
-	GameObjects.push_back(TurretBullet2);
-	TurretBullet3 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
-	GameObjects.push_back(TurretBullet3);
-
-	// // //
-	// ESC  
-	// // //
+	//TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	//GameObjects.push_back(TurretBullet);
+	//TurretBullet2 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	//GameObjects.push_back(TurretBullet2);
+	//TurretBullet3 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
+	//GameObjects.push_back(TurretBullet3);
 
 	// Initialize coordinator
 	_coordinator.Init();
@@ -153,7 +130,7 @@ void Game::Init()
 	}
 	_physicsSystem->Init();
 
-	std::vector<Entity> entities(MAX_ENTITIES - 4500);
+	/*std::vector<Entity> entities(MAX_ENTITIES - 4000);
 
 	for (auto& entity : entities)
 	{
@@ -171,11 +148,29 @@ void Game::Init()
 				.Sprite = ResourceManager::GetTexture("TurretBullet"),
 				.Color = glm::vec4(1.0f)
 			});
-	}
+	}*/
 
-	// // //
-	// /ESC  
-	// // //
+	Player = _coordinator.CreateEntity();
+	_coordinator.AddComponent(Player, Transform
+		{
+			.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
+			.Scale = BlockSize,
+			.Rotation = 0.0f
+		});
+	_coordinator.AddComponent(Player, Rigidbody
+		{
+			.Velocity = glm::vec2(0.0f)
+		});
+	_coordinator.AddComponent(Player, Renderable
+		{
+			.Sprite = ResourceManager::GetTexture("Player"),
+			.Color = glm::vec4(1.0f)
+		});
+
+	// Load Levels
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
+
+	CurrentLevel = test;
 }
 
 //#include "KeyInput.hpp"
@@ -185,14 +180,13 @@ void Game::Init()
 /// <param name="dt">Deltatime</param>
 void Game::ProcessInput(float dt)
 {
-	// Loop through GameObjects and call their Update function
-	for (int i = GameObjects.size() - 1; i > -1; --i)
-	{
-		GameObjects[i]->Input(dt);
-	}
-
 	if (this->State == GameState::GAME_ACTIVE)
 	{
+		// Player Movement
+		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 300.0f;
+
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
@@ -214,6 +208,46 @@ void Game::ProcessInput(float dt)
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
+
+		// Check for Inventory things
+		if (KeyInput::GetKeyDown(GLFW_KEY_1))
+			SelectedHotbarSlot = 0;
+		if (KeyInput::GetKeyDown(GLFW_KEY_2))
+			SelectedHotbarSlot = 1;
+		if (KeyInput::GetKeyDown(GLFW_KEY_3))
+			SelectedHotbarSlot = 2;
+		if (KeyInput::GetKeyDown(GLFW_KEY_4))
+			SelectedHotbarSlot = 3;
+		if (KeyInput::GetKeyDown(GLFW_KEY_5))
+			SelectedHotbarSlot = 4;
+		if (KeyInput::GetKeyDown(GLFW_KEY_6))
+			SelectedHotbarSlot = 5;
+		if (KeyInput::GetKeyDown(GLFW_KEY_7))
+			SelectedHotbarSlot = 6;
+		if (KeyInput::GetKeyDown(GLFW_KEY_8))
+			SelectedHotbarSlot = 7;
+		if (KeyInput::GetKeyDown(GLFW_KEY_9))
+			SelectedHotbarSlot = 8;
+
+		// Got to reset to 0 if not scrolling idk how tbh
+		if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) > 0)
+			SelectedHotbarSlot = SelectedHotbarSlot <= 0 ? 8 : SelectedHotbarSlot - 1;
+		else if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) < 0)
+			SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
+
+		if (KeyInput::GetKeyDown(GLFW_KEY_M))
+		{
+			Inventory->AddItem(new ItemInstance(new Stone(), 300));
+		}
+		if (KeyInput::GetKeyDown(GLFW_KEY_N))
+		{
+			Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
+		}
+
+		if (KeyInput::GetKeyDown(GLFW_KEY_E))
+		{
+			Inventory->DisplayInventory(SelectedHotbarSlot);
+		}
 	}
 }
 
@@ -224,11 +258,11 @@ float angle = 0.0f;
 /// <param name="dt">Deltatime</param>
 void Game::Update(float dt)
 {
-	// Loop through GameObjects and call their Update function
-	for (int i = GameObjects.size() - 1; i > -1; --i)
-	{
-		GameObjects[i]->Update(dt);
-	}
+	// Physics
+	_physicsSystem->Update(dt);
+
+	// Player Movement -> Replace with the physics system at some point
+	//_coordinator.GetComponent<Transform>(Player).Position += _coordinator.GetComponent<Rigidbody>(Player).Velocity * dt;
 
 	// Chroma
 	if (Chroma->ChromaEnabled)
@@ -237,7 +271,7 @@ void Game::Update(float dt)
 		Chroma->Clear();
 
 		Chroma->Test();
-		Chroma->Inventory(Player->SelectedHotbarSlot);
+		Chroma->Inventory(SelectedHotbarSlot);
 
 		// Draw changes last
 		Chroma->Draw();
@@ -291,37 +325,41 @@ void Game::Update(float dt)
 		// Fuck it you need a grid system OOF
 	}
 
+	// Camera Controls
+	// Reset Rotation
 	if (KeyInput::GetKeyDown(GLFW_KEY_K))
 		_camera.SetRotation(0.0f);
 
-	//if (KeyInput::GetKey(GLFW_KEY_L))
-	//	_camera.SetRotation(_camera.GetRotation() + 0.025f * dt);
-
-	// Rotate camera around center insteaf of top left
+	// Rotate
 	_camera.SetRotation(_camera.GetRotation() + KeyInput::GetCustomAxisRaw(GLFW_KEY_J, GLFW_KEY_L) * 0.015 * dt);
 
-	angle -= dt / 2.0f;
-	float tdegrees = std::remainder(angle * 360.0f, 360.0f);
-	float tradius = BlockSize.x * 1.5f; // Get difference in positions instead
-	glm::vec2 newPos = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees)), tradius * glm::cos(Math::DegToRad(tdegrees)));
-	TurretBullet->Position = newPos;
-	TurretBullet->Rotation = -tdegrees;
+	//angle -= dt / 2.0f;
+	//float tdegrees = std::remainder(angle * 360.0f, 360.0f);
+	//float tradius = BlockSize.x * 1.5f; // Get difference in positions instead
+	//glm::vec2 newPos = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees)), tradius * glm::cos(Math::DegToRad(tdegrees)));
+	//TurretBullet->Position = newPos;
+	//TurretBullet->Rotation = -tdegrees;
 
-	float offset2 = 120.0f;
-	float tdegrees2 = std::remainder(angle * 360.0f + offset2, 360.0f);
-	glm::vec2 newPos2 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees2)), tradius * glm::cos(Math::DegToRad(tdegrees2)));
-	TurretBullet2->Position = newPos2;
-	TurretBullet2->Rotation = -tdegrees2;
+	//float offset2 = 120.0f;
+	//float tdegrees2 = std::remainder(angle * 360.0f + offset2, 360.0f);
+	//glm::vec2 newPos2 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees2)), tradius * glm::cos(Math::DegToRad(tdegrees2)));
+	//TurretBullet2->Position = newPos2;
+	//TurretBullet2->Rotation = -tdegrees2;
 
-	float offset3 = 240.0f;
-	float tdegrees3 = std::remainder(angle * 360.0f + offset3, 360.0f);
-	glm::vec2 newPos3 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees3)), tradius * glm::cos(Math::DegToRad(tdegrees3)));
-	TurretBullet3->Position = newPos3;
-	TurretBullet3->Rotation = -tdegrees3;
+	//float offset3 = 240.0f;
+	//float tdegrees3 = std::remainder(angle * 360.0f + offset3, 360.0f);
+	//glm::vec2 newPos3 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees3)), tradius * glm::cos(Math::DegToRad(tdegrees3)));
+	//TurretBullet3->Position = newPos3;
+	//TurretBullet3->Rotation = -tdegrees3;
 	
 	DoCollision(dt);
 
-	_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
+	//_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
+	_camera.SetPosition(glm::vec3(
+		_coordinator.GetComponent<Transform>(Player).Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), 
+		_coordinator.GetComponent<Transform>(Player).Position.y - (this->Height / 2.0f -BlockSize.y / 2.0f), 
+		0.0f
+	));
 
 	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
@@ -339,85 +377,75 @@ void Game::Render(float dt)
 		// RenderSystem
 		_renderSystem->Update(dt);
 
-		// Draw calls
-		// Loop trhough GameObjects and draw them
-		for (int i = GameObjects.size() - 1; i > -1; --i)
-		{
-			GameObjects[i]->Draw(*Renderer);
-		}
-
 		// Layer 0 : Background / Skybox - NOW CLEAR COLOR IN Main.cpp
 		//Texture2D background = ResourceManager::GetTexture("background");
 		//Renderer->DrawSprite(background, glm::vec2(0.0f, 0.0f), glm::vec2(this->Width, this->Height), 0.0f, glm::vec4(1.0f));
-		
-		// Layer 1 : Level Blocks
-		CurrentLevel.Draw(*Renderer);
 	}
 }
 
 void Game::ResetPlayer()
 {
 	// Reset Player
-	Player->Size = BlockSize;
-	Player->Position = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
+	//_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
+	_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f);
 }
 
 // Move this to a class and than add to stuff
-bool CheckCollision(EntityOld& player, GameObject& object)
-{
-	float push = 0.0f;
-
-	float deltaX = object.Position.x - player.Position.x;
-	float deltaY = object.Position.y - player.Position.y;
-
-	float intersectX = abs(deltaX) - (object.Size.x / 2.0f + player.Size.x / 2.0f);
-	float intersectY = abs(deltaY) - (object.Size.y / 2.0f + player.Size.y / 2.0f);
-
-	if (intersectX < 0.0f && intersectY < 0.0f)
-	{
-		// This is a clamp
-		push = std::min(std::max(push, 0.0f), 1.0f);
-
-		if (intersectX > intersectY)
-		{
-			if (deltaX > 0.0f)
-			{
-				player.Position += glm::vec2(intersectX* (1.0f - push), 0.0f);
-			}
-			else
-			{
-				player.Position += glm::vec2(-intersectX * (1.0f - push), 0.0f);
-			}
-		}
-		else
-		{
-			if (deltaY > 0.0f)
-			{
-				player.Position += glm::vec2(0.0f, intersectY * (1.0f - push));
-			}
-			else
-			{
-				player.Position += glm::vec2(0.0f, -intersectY * (1.0f - push));
-			}
-		}
-
-		return true;
-	}
-
-	return false;
-}
+//bool CheckCollision(EntityOld& player, GameObject& object)
+//{
+//	float push = 0.0f;
+//
+//	float deltaX = object.Position.x - player.Position.x;
+//	float deltaY = object.Position.y - player.Position.y;
+//
+//	float intersectX = abs(deltaX) - (object.Size.x / 2.0f + player.Size.x / 2.0f);
+//	float intersectY = abs(deltaY) - (object.Size.y / 2.0f + player.Size.y / 2.0f);
+//
+//	if (intersectX < 0.0f && intersectY < 0.0f)
+//	{
+//		// This is a clamp
+//		push = std::min(std::max(push, 0.0f), 1.0f);
+//
+//		if (intersectX > intersectY)
+//		{
+//			if (deltaX > 0.0f)
+//			{
+//				player.Position += glm::vec2(intersectX* (1.0f - push), 0.0f);
+//			}
+//			else
+//			{
+//				player.Position += glm::vec2(-intersectX * (1.0f - push), 0.0f);
+//			}
+//		}
+//		else
+//		{
+//			if (deltaY > 0.0f)
+//			{
+//				player.Position += glm::vec2(0.0f, intersectY * (1.0f - push));
+//			}
+//			else
+//			{
+//				player.Position += glm::vec2(0.0f, -intersectY * (1.0f - push));
+//			}
+//		}
+//
+//		return true;
+//	}
+//
+//	return false;
+//}
 
 void Game::DoCollision(float dt)
 {
 	int i = 0;
 
-	for (GameObject& block : CurrentLevel.Blocks)
-	{
-		/*Player->Collision.DoCollision(block);
-		Player2->Collision.DoCollision(block);*/
+	//for (GameObject& block : CurrentLevel.Blocks)
+	//{
+	//	/*Player->Collision.DoCollision(block);
+	//	Player2->Collision.DoCollision(block);*/
 
-		CheckCollision(*Player, block);
-	}
+	//	//CheckCollision(*Player, block);
+	//}
 
 	/*if (i > 0)
 	{

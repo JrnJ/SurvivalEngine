@@ -27,11 +27,7 @@ enum class GameState
 
 class Game
 {
-public:
-    // Storage
-    //static std::map<GameObject, int> GameObjects;
-    static std::vector<GameObject*> GameObjects;
-    
+public:    
     // Game State
     GameState State;
     Level CurrentLevel;

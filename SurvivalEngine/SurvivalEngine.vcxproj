@@ -172,16 +172,11 @@
     <ClCompile Include="Source\Items\Item.cpp" />
     <ClCompile Include="Source\Inventory\Inventory.cpp" />
     <ClCompile Include="Source\Items\Items.hpp" />
-    <ClCompile Include="Source\Objects\CowEntity.cpp" />
-    <ClCompile Include="Source\Objects\EntityOld.cpp" />
     <ClCompile Include="Source\Game.cpp" />
     <ClCompile Include="Source\glad.c" />
     <ClCompile Include="Source\Level.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Math.cpp" />
-    <ClCompile Include="Source\Objects\BlockObject.cpp" />
-    <ClCompile Include="Source\Objects\GameObject.cpp" />
-    <ClCompile Include="Source\Objects\PlayerEntity.cpp" />
     <ClCompile Include="Source\Razer\ChromaAnimationAPI.cpp" />
     <ClCompile Include="Source\Razer\ChromaConnect.cpp" />
     <ClCompile Include="Source\Razer\ChromaSDKPluginTypes.cpp" />
@@ -218,14 +213,9 @@
     <ClInclude Include="Source\Inventory\PlayerInventory.hpp" />
     <ClInclude Include="Source\Items\Item.hpp" />
     <ClInclude Include="Source\Inventory\Inventory.hpp" />
-    <ClInclude Include="Source\Objects\CowEntity.hpp" />
-    <ClInclude Include="Source\Objects\EntityOld.hpp" />
     <ClInclude Include="Source\Game.hpp" />
     <ClInclude Include="Source\Level.hpp" />
     <ClInclude Include="Source\Math.hpp" />
-    <ClInclude Include="Source\Objects\BlockObject.hpp" />
-    <ClInclude Include="Source\Objects\GameObject.hpp" />
-    <ClInclude Include="Source\Objects\PlayerEntity.hpp" />
     <ClInclude Include="Source\Razer\ChromaAnimationAPI.h" />
     <ClInclude Include="Source\Razer\ChromaConnect.hpp" />
     <ClInclude Include="Source\Razer\ChromaSDKPluginTypes.h" />
@@ -256,6 +246,7 @@
     <Text Include="Assets\Bugs.txt" />
     <Text Include="Assets\levels\cage.txt" />
     <Text Include="Assets\levels\test.txt" />
+    <Text Include="Assets\levels\world.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\textures\background.png" />

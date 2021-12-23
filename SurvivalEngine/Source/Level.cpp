@@ -2,10 +2,19 @@
 
 #include <fstream>
 #include <sstream>
+#include "ECS/Coordinator.hpp"
+#include "Components/Transform.hpp"
+#include "Components/Renderable.hpp"
+
+extern Coordinator _coordinator;
 
 void Level::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 {
 	// Clear old Level data
+	for (auto& entity : this->Blocks)
+	{
+		_coordinator.DestroyEntity(entity);
+	}
 	this->Blocks.clear();
 
 	// Load Level from file
@@ -70,13 +79,6 @@ void Level::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 	}
 }
 
-void Level::Draw(SpriteRenderer& renderer)
-{
-	// Draw level
-	for (GameObject& block : this->Blocks)
-		block.Draw(renderer);
-}
-
 void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 screenSize, glm::vec2 blockSize)
 {
 	// blockData is just a 2D array, so two loops
@@ -86,21 +88,35 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 		{
 			if (blockData[y][x] > 0)
 			{
-				// glm::vec2 pos(blockSize.x * x, blockSize.y * y);
-				glm::vec2 pos(blockSize.x * x, (-blockSize.y * y) + screenSize.y - blockSize.y);
-				std::string block = "";
+				glm::vec2 pos(blockSize.x * x, blockSize.y * y);
+				std::string texName = "";
 
 				switch (blockData[y][x])
-				{
+				{	
 					case 2:
-						block = "RailStraight";
+						texName = "RailStraight";
 						break;
 					case 3:
-						block = "RailAngled";
+						texName = "RailAngled";
+						break;
+					default:
+						texName = "";
 						break;
 				}
 
-				this->Blocks.push_back(GameObject(pos, blockSize, ResourceManager::GetTexture(block)));
+				Entity entity = _coordinator.CreateEntity();
+				_coordinator.AddComponent(entity, Transform
+					{
+						.Position = pos,
+						.Scale = blockSize,
+						.Rotation = 0.0f
+					});
+				_coordinator.AddComponent(entity, Renderable
+					{
+						.Sprite = ResourceManager::GetTexture(texName),
+						.Color = glm::vec4(1.0f)
+					});
+				this->Blocks.push_back(entity);
 			}
 		}
 	}
