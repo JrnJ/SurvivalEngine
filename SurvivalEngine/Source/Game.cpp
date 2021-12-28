@@ -36,7 +36,7 @@ glm::vec2 MoveDirection;
 /// Constructor for Game class
 /// </summary>
 Game::Game(unsigned int width, unsigned int height)
-	: State(GameState::GAME_ACTIVE), Width(width), Height(height), BlockSize(width / 24.0f, height / 13.5f), 
+	: State(GameState::GAME_ACTIVE), Width(width), Height(height), 
 		_camera(0.0f, width, height, 0.0f)
 {
 	
@@ -92,7 +92,6 @@ void Game::Init()
 	//glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
 	//Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
 	//GameObjects.push_back(Turret);
-
 	//TurretBullet = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
 	//GameObjects.push_back(TurretBullet);
 	//TurretBullet2 = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("TurretBullet"));
@@ -136,6 +135,15 @@ void Game::Init()
 	}
 	_physicsSystem->Init();
 
+	// Resize System
+	_resizeSystem = _coordinator.RegisterSystem<ResizeSystem>();
+	{
+		Signature signature;
+		signature.set(_coordinator.GetComponentType<Transform>());
+		_coordinator.SetSystemSignature<ResizeSystem>(signature);
+	}
+	_resizeSystem->Init(this->Width, this->Height);
+
 	/*std::vector<Entity> entities(MAX_ENTITIES - 4000);
 
 	for (auto& entity : entities)
@@ -160,7 +168,7 @@ void Game::Init()
 	_coordinator.AddComponent(Player, Transform
 		{
 			.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
-			.Scale = BlockSize,
+			.Scale = _resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
 	_coordinator.AddComponent(Player, Collider{});
@@ -175,8 +183,8 @@ void Game::Init()
 			.Layer = 100
 		});
 
-	// Load Levels
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
+	// Load Level
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 
 	CurrentLevel = test;
 }
@@ -198,21 +206,21 @@ void Game::ProcessInput(float dt)
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_F2))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_F3))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/world.txt", glm::vec2(this->Width, this->Height), BlockSize);
+			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/world.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
@@ -308,8 +316,8 @@ void Game::Update(float dt)
 		//};
 
 		glm::vec2 newPos = {
-			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / BlockSize.x) * BlockSize.x,
-			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / BlockSize.y) * BlockSize.y
+			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x) * _resizeSystem->BlockSize.x,
+			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y) * _resizeSystem->BlockSize.y
 		};
 
 		// Try create a rail
@@ -317,7 +325,7 @@ void Game::Update(float dt)
 		_coordinator.AddComponent(entity, Transform
 			{
 				.Position = glm::vec2(newPos),
-				.Scale = BlockSize,
+				.Scale = _resizeSystem->BlockSize,
 				.Rotation = 0.0f
 			});
 		_coordinator.AddComponent(entity, Renderable
@@ -363,16 +371,14 @@ void Game::Update(float dt)
 	//glm::vec2 newPos3 = Turret->Position - glm::vec2(tradius * glm::sin(Math::DegToRad(tdegrees3)), tradius * glm::cos(Math::DegToRad(tdegrees3)));
 	//TurretBullet3->Position = newPos3;
 	//TurretBullet3->Rotation = -tdegrees3;
-	
-	DoCollision(dt);
 
 	// Physics
 	_physicsSystem->Update(dt);
 
 	//_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
 	_camera.SetPosition(glm::vec3(
-		_coordinator.GetComponent<Transform>(Player).Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), 
-		_coordinator.GetComponent<Transform>(Player).Position.y - (this->Height / 2.0f -BlockSize.y / 2.0f), 
+		_coordinator.GetComponent<Transform>(Player).Position.x - (this->Width / 2.0f - _resizeSystem->BlockSize.x / 2.0f),
+		_coordinator.GetComponent<Transform>(Player).Position.y - (this->Height / 2.0f - _resizeSystem->BlockSize.y / 2.0f),
 		0.0f
 	));
 
@@ -398,76 +404,23 @@ void Game::Render(float dt)
 	}
 }
 
+void Game::WindowResized(int width, int height)
+{
+	this->Width = width;
+	this->Height = height;
+
+	_resizeSystem->WindowResized(width, height);
+	_camera.SetProjectionMatrix(0.0f, width, height, 0.0f);
+
+	// Load Levels
+	this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+	this->ResetPlayer();
+	std::cout << "Level Loaded!" << std::endl;
+}
+
 void Game::ResetPlayer()
 {
 	// Reset Player
 	//_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
 	_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f);
-}
-
-// Move this to a class and than add to stuff
-//bool CheckCollision(EntityOld& player, GameObject& object)
-//{
-//	float push = 0.0f;
-//
-//	float deltaX = object.Position.x - player.Position.x;
-//	float deltaY = object.Position.y - player.Position.y;
-//
-//	float intersectX = abs(deltaX) - (object.Size.x / 2.0f + player.Size.x / 2.0f);
-//	float intersectY = abs(deltaY) - (object.Size.y / 2.0f + player.Size.y / 2.0f);
-//
-//	if (intersectX < 0.0f && intersectY < 0.0f)
-//	{
-//		// This is a clamp
-//		push = std::min(std::max(push, 0.0f), 1.0f);
-//
-//		if (intersectX > intersectY)
-//		{
-//			if (deltaX > 0.0f)
-//			{
-//				player.Position += glm::vec2(intersectX* (1.0f - push), 0.0f);
-//			}
-//			else
-//			{
-//				player.Position += glm::vec2(-intersectX * (1.0f - push), 0.0f);
-//			}
-//		}
-//		else
-//		{
-//			if (deltaY > 0.0f)
-//			{
-//				player.Position += glm::vec2(0.0f, intersectY * (1.0f - push));
-//			}
-//			else
-//			{
-//				player.Position += glm::vec2(0.0f, -intersectY * (1.0f - push));
-//			}
-//		}
-//
-//		return true;
-//	}
-//
-//	return false;
-//}
-
-void Game::DoCollision(float dt)
-{
-	int i = 0;
-
-	//for (GameObject& block : CurrentLevel.Blocks)
-	//{
-	////XXX	/*Player->Collision.DoCollision(block);
-	////XXX	Player2->Collision.DoCollision(block);*/
-
-	//	//CheckCollision(*Player, block);
-	//}
-
-	/*if (i > 0)
-	{
-		Player->Color = glm::vec3(1.0f, 0.0f, 0.0f);
-	}
-	else
-	{
-		Player->Color = glm::vec3(1.0f, 1.0f, 1.0f);
-	}*/
 }

@@ -17,6 +17,7 @@
 // Systems
 #include "Systems/RenderSystem.hpp"
 #include "Systems/PhysicsSystem.hpp"
+#include "Systems/ResizeSystem.hpp"
 
 // All Game States
 enum class GameState 
@@ -35,9 +36,6 @@ public:
     // Window Dimensions
     unsigned int Width, Height;
 
-    // Block Size
-    glm::vec2 BlockSize;
-
     // Constructor & Destructor
     Game(unsigned int width, unsigned int height);
     ~Game();
@@ -50,15 +48,18 @@ public:
     void Update(float dt);
     void Render(float dt);
 
+    // Events
+    void WindowResized(int width, int height);
+
     // Player
     void ResetPlayer();
-    void DoCollision(float dt);
 
 private:
     Camera _camera;
 
     std::shared_ptr<RenderSystem> _renderSystem;
     std::shared_ptr<PhysicsSystem> _physicsSystem;
+    std::shared_ptr<ResizeSystem> _resizeSystem;
 
     std::vector<Entity> _entities;
 };

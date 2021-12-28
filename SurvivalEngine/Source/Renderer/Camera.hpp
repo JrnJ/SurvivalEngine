@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class Camera
 {
@@ -21,8 +22,14 @@ public:
 	const float GetZoom() const { return _zoom; }
 	void SetZoom(const float zoom) { _zoom = zoom; RecalculateViewMatrix(); }
 
-	// Getters
+	// ProjectionMatrix
 	const glm::mat4 GetProjectionMatrix() const { return _projectionMatrix; }
+	void SetProjectionMatrix(float left, float right, float bottom, float top) 
+	{ 
+		_projectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f); 
+		RecalculateViewMatrix(); 
+	}
+
 	const glm::mat4 GetViewMatrix() const { return _viewMatrix; }
 	const glm::mat4 GetViewProjectionMatrix() const { return _viewProjectionMatrix; }
 

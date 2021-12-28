@@ -24,9 +24,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void cursor_move_callback(GLFWwindow* window, double cursorX, double cursorY);
+void window_size_callback(GLFWwindow* window, int width, int height);
 
+// Aspect ratio = 16:9
 const unsigned int SCREEN_WIDTH = 1280;
 const unsigned int SCREEN_HEIGHT = 720;
+//const unsigned int SCREEN_WIDTH = 640;
+//const unsigned int SCREEN_HEIGHT = 360;
 //const unsigned int SCREEN_WIDTH = 1920;
 //const unsigned int SCREEN_HEIGHT = 1080;
 
@@ -43,7 +47,7 @@ int main(int argc, char* argv[])
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	glfwWindowHint(GLFW_RESIZABLE, false);
+	glfwWindowHint(GLFW_RESIZABLE, true);
 	//glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, 1);
 	//glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, GLFW_TRUE);
 
@@ -75,6 +79,7 @@ int main(int argc, char* argv[])
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	glfwSetCursorPosCallback(window, cursor_move_callback);
+	glfwSetWindowSizeCallback(window, window_size_callback);
 
 	// Configurate OpenGL
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -143,6 +148,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+	{
+		glfwSetWindowSize(window, 640, 360);
+	}	
+
 	// Keyboard
 	if (key >= 0 && key < 1024)
 	{
@@ -185,4 +195,10 @@ void cursor_move_callback(GLFWwindow* window, double cursorX, double cursorY)
 {
 	KeyInput::MouseX = cursorX;
 	KeyInput::MouseY = cursorY;
+}
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+	Survival.WindowResized(width, height);
 }
