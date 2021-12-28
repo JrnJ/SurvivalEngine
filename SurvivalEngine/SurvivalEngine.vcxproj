@@ -163,6 +163,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Systems\ColliderSystem.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\Systems\PhysicsSystem.cpp" />
     <ClCompile Include="Source\Systems\RenderSystem.cpp" />
     <ClCompile Include="Source\KeyInput.cpp" />
@@ -190,8 +193,13 @@
     <ClCompile Include="Source\Items\Materials\Stone\Stone.cpp" />
     <ClCompile Include="Source\Spells\Spawning\Turret.cpp" />
     <ClCompile Include="Source\Items\Weapon\Spellbook.cpp" />
+    <ClCompile Include="Source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Systems\ColliderSystem.hpp" />
+    <ClInclude Include="Source\Scene.hpp" />
+    <ClInclude Include="Source\Components\Collider.hpp" />
+    <ClInclude Include="Source\SceneManager.hpp" />
     <ClInclude Include="Source\Systems\PhysicsSystem.hpp" />
     <ClInclude Include="Source\Components\Camera2D.hpp" />
     <ClInclude Include="Source\Components\Components.hpp" />
@@ -233,6 +241,7 @@
     <ClInclude Include="Source\Spells\Spells.hpp" />
     <ClInclude Include="Source\Spells\Spawning\Turret.hpp" />
     <ClInclude Include="Source\Items\Weapon\Spellbook.hpp" />
+    <ClInclude Include="Source\World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\shaders\sprite.fs.glsl" />
@@ -247,6 +256,10 @@
     <Text Include="Assets\levels\cage.txt" />
     <Text Include="Assets\levels\test.txt" />
     <Text Include="Assets\levels\world.txt" />
+    <Text Include="Worlds\test2\playerdata\player.txt" />
+    <Text Include="Worlds\test2\world.txt" />
+    <Text Include="Worlds\test\playerdata\player.txt" />
+    <Text Include="Worlds\test\world.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\textures\background.png" />

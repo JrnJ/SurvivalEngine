@@ -12,7 +12,7 @@ public:
 	void Update(float dt);
 
 private:
-	Entity _camera;
+	//Entity _camera;
 };
 
 #endif

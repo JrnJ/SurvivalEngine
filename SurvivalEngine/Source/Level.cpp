@@ -3,8 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include "ECS/Coordinator.hpp"
-#include "Components/Transform.hpp"
-#include "Components/Renderable.hpp"
+#include "Components/Components.hpp"
 
 extern Coordinator _coordinator;
 
@@ -111,10 +110,12 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 						.Scale = blockSize,
 						.Rotation = 0.0f
 					});
+				_coordinator.AddComponent(entity, Collider{});
 				_coordinator.AddComponent(entity, Renderable
 					{
 						.Sprite = ResourceManager::GetTexture(texName),
-						.Color = glm::vec4(1.0f)
+						.Color = glm::vec4(1.0f),
+						.Layer = 80
 					});
 				this->Blocks.push_back(entity);
 			}

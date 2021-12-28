@@ -105,13 +105,18 @@ void Game::Init()
 
 	// Register Components
 	_coordinator.RegisterComponent<Transform>();
+	_coordinator.RegisterComponent<Collider>();
 	_coordinator.RegisterComponent<Rigidbody>();
+
 	_coordinator.RegisterComponent<Renderable>();
+
 	_coordinator.RegisterComponent<Camera2D>();
 
 	// Render System
 	_renderSystem = _coordinator.RegisterSystem<RenderSystem>();
 	{
+		// Only the Entities with these Components will be in mEntities
+		// You will only be able to acces these Components inside the System
 		Signature signature;
 		signature.set(_coordinator.GetComponentType<Transform>());
 		signature.set(_coordinator.GetComponentType<Renderable>());
@@ -124,8 +129,9 @@ void Game::Init()
 	{
 		Signature signature;
 		signature.set(_coordinator.GetComponentType<Transform>());
-		signature.set(_coordinator.GetComponentType<Renderable>());
 		signature.set(_coordinator.GetComponentType<Rigidbody>());
+		signature.set(_coordinator.GetComponentType<Collider>());
+		signature.set(_coordinator.GetComponentType<Renderable>());
 		_coordinator.SetSystemSignature<PhysicsSystem>(signature);
 	}
 	_physicsSystem->Init();
@@ -157,6 +163,7 @@ void Game::Init()
 			.Scale = BlockSize,
 			.Rotation = 0.0f
 		});
+	_coordinator.AddComponent(Player, Collider{});
 	_coordinator.AddComponent(Player, Rigidbody
 		{
 			.Velocity = glm::vec2(0.0f)
@@ -164,7 +171,8 @@ void Game::Init()
 	_coordinator.AddComponent(Player, Renderable
 		{
 			.Sprite = ResourceManager::GetTexture("Player"),
-			.Color = glm::vec4(1.0f)
+			.Color = glm::vec4(1.0f),
+			.Layer = 100
 		});
 
 	// Load Levels
@@ -248,6 +256,12 @@ void Game::ProcessInput(float dt)
 		{
 			Inventory->DisplayInventory(SelectedHotbarSlot);
 		}
+
+		if (KeyInput::GetKeyDown(GLFW_KEY_O))
+		{
+			glm::vec2 pos = _coordinator.GetComponent<Transform>(Player).Position;
+			std::cout << "PlayerPosition: X: " << pos.x << " Y: " << pos.y << std::endl;
+		}
 	}
 }
 
@@ -258,9 +272,6 @@ float angle = 0.0f;
 /// <param name="dt">Deltatime</param>
 void Game::Update(float dt)
 {
-	// Physics
-	_physicsSystem->Update(dt);
-
 	// Player Movement -> Replace with the physics system at some point
 	//_coordinator.GetComponent<Transform>(Player).Position += _coordinator.GetComponent<Rigidbody>(Player).Velocity * dt;
 
@@ -312,7 +323,8 @@ void Game::Update(float dt)
 		_coordinator.AddComponent(entity, Renderable
 			{
 				.Sprite = ResourceManager::GetTexture("RailStraight"),
-				.Color = glm::vec4(1.0f)
+				.Color = glm::vec4(1.0f),
+				.Layer = 90
 			});
 	}
 
@@ -353,6 +365,9 @@ void Game::Update(float dt)
 	//TurretBullet3->Rotation = -tdegrees3;
 	
 	DoCollision(dt);
+
+	// Physics
+	_physicsSystem->Update(dt);
 
 	//_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
 	_camera.SetPosition(glm::vec3(
@@ -441,8 +456,8 @@ void Game::DoCollision(float dt)
 
 	//for (GameObject& block : CurrentLevel.Blocks)
 	//{
-	//	/*Player->Collision.DoCollision(block);
-	//	Player2->Collision.DoCollision(block);*/
+	////XXX	/*Player->Collision.DoCollision(block);
+	////XXX	Player2->Collision.DoCollision(block);*/
 
 	//	//CheckCollision(*Player, block);
 	//}

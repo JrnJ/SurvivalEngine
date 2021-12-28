@@ -8,6 +8,7 @@ struct Renderable
 {
 	Texture2D Sprite;
 	glm::vec4 Color;
+	int Layer;
 };
 
 #endif

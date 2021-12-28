@@ -96,6 +96,18 @@
     <ClCompile Include="Source\Systems\PhysicsSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Systems\ColliderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Game.hpp">
@@ -221,6 +233,21 @@
     <ClInclude Include="Source\Systems\PhysicsSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Collider.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Systems\ColliderSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="CChromaEditorLibrary.dll" />
@@ -235,6 +262,10 @@
     <Text Include="Assets\levels\test.txt" />
     <Text Include="Assets\Bugs.txt" />
     <Text Include="Assets\levels\world.txt" />
+    <Text Include="Worlds\test\world.txt" />
+    <Text Include="Worlds\test\playerdata\player.txt" />
+    <Text Include="Worlds\test2\playerdata\player.txt" />
+    <Text Include="Worlds\test2\world.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\textures\background.png">

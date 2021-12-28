@@ -62,6 +62,12 @@ public:
 		mSystemManager->EntitySignatureChanged(entity, signature);
 	}
 
+	/// <summary>
+	/// Get a component from an Entity
+	/// </summary>
+	/// <typeparam name="T">Component you want to get</typeparam>
+	/// <param name="entity">: From which Entity to get the Component</param>
+	/// <returns>A Component of that Entity</returns>
 	template<typename T>
 	T& GetComponent(Entity entity)
 	{

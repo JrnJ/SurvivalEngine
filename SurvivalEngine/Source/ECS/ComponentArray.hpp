@@ -74,6 +74,8 @@ public:
 	/// <returns>Reference to the entity's component</returns>
 	T& GetData(Entity entity)
 	{
+		// This is not the way
+		// We have to do this like unity, where if the component doesnt exist, just return null
 		assert(mEntityToIndexMap.find(entity) != mEntityToIndexMap.end() && "Retrieving non-existent component.");
 
 		return mComponentArray[mEntityToIndexMap[entity]];
