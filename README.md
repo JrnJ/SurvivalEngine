@@ -15,11 +15,8 @@ ESC = Close Game<br>
 1 -> 9 = Reset Level<br>
 [/Controls]<br>
 
-Includes
--glad<br>
--GLFW<br>
--glm<br>
--KHR<br>
-
 Libraries
--glfw3
+-glfw3.3.6
+-glm
+-stb_image
+-glad
