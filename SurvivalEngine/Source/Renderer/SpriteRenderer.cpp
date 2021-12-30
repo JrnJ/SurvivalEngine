@@ -46,7 +46,7 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec
     texture.Bind();
 
     glBindVertexArray(this->_quadVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
 
@@ -57,13 +57,10 @@ void SpriteRenderer::initRenderData()
 
     float vertices[] = {
         // pos       // tex       // color
-        0.0f, 1.0f,  0.0f, 1.0f,  1.0f, 0.0f, 0.0f, // top left
-        1.0f, 0.0f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f, // top right
-        0.0f, 0.0f,  0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // bottom left
-
-        0.0f, 1.0f,  0.0f, 1.0f,  0.0f, 1.0f, 0.0f, // top right
-        1.0f, 1.0f,  1.0f, 1.0f,  0.0f, 1.0f, 1.0f, // bottom right
-        1.0f, 0.0f,  1.0f, 0.0f,  0.0f, 0.0f, 1.0f, // bottom left
+        0.0f, 0.0f,  0.0f, 0.0f,  //0.0f, 0.0f, 1.0f, // bottom left
+        0.0f, 1.0f,  0.0f, 1.0f,  //1.0f, 0.0f, 0.0f, // top left
+        1.0f, 0.0f,  1.0f, 0.0f,  //0.0f, 1.0f, 0.0f, // top right
+        1.0f, 1.0f,  1.0f, 1.0f,  //0.0f, 1.0f, 1.0f, // bottom right
     };
 
     glGenVertexArrays(1, &this->_quadVAO);
@@ -75,12 +72,12 @@ void SpriteRenderer::initRenderData()
     glBindVertexArray(this->_quadVAO);
 
     // Vertex
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    //glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(4 * sizeof(float)));
+    //glEnableVertexAttribArray(1);
 
     // Draw Mode - Optional
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Fill
