@@ -6,8 +6,6 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-#include "ResourceManager.hpp"
-#include "Renderer/SpriteRenderer.hpp"
 #include "ECS/Types.hpp"
 
 class Level

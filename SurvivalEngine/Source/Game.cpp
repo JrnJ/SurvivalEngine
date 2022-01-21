@@ -3,20 +3,17 @@
 #include <iostream>
 #include <queue>
 
-#include "ResourceManager.hpp"
-
 #include "Math.hpp"
 #include "KeyInput.hpp"
 
 #include "Razer/ChromaConnect.hpp"
+#include "ResourceManager.hpp"
 
-#include "Renderer/SpriteRenderer.hpp"
 #include "Components/Components.hpp"
 
 // Also includes all items
 #include "Inventory/PlayerInventory.hpp"
 
-SpriteRenderer* Renderer;
 ChromaConnect* Chroma;
 Coordinator _coordinator;
 
@@ -47,8 +44,6 @@ Game::Game(unsigned int width, unsigned int height)
 /// </summary>
 Game::~Game()
 {
-	delete Renderer;
-
 	delete Chroma;
 
 	delete Inventory;
@@ -63,33 +58,6 @@ void Game::Init()
 {
 	// Initialize Razer ChromaConnect
 	Chroma = new ChromaConnect(false);
-
-	// Load Shaders
-	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
-	ResourceManager::GetShader("sprite").Use().SetInteger("image", 0);
-
-	// set render-specific controls
-	Shader shader = ResourceManager::GetShader("sprite");
-	Renderer = new SpriteRenderer(shader);
-
-	// Load Textures
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/player.png", "Player", true);
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/enemy.png", "enemy", true);
-
-	// Texture loading
-	// ID : 0 -> Nothing
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Unknown.png", "", false); // ID : - 
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Grass.png", "Grass", false); // ID : 1
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Dirt.png", "Dirt", false); // ID : 2
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/Water.png", "Water", false); // ID : 3
-
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/TurretBullet.png", "TurretBullet", true);
-
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailStraight.png", "RailStraight", true);
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailAngled.png", "RailAngled", true);
-
-	// Load Sprite Sheet / Atlas
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
 
 	// Configure GameObjects
 	//glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));

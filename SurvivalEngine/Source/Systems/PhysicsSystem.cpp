@@ -2,7 +2,6 @@
 
 #include "../Components/Components.hpp"
 #include "../ECS/Coordinator.hpp"
-//#include "../ResourceManager.cpp"
 
 extern Coordinator _coordinator;
 

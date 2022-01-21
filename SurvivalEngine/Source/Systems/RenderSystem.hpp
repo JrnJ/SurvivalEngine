@@ -2,6 +2,7 @@
 #define RENDERSYSTEM_HPP
 
 #include "../ECS/System.hpp"
+#include <glm/glm.hpp>
 #include <memory>
 
 class RenderSystem : public System

@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Texture2D.hpp"
-#include "shader.hpp"
+#include "Shader.hpp"
 
 
 class SpriteRenderer

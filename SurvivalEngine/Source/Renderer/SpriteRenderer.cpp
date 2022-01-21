@@ -45,7 +45,7 @@ static Vertex* CreateSprite(Vertex* target, float x, float y)
     return target;
 }
 
-const size_t MaxQuadCount = 150;
+const size_t MaxQuadCount = 576;
 const size_t MaxVertexCount = MaxQuadCount * 4;
 const size_t MaxIndexCount = MaxQuadCount * 6;
 
@@ -56,6 +56,10 @@ void SpriteRenderer::DrawSprite(glm::vec2 position, glm::vec2 scale, float rotat
     Vertex* buffer = vertices.data();
 
     buffer = CreateSprite(buffer, position.x, position.y);
+    indexCount += 6;
+
+    glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
 
     this->_shader.Use();
 
