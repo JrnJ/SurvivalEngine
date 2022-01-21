@@ -88,6 +88,9 @@ void Game::Init()
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailStraight.png", "RailStraight", true);
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/Blocks/RailAngled.png", "RailAngled", true);
 
+	// Load Sprite Sheet / Atlas
+	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
+
 	// Configure GameObjects
 	//glm::vec2 turretSpawnPos = glm::vec2(this->Width / 2.0f, this->Height - (BlockSize.y * (5.0f + 5.0f)));
 	//Turret = new GameObject(turretSpawnPos, BlockSize, ResourceManager::GetTexture("Grass"));
@@ -144,7 +147,7 @@ void Game::Init()
 	}
 	_resizeSystem->Init(this->Width, this->Height);
 
-	/*std::vector<Entity> entities(MAX_ENTITIES - 4000);
+	/*std::vector<Entity> entities(MAX_ENTITIES - 3700);
 
 	for (auto& entity : entities)
 	{
@@ -153,7 +156,7 @@ void Game::Init()
 		_coordinator.AddComponent(entity, Transform
 			{
 				.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
-				.Scale = BlockSize,
+				.Scale = _resizeSystem->BlockSize,
 				.Rotation = 0.0f
 			});
 
