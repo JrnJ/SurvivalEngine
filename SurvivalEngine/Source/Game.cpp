@@ -138,7 +138,7 @@ void Game::Init()
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
 		{
-			.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
+			.Position = glm::vec2(1.0f, 12.0f), //this->Width / 2.0f, this->Height / 2.0f
 			.Scale = _resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
@@ -171,7 +171,7 @@ void Game::ProcessInput(float dt)
 		// Player Movement
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
-		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 300.0f;
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical) * 300.0f);
 
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
@@ -286,12 +286,12 @@ void Game::Update(float dt)
 		//};
 
 		glm::vec2 newPos = {
-			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x) * _resizeSystem->BlockSize.x,
-			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y) * _resizeSystem->BlockSize.y
+			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
+			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
 		};
 
 		// Try create a rail
-		/*Entity entity = _coordinator.CreateEntity();
+		Entity entity = _coordinator.CreateEntity();
 		_coordinator.AddComponent(entity, Transform
 			{
 				.Position = glm::vec2(newPos),
@@ -300,10 +300,9 @@ void Game::Update(float dt)
 			});
 		_coordinator.AddComponent(entity, Renderable
 			{
-				.Sprite = ResourceManager::GetTexture("RailStraight"),
-				.Color = glm::vec4(1.0f),
-				.Layer = 90
-			});*/
+				.TexCoords = glm::vec2(0.0f, 1.0f),
+				.Color = glm::vec4(1.0f)
+			});
 	}
 
 	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
@@ -345,14 +344,11 @@ void Game::Update(float dt)
 	// Physics
 	_physicsSystem->Update(dt);
 
-	//_camera.SetPosition(glm::vec3(Player->Position.x - (this->Width / 2.0f - BlockSize.x / 2.0f), Player->Position.y - (this->Height / 2.0f - BlockSize.y / 2.0f), 0.0f));
 	_camera.SetPosition(glm::vec3(
-		_coordinator.GetComponent<Transform>(Player).Position.x - (this->Width / 2.0f - _resizeSystem->BlockSize.x / 2.0f),
-		_coordinator.GetComponent<Transform>(Player).Position.y - (this->Height / 2.0f - _resizeSystem->BlockSize.y / 2.0f),
+		_coordinator.GetComponent<Transform>(Player).Position.x * _resizeSystem->BlockSize.x - this->Width / 2.0f + _resizeSystem->BlockSize.x / 2.0f,
+		_coordinator.GetComponent<Transform>(Player).Position.y * _resizeSystem->BlockSize.y - this->Height / 2.0f + _resizeSystem->BlockSize.y / 2.0f,
 		0.0f
 	));
-
-	//std::cout << "velX: " << Player->Velocity.x << " velY: " << Player->Velocity.y << std::endl;
 }
 
 /// <summary>
@@ -364,7 +360,7 @@ void Game::Render(float dt)
 	{
 		// Update Camera
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
-
+		//std::cout << "X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
 		// RenderSystem
 		_renderSystem->Update(dt);
 

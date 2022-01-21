@@ -87,7 +87,7 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 		{
 			if (blockData[y][x] > 0)
 			{
-				glm::vec2 pos(blockSize.x * x, blockSize.y * y);
+				glm::vec2 pos(x, y);
 				std::string texName = "";
 
 				switch (blockData[y][x])

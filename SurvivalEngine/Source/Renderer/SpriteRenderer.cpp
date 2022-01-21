@@ -55,6 +55,7 @@ void SpriteRenderer::DrawSprite(glm::vec2 position, glm::vec2 scale, float rotat
     std::array<Vertex, MaxQuadCount> vertices;
     Vertex* buffer = vertices.data();
 
+    //buffer = CreateSprite(buffer, position.x / scale.x, position.y / scale.y);
     buffer = CreateSprite(buffer, position.x, position.y);
     indexCount += 6;
 
