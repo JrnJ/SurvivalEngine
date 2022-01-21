@@ -248,8 +248,8 @@
   <ItemGroup>
     <None Include="Assets\shaders\sprite.fs.glsl" />
     <None Include="Assets\shaders\sprite.vs.glsl" />
-    <None Include="Assets\shaders\sprite_old.fs" />
-    <None Include="Assets\shaders\sprite_old.vs" />
+    <None Include="Assets\shaders\sprite_old.fs.glsl" />
+    <None Include="Assets\shaders\sprite_old.vs.glsl" />
     <None Include="CChromaEditorLibrary.dll" />
     <None Include="CChromaEditorLibrary64.dll" />
   </ItemGroup>

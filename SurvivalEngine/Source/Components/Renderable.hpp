@@ -6,9 +6,8 @@
 
 struct Renderable
 {
-	Texture2D Sprite;
+	glm::vec2 TexCoords;
 	glm::vec4 Color;
-	int Layer;
 };
 
 #endif

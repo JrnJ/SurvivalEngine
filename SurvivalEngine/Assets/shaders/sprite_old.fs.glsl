@@ -2,12 +2,13 @@
 
 layout (location = 0) out vec4 color;
 
-in vec2 v_TextureVertex;
+in vec3 v_Position;
 in vec4 v_VertexColor;
 
 uniform sampler2D sprite;
+uniform vec4 spriteColor;
 
 void main()
 {
-    color = v_VertexColor * texture(sprite, v_TextureVertex);
+    color = spriteColor * texture(sprite, vec2(v_Position.xy));
 }

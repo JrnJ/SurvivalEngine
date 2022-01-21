@@ -17,12 +17,14 @@ public:
     ~SpriteRenderer();
 
     // Draws a quad based on the sprite
-    void DrawSprite(Texture2D& texture, glm::vec2 position, glm::vec2 scale, float rotation, glm::vec4 color);
+    void DrawSprite(glm::vec2 position, glm::vec2 scale, float rotation, Texture2D texture);
 
 private:
     // Render state
     Shader _shader;
-    unsigned int _quadVAO;
+    unsigned int _quadVBO; // Vertex Buffer
+    unsigned int _quadVAO; // Vertex Array
+    unsigned int _quadIB;  // Indices Buffer
 
     // Initialize vertex data
     void initRenderData();

@@ -35,7 +35,7 @@ void RenderSystem::Update(float dt)
 {
 	// Loop through entities
 	// get entites from systems
-	for (auto const& entity : mEntities)
+	/*for (auto const& entity : mEntities)
 	{
 		Renderer->DrawSprite(
 			_coordinator.GetComponent<Renderable>(entity).Sprite,
@@ -44,5 +44,7 @@ void RenderSystem::Update(float dt)
 			_coordinator.GetComponent<Transform>(entity).Rotation,
 			_coordinator.GetComponent<Renderable>(entity).Color
 			);
-	}
+	}*/
+
+
 }

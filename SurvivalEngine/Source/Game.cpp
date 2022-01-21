@@ -181,9 +181,8 @@ void Game::Init()
 		});
 	_coordinator.AddComponent(Player, Renderable
 		{
-			.Sprite = ResourceManager::GetTexture("Player"),
-			.Color = glm::vec4(1.0f),
-			.Layer = 100
+			.TexCoords = glm::vec2(0.0f, 1.0f),
+			.Color = glm::vec4(1.0f)
 		});
 
 	// Load Level
@@ -324,7 +323,7 @@ void Game::Update(float dt)
 		};
 
 		// Try create a rail
-		Entity entity = _coordinator.CreateEntity();
+		/*Entity entity = _coordinator.CreateEntity();
 		_coordinator.AddComponent(entity, Transform
 			{
 				.Position = glm::vec2(newPos),
@@ -336,7 +335,7 @@ void Game::Update(float dt)
 				.Sprite = ResourceManager::GetTexture("RailStraight"),
 				.Color = glm::vec4(1.0f),
 				.Layer = 90
-			});
+			});*/
 	}
 
 	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))

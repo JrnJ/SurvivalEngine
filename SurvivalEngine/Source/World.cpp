@@ -101,7 +101,7 @@ void World::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 						});
 					_coordinator.AddComponent(entity, Renderable
 						{
-							.Sprite = ResourceManager::GetTexture(texName),
+							.TexCoords = glm::vec2(0.0f, 1.0f),
 							.Color = glm::vec4(1.0f)
 						});
 					this->Blocks.push_back(entity);
@@ -120,7 +120,7 @@ void World::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 		});
 	_coordinator.AddComponent(blockEntity, Renderable
 		{
-			.Sprite = ResourceManager::GetTexture(""),
+			.TexCoords = glm::vec2(0.0f, 1.0f),
 			.Color = glm::vec4(1.0f)
 		});
 

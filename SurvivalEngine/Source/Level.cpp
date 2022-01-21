@@ -113,9 +113,8 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 				_coordinator.AddComponent(entity, Collider{});
 				_coordinator.AddComponent(entity, Renderable
 					{
-						.Sprite = ResourceManager::GetTexture(texName),
-						.Color = glm::vec4(1.0f),
-						.Layer = 80
+						.TexCoords = glm::vec2(0.0f, 1.0f),
+						.Color = glm::vec4(1.0f)
 					});
 				this->Blocks.push_back(entity);
 			}
