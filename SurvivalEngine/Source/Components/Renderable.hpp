@@ -6,7 +6,8 @@
 
 struct Renderable
 {
-	glm::vec2 TexCoords;
+	glm::vec2 TexLeftTop;
+	glm::vec2 TexRightBottom;
 	glm::vec4 Color;
 };
 

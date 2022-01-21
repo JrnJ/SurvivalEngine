@@ -28,16 +28,9 @@ void RenderSystem::Update(float dt)
 	// get entites from systems
 	for (auto const& entity : mEntities)
 	{
-		/*Renderer->DrawSprite(
-			_coordinator.GetComponent<Renderable>(entity).Sprite,
-			_coordinator.GetComponent<Transform>(entity).Position,
-			_coordinator.GetComponent<Transform>(entity).Scale,
-			_coordinator.GetComponent<Transform>(entity).Rotation,
-			_coordinator.GetComponent<Renderable>(entity).Color
-			);*/
-
 		Renderer->DrawSprite(
 			_coordinator.GetComponent<Transform>(entity).Position,
+			_coordinator.GetComponent<Renderable>(entity),
 			_coordinator.GetComponent<Transform>(entity).Scale,
 			0.0f,
 			ResourceManager::GetTexture("Atlas")

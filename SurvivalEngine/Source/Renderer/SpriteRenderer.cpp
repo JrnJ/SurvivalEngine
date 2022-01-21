@@ -20,25 +20,29 @@ SpriteRenderer::~SpriteRenderer()
     glDeleteVertexArrays(1, &this->_quadVAO);
 }
 
-static Vertex* CreateSprite(Vertex* target, float x, float y)
+static Vertex* CreateSprite(Vertex* target, float x, float y, Renderable renderable)
 {
+    // Left Bottom
     target->Position = { x, y + 1.0f };
-    target->TexCoords = { 0.5f, 0.5f };
+    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y }; // { 0.5f, 0.5f };
     target->Color = { 0.0f, 0.0f, 1.0f, 1.0f };
     target++;
 
+    // Right Bottom
     target->Position = { x + 1.0f, y + 1.0f };
-    target->TexCoords = { 0.75f, 0.5f };
+    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y }; // { 0.75f, 0.5f };
     target->Color = { 0.0f, 1.0f, 1.0f, 1.0f };
     target++;
 
+    // Right Top
     target->Position = { x + 1.0f, y + 0.0f };
-    target->TexCoords = { 0.75f, 0.25f };
+    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y }; // { 0.75f, 0.25f };
     target->Color = { 0.0f, 1.0f, 0.0f, 1.0f };
     target++;
 
+    // Left Top
     target->Position = { x, y };
-    target->TexCoords = { 0.5f, 0.25f };
+    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y }; // { 0.5f, 0.25f };
     target->Color = { 1.0f, 0.0f, 0.0f, 1.0f };
     target++;
 
@@ -49,14 +53,13 @@ const size_t MaxQuadCount = 576;
 const size_t MaxVertexCount = MaxQuadCount * 4;
 const size_t MaxIndexCount = MaxQuadCount * 6;
 
-void SpriteRenderer::DrawSprite(glm::vec2 position, glm::vec2 scale, float rotation, Texture2D texture)
+void SpriteRenderer::DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture)
 {
     uint32_t indexCount = 0;
     std::array<Vertex, MaxQuadCount> vertices;
     Vertex* buffer = vertices.data();
 
-    //buffer = CreateSprite(buffer, position.x / scale.x, position.y / scale.y);
-    buffer = CreateSprite(buffer, position.x, position.y);
+    buffer = CreateSprite(buffer, position.x, position.y, renderable);
     indexCount += 6;
 
     glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);

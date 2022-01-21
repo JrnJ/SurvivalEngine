@@ -11,8 +11,8 @@ public:
 	Camera(float left, float right, float bottom, float top);
 
 	// Position
-	const glm::vec3& GetPosition() const { return _position; }
-	void SetPosition(const glm::vec3 position) { _position = position; RecalculateViewMatrix(); }
+	const glm::vec2& GetPosition() const { return _position; }
+	void SetPosition(const glm::vec2 position) { _position = position; RecalculateViewMatrix(); }
 
 	// Rotation
 	const float GetRotation() const { return _rotation; }
@@ -39,7 +39,7 @@ private:
 	glm::mat4 _viewMatrix;
 	glm::mat4 _zoomMatrix;
 	glm::mat4 _viewProjectionMatrix;
-	glm::vec3 _position = { 0.0f, 0.0f, 0.0f };
+	glm::vec2 _position = { 0.0f, 0.0f };
 	float _rotation = 0.0f;
 	float _zoom = 1.0f;
 

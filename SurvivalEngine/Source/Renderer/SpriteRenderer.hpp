@@ -7,6 +7,7 @@
 
 #include "Texture2D.hpp"
 #include "Shader.hpp"
+#include "../Components/Renderable.hpp"
 
 
 class SpriteRenderer
@@ -17,7 +18,7 @@ public:
     ~SpriteRenderer();
 
     // Draws a quad based on the sprite
-    void DrawSprite(glm::vec2 position, glm::vec2 scale, float rotation, Texture2D texture);
+    void DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture);
 
 private:
     // Render state

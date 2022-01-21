@@ -51,6 +51,19 @@ Game::~Game()
 	std::cout << "Game Deconstrcuted!" << std::endl;
 }
 
+const float atlasWidth = 128;
+const float atlasHeight = 128;
+const float textureWidth = 32;
+const float textureHeight = 32;
+
+float atlasCalcWidth = 1.0f / 128.0f * 32.0f;
+float atlasCalcHeight = 1.0f / 128.0f * 32.0f;
+
+glm::vec2 GetSpriteInAtlas(int x, int y)
+{
+	return glm::vec2(atlasCalcWidth * (x - 1), atlasCalcHeight * (y - 1));
+}
+
 /// <summary>
 /// Initialize the Game
 /// </summary>
@@ -149,7 +162,8 @@ void Game::Init()
 		});
 	_coordinator.AddComponent(Player, Renderable
 		{
-			.TexCoords = glm::vec2(0.0f, 1.0f),
+			.TexLeftTop = GetSpriteInAtlas(4, 1),
+			.TexRightBottom = GetSpriteInAtlas(5, 2),
 			.Color = glm::vec4(1.0f)
 		});
 
@@ -171,7 +185,7 @@ void Game::ProcessInput(float dt)
 		// Player Movement
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
-		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical) * 300.0f);
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f;
 
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
@@ -300,18 +314,10 @@ void Game::Update(float dt)
 			});
 		_coordinator.AddComponent(entity, Renderable
 			{
-				.TexCoords = glm::vec2(0.0f, 1.0f),
+				.TexLeftTop = GetSpriteInAtlas(3, 2),
+				.TexRightBottom = GetSpriteInAtlas(4, 3),
 				.Color = glm::vec4(1.0f)
 			});
-	}
-
-	if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
-	{
-		// Try delete the rail
-		
-		// TODO
-		// Get block info on click
-		// Fuck it you need a grid system OOF
 	}
 
 	// Camera Controls
@@ -344,10 +350,9 @@ void Game::Update(float dt)
 	// Physics
 	_physicsSystem->Update(dt);
 
-	_camera.SetPosition(glm::vec3(
+	_camera.SetPosition(glm::vec2(
 		_coordinator.GetComponent<Transform>(Player).Position.x * _resizeSystem->BlockSize.x - this->Width / 2.0f + _resizeSystem->BlockSize.x / 2.0f,
-		_coordinator.GetComponent<Transform>(Player).Position.y * _resizeSystem->BlockSize.y - this->Height / 2.0f + _resizeSystem->BlockSize.y / 2.0f,
-		0.0f
+		_coordinator.GetComponent<Transform>(Player).Position.y * _resizeSystem->BlockSize.y - this->Height / 2.0f + _resizeSystem->BlockSize.y / 2.0f
 	));
 }
 
@@ -379,7 +384,7 @@ void Game::WindowResized(int width, int height)
 	_camera.SetProjectionMatrix(0.0f, width, height, 0.0f);
 
 	// Load Levels
-	this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+	this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 	this->ResetPlayer();
 	std::cout << "Level Loaded!" << std::endl;
 }
@@ -388,5 +393,5 @@ void Game::ResetPlayer()
 {
 	// Reset Player
 	//_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f - BlockSize.x / 2.0f, this->Height / 2.0f - BlockSize.y / 2.0f);
-	_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f);
+	//_coordinator.GetComponent<Transform>(Player).Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f);
 }

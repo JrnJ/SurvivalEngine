@@ -92,7 +92,7 @@ void World::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 						break;
 					}
 
-					Entity entity = _coordinator.CreateEntity();
+					/*Entity entity = _coordinator.CreateEntity();
 					_coordinator.AddComponent(entity, Transform
 						{
 							.Position = pos,
@@ -104,28 +104,28 @@ void World::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 							.TexCoords = glm::vec2(0.0f, 1.0f),
 							.Color = glm::vec4(1.0f)
 						});
-					this->Blocks.push_back(entity);
+					this->Blocks.push_back(entity);*/
 				}
 			}
 		}
 	}
 
-	// Create an Entity
-	Entity blockEntity = _coordinator.CreateEntity();
-	_coordinator.AddComponent(blockEntity, Transform
-		{
-			.Position = glm::vec2(0.0f),
-			.Scale = glm::vec2(1.0f),
-			.Rotation = 0.0f
-		});
-	_coordinator.AddComponent(blockEntity, Renderable
-		{
-			.TexCoords = glm::vec2(0.0f, 1.0f),
-			.Color = glm::vec4(1.0f)
-		});
+	//// Create an Entity
+	//Entity blockEntity = _coordinator.CreateEntity();
+	//_coordinator.AddComponent(blockEntity, Transform
+	//	{
+	//		.Position = glm::vec2(0.0f),
+	//		.Scale = glm::vec2(1.0f),
+	//		.Rotation = 0.0f
+	//	});
+	//_coordinator.AddComponent(blockEntity, Renderable
+	//	{
+	//		.TexCoords = glm::vec2(0.0f, 1.0f),
+	//		.Color = glm::vec4(1.0f)
+	//	});
 
-	// Add Entity to Scene
-	this->Blocks.push_back(blockEntity);
+	//// Add Entity to Scene
+	//this->Blocks.push_back(blockEntity);
 }
 
 void World::Unload()
