@@ -25,25 +25,25 @@ static Vertex* CreateSprite(Vertex* target, float x, float y, Renderable rendera
     // Left Bottom
     target->Position = { x, y + 1.0f };
     target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y }; // { 0.5f, 0.5f };
-    target->Color = { 0.0f, 0.0f, 1.0f, 1.0f };
+    target->Color = renderable.Color; // { 0.0f, 0.0f, 1.0f, 1.0f };
     target++;
 
     // Right Bottom
     target->Position = { x + 1.0f, y + 1.0f };
     target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y }; // { 0.75f, 0.5f };
-    target->Color = { 0.0f, 1.0f, 1.0f, 1.0f };
+    target->Color = renderable.Color; // { 0.0f, 1.0f, 1.0f, 1.0f };
     target++;
 
     // Right Top
     target->Position = { x + 1.0f, y + 0.0f };
     target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y }; // { 0.75f, 0.25f };
-    target->Color = { 0.0f, 1.0f, 0.0f, 1.0f };
+    target->Color = renderable.Color; // { 0.0f, 1.0f, 0.0f, 1.0f };
     target++;
 
     // Left Top
     target->Position = { x, y };
     target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y }; // { 0.5f, 0.25f };
-    target->Color = { 1.0f, 0.0f, 0.0f, 1.0f };
+    target->Color = renderable.Color; // { 1.0f, 0.0f, 0.0f, 1.0f };
     target++;
 
     return target;

@@ -56,8 +56,8 @@ const float atlasHeight = 128;
 const float textureWidth = 32;
 const float textureHeight = 32;
 
-float atlasCalcWidth = 1.0f / 128.0f * 32.0f;
-float atlasCalcHeight = 1.0f / 128.0f * 32.0f;
+float atlasCalcWidth = 1.0f / atlasWidth * textureWidth;
+float atlasCalcHeight = 1.0f / atlasHeight * textureHeight;
 
 glm::vec2 GetSpriteInAtlas(int x, int y)
 {
@@ -350,6 +350,7 @@ void Game::Update(float dt)
 	// Physics
 	_physicsSystem->Update(dt);
 
+	// Update Camera
 	_camera.SetPosition(glm::vec2(
 		_coordinator.GetComponent<Transform>(Player).Position.x * _resizeSystem->BlockSize.x - this->Width / 2.0f + _resizeSystem->BlockSize.x / 2.0f,
 		_coordinator.GetComponent<Transform>(Player).Position.y * _resizeSystem->BlockSize.y - this->Height / 2.0f + _resizeSystem->BlockSize.y / 2.0f
@@ -366,6 +367,7 @@ void Game::Render(float dt)
 		// Update Camera
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 		//std::cout << "X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
+
 		// RenderSystem
 		_renderSystem->Update(dt);
 
