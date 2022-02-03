@@ -18,6 +18,9 @@ void GLAPIENTRY MessageCallback(GLenum source, GLenum type, GLuint id, GLenum se
 	std::cout << std::endl;
 }
 
+// Utility Methods
+void write_fps_to_window_title(GLFWwindow* window);
+
 // GLFW function declarations
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -35,6 +38,9 @@ const unsigned int SCREEN_HEIGHT = 720;
 //const unsigned int SCREEN_HEIGHT = 1080;
 
 Game Survival(SCREEN_WIDTH, SCREEN_HEIGHT);
+
+int nbFrames = 0;
+double lastTime = 0.00;
 
 int main(int argc, char* argv[])
 {
@@ -123,6 +129,7 @@ int main(int argc, char* argv[])
 		KeyInput::ScrollX = 0;
 		KeyInput::ScrollY = 0;
 
+		write_fps_to_window_title(window);
 		glfwSwapBuffers(window);
 	}
 
@@ -132,6 +139,27 @@ int main(int argc, char* argv[])
 
 	std::cout << "Window and Resources Closed" << std::endl;
 	return 0;
+}
+
+// Utility Methods
+void write_fps_to_window_title(GLFWwindow* window)
+{
+	// Measure Window Speed
+	double currentTime = glfwGetTime();
+	double delta = currentTime - lastTime;
+	nbFrames++;
+	if (delta >= 1.0) { // If last cout was more than 1 sec ago
+		//std::cout << 1000.0 / double(nbFrames) << std::endl;
+
+		double fps = double(nbFrames) / delta;
+
+		std::string ss = "Survival Engine [ " + std::to_string(fps) + "FPS]";
+
+		glfwSetWindowTitle(window, ss.c_str());
+
+		nbFrames = 0;
+		lastTime = currentTime;
+	}
 }
 
 // GLFW Callbacks
