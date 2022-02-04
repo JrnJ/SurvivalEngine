@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <queue>
+#include <vector>
 
 #include "Math.hpp"
 #include "KeyInput.hpp"
@@ -128,25 +129,25 @@ void Game::Init()
 	}
 	_resizeSystem->Init(this->Width, this->Height);
 
-	/*std::vector<Entity> entities(MAX_ENTITIES - 3700);
+	//std::vector<Entity> entities(MAX_ENTITIES - 200);
 
-	for (auto& entity : entities)
-	{
-		entity = _coordinator.CreateEntity();
+	//for (auto& entity : entities)
+	//{
+	//	entity = _coordinator.CreateEntity();
 
-		_coordinator.AddComponent(entity, Transform
-			{
-				.Position = glm::vec2(this->Width / 2.0f, this->Height / 2.0f),
-				.Scale = _resizeSystem->BlockSize,
-				.Rotation = 0.0f
-			});
-
-		_coordinator.AddComponent(entity, Renderable
-			{
-				.Sprite = ResourceManager::GetTexture("TurretBullet"),
-				.Color = glm::vec4(1.0f)
-			});
-	}*/
+	//	_coordinator.AddComponent(entity, Transform
+	//		{
+	//			.Position = glm::vec2(1.0f, 12.0f), //this->Width / 2.0f, this->Height / 2.0f
+	//			.Scale = _resizeSystem->BlockSize,
+	//			.Rotation = 0.0f
+	//		});
+	//	_coordinator.AddComponent(entity, Renderable
+	//		{
+	//			.TexLeftTop = GetSpriteInAtlas(1, 2),
+	//			.TexRightBottom = GetSpriteInAtlas(2, 3),
+	//			.Color = glm::vec4(1.0f)
+	//		});
+	//}
 
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform

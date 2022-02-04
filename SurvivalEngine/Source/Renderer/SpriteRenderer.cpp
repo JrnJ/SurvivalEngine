@@ -1,6 +1,7 @@
 #include "SpriteRenderer.hpp"
 
-#include <array>
+
+#include <vector>
 
 struct Vertex
 {
@@ -9,7 +10,8 @@ struct Vertex
     glm::vec4 Color;
 };
 
-SpriteRenderer::SpriteRenderer(Shader& shader)
+SpriteRenderer::SpriteRenderer(Shader& shader, size_t maxEntites)
+    : MaxQuadCount(maxEntites * 4), MaxVertexCount(maxEntites * 4 * 4), MaxIndexCount(maxEntites * 4 * 6)
 {
     this->_shader = shader;
     this->initRenderData();
@@ -49,14 +51,14 @@ static Vertex* CreateSprite(Vertex* target, float x, float y, Renderable rendera
     return target;
 }
 
-const size_t MaxQuadCount = 576;
-const size_t MaxVertexCount = MaxQuadCount * 4;
-const size_t MaxIndexCount = MaxQuadCount * 6;
+//const size_t MaxQuadCount = 576;
+//const size_t MaxVertexCount = MaxQuadCount * 4;
+//const size_t MaxIndexCount = MaxQuadCount * 6;
 
 void SpriteRenderer::DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture)
 {
     uint32_t indexCount = 0;
-    std::array<Vertex, MaxQuadCount> vertices;
+    std::vector<Vertex> vertices(MaxQuadCount);
     Vertex* buffer = vertices.data();
 
     buffer = CreateSprite(buffer, position.x, position.y, renderable);
@@ -98,6 +100,54 @@ void SpriteRenderer::DrawSprite(glm::vec2 position, Renderable renderable, glm::
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
+//void SpriteRenderer::DrawBatch(std::vector<Entity> entities, float scale, float rotation = 0.0f, Texture2D texture)
+//{
+//    uint32_t indexCount = 0;
+//    std::vector<Vertex> vertices(MaxQuadCount);
+//    Vertex* buffer = vertices.data();
+//
+//    for (int i = 0; i < entities.size(); i++)
+//    {
+//        buffer = CreateSprite(buffer, position.x, position.y, renderable);
+//        indexCount += 6;
+//    }
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
+//    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+//
+//    this->_shader.Use();
+//
+//    // Model
+//    glm::mat4 model = glm::mat4(1.0f);
+//
+//    // Calculate Model
+//    // Transformation order: scale, rotation, final translation happens; reversed order)
+//    // Set Position
+//    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+//
+//    // Move origin of rotation to center of the quad
+//    model = glm::translate(model, glm::vec3(0.5f * scale, 0.5f * scale, 0.0f));
+//
+//    // Rotate quad
+//    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+//
+//    // Move origin back
+//    model = glm::translate(model, glm::vec3(-0.5f * scale, -0.5f * scale, 0.0f));
+//
+//    // Apply scaling
+//    model = glm::scale(model, glm::vec3(scale, scale, 1.0f));
+//
+//    // Apply model to Shader
+//    this->_shader.SetMatrix4("u_Model", model);
+//
+//    // Bind Texture
+//    glActiveTexture(GL_TEXTURE0);
+//    texture.Bind();
+//
+//    glBindVertexArray(this->_quadVAO);
+//    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+//}
+
 void SpriteRenderer::initRenderData()
 {
     glGenVertexArrays(1, &this->_quadVAO);
@@ -121,10 +171,11 @@ void SpriteRenderer::initRenderData()
     glEnableVertexAttribArray(2);
 
     // Generate Indices Buffer
-    uint32_t indices[MaxIndexCount];
+    std::vector<uint32_t> indices(MaxIndexCount);
     uint32_t offset = 0;
     for (size_t i = 0; i < MaxIndexCount; i += 6)
     {
+        // Order of vertex points
         indices[i + 0] = 0 + offset;
         indices[i + 1] = 1 + offset;
         indices[i + 2] = 2 + offset;
@@ -138,7 +189,7 @@ void SpriteRenderer::initRenderData()
 
     glGenBuffers(1, &_quadIB);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _quadIB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(Vertex), &indices[0], GL_STATIC_DRAW);
 
     // Draw Mode - Optional
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Fill
