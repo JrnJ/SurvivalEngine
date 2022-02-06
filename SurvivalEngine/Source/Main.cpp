@@ -69,7 +69,8 @@ int main(int argc, char* argv[])
 
 	//GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Platformer Engine", monitors[1], NULL);
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(0);
+	// Disable VSYNC
+	//glfwSwapInterval(0);
 
 	// Load Glad with OpenGL function pointers
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

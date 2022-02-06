@@ -8,6 +8,7 @@ namespace Math
 	const float PI = 3.14159265359f;
 
 	const glm::vec2 Normalize(glm::vec2 vec2);
+	const float Clamp(float value, float min, float max);
 
 	// Degrees
 	const float RadToDeg(float radians);

@@ -85,7 +85,9 @@ void RenderSystem::Update(float dt)
     for (auto const& entity : mEntities)
     {
         glm::vec2 position = _coordinator.GetComponent<Transform>(entity).Position;
-        buffer = CreateSprite(buffer, position.x, position.y, _coordinator.GetComponent<Renderable>(entity));
+        Renderable renderable = _coordinator.GetComponent<Renderable>(entity);
+
+        buffer = CreateSprite(buffer, position.x, position.y, renderable);
         indexCount += 6;
 
         if (indexCount == maxBatch * 6 || entity == mEntities.size() - 1)

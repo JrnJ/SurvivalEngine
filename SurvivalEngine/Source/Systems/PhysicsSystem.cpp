@@ -28,7 +28,7 @@ void PhysicsSystem::Update(float dt)
 	for (auto const& entity : mEntities)
 	{
 		// Apply Physics
-		_coordinator.GetComponent<Transform>(entity).Position += _coordinator.GetComponent<Rigidbody>(entity).Velocity * dt;
+		_coordinator.GetComponent<Transform>(entity).Position += _coordinator.GetComponent<Rigidbody>(entity).Velocity * -1.0f;
 
 		// Apply Collision
 		this->DoCollision(entity);

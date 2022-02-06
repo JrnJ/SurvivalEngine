@@ -129,7 +129,7 @@ void Game::Init()
 	}
 	_resizeSystem->Init(this->Width, this->Height);
 
-	//std::vector<Entity> entities(MAX_ENTITIES - 200);
+	std::vector<Entity> entities(MAX_ENTITIES - 200);
 
 	//for (auto& entity : entities)
 	//{
@@ -174,7 +174,18 @@ void Game::Init()
 	CurrentLevel = test;
 }
 
-//#include "KeyInput.hpp"
+// Speed of car in m/s
+float carSpeed = 0.0f;
+float carMinSpeed = -5.5f;
+float carMaxSpeed = 11.1f;
+float carAcceleration = 8.0f;  // 40 / 2 / 3.6
+float carDecceleration = 8.0f; // 40 / 2 / 3.6
+
+// Others
+float carBreakAcceleration = 10.1f;
+float carReverseAcceleration = 6.6f;
+float carMaxReverseSpeed = 3.5f;
+
 /// <summary>
 /// Take user input each frame
 /// </summary>
@@ -184,9 +195,74 @@ void Game::ProcessInput(float dt)
 	if (this->State == GameState::GAME_ACTIVE)
 	{
 		// Player Movement
-		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+		//float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+		//float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
+		//_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f * dt;
+
+		// Car Physics
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
-		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f;
+
+		//carSpeed = Math::Clamp(
+		//	vertical != 0 ? carSpeed + carAcceleration * vertical * dt : carSpeed - carDecceleration * dt,
+		//	carMinSpeed, carMaxSpeed
+		//);
+
+		// Space is the brake
+		if (!KeyInput::GetKeyDown(GLFW_KEY_SPACE))
+		{
+			if (vertical == 0)
+			{
+				if (std::round(carSpeed) == 0)
+				{
+					carSpeed = 0;
+				}
+				else
+				{
+					if (carSpeed > 0)
+					{
+						// Deccelerate car
+						carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
+					}
+					else
+					{
+						// Accelerate car lol
+						carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
+					}
+				}		
+			}
+			else if (vertical == 1)
+			{
+				// Forward
+				carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
+			}
+			else // if (vertical == -1)
+			{
+				if (carSpeed > 0)
+				{
+					// Break if Car is having speed
+					carSpeed = Math::Clamp(carSpeed - carAcceleration * dt, carMinSpeed, carMaxSpeed);
+				}
+				else
+				{
+					// Reverse if car if speed is below 0
+					carSpeed = Math::Clamp(carSpeed - carReverseAcceleration * dt, carMinSpeed, carMaxSpeed);
+				}
+			}
+		}
+		else // Make car break
+		{
+			carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+
+			if (std::round(carSpeed) == 0)
+				carSpeed = 0;
+		}
+
+		std::cout << "Speed: " << carSpeed << std::endl;
+
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = { 0.0f, carSpeed * dt };
+
+		// Display Speed
+		//std::cout << "RPM: " << " Velocity: " << std::endl;
 
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
@@ -211,30 +287,30 @@ void Game::ProcessInput(float dt)
 		}
 
 		// Check for Inventory things
-		if (KeyInput::GetKeyDown(GLFW_KEY_1))
-			SelectedHotbarSlot = 0;
-		if (KeyInput::GetKeyDown(GLFW_KEY_2))
-			SelectedHotbarSlot = 1;
-		if (KeyInput::GetKeyDown(GLFW_KEY_3))
-			SelectedHotbarSlot = 2;
-		if (KeyInput::GetKeyDown(GLFW_KEY_4))
-			SelectedHotbarSlot = 3;
-		if (KeyInput::GetKeyDown(GLFW_KEY_5))
-			SelectedHotbarSlot = 4;
-		if (KeyInput::GetKeyDown(GLFW_KEY_6))
-			SelectedHotbarSlot = 5;
-		if (KeyInput::GetKeyDown(GLFW_KEY_7))
-			SelectedHotbarSlot = 6;
-		if (KeyInput::GetKeyDown(GLFW_KEY_8))
-			SelectedHotbarSlot = 7;
-		if (KeyInput::GetKeyDown(GLFW_KEY_9))
-			SelectedHotbarSlot = 8;
-
-		// Got to reset to 0 if not scrolling idk how tbh
-		if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) > 0)
-			SelectedHotbarSlot = SelectedHotbarSlot <= 0 ? 8 : SelectedHotbarSlot - 1;
-		else if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) < 0)
-			SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_1))
+		//	SelectedHotbarSlot = 0;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_2))
+		//	SelectedHotbarSlot = 1;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_3))
+		//	SelectedHotbarSlot = 2;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_4))
+		//	SelectedHotbarSlot = 3;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_5))
+		//	SelectedHotbarSlot = 4;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_6))
+		//	SelectedHotbarSlot = 5;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_7))
+		//	SelectedHotbarSlot = 6;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_8))
+		//	SelectedHotbarSlot = 7;
+		//if (KeyInput::GetKeyDown(GLFW_KEY_9))
+		//	SelectedHotbarSlot = 8;
+		//
+		//// Got to reset to 0 if not scrolling idk how tbh
+		//if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) > 0)
+		//	SelectedHotbarSlot = SelectedHotbarSlot <= 0 ? 8 : SelectedHotbarSlot - 1;
+		//else if (KeyInput::GetAxisRaw(Axis::MouseScrollWheel) < 0)
+		//	SelectedHotbarSlot = SelectedHotbarSlot >= 8 ? 0 : SelectedHotbarSlot + 1;
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_M))
 		{

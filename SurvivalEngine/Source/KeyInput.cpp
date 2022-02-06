@@ -65,17 +65,17 @@ const bool KeyInput::GetMouseButtonUp(int button)
 	return false;
 }
 
-const Math::Vector2 KeyInput::MouseToWorldPos()
-{
-	std::cout << "Function not working due to camera now accesible by any object, see comments for info" << std::endl;
-	// Calculation:
-	// return Math::Vector2(KeyInput::MouseX + _camera.GetPosition().x, KeyInput::MouseY + _camera.GetPosition().y); 
-
-	// Camera has to become a namespace in which everything can acces it in order to allow the getting of the camera position
-	// Or create a reference to here from the camera :)
-
-	return Math::Vector2();
-}
+//const Math::Vector2 KeyInput::MouseToWorldPos()
+//{
+//	std::cout << "Function not working due to camera now accesible by any object, see comments for info" << std::endl;
+//	// Calculation:
+//	// return Math::Vector2(KeyInput::MouseX + _camera.GetPosition().x, KeyInput::MouseY + _camera.GetPosition().y); 
+//
+//	// Camera has to become a namespace in which everything can acces it in order to allow the getting of the camera position
+//	// Or create a reference to here from the camera :)
+//
+//	return { 0.0f, 0.0f };
+//}
 
 // Mouse //
 const float KeyInput::GetAxis(Axis axis)
@@ -105,8 +105,8 @@ const float KeyInput::GetAxisRaw(Axis axis)
 			(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT));
 	case Axis::Vertical:
 		return
-			(float)std::max((int)GetKey(GLFW_KEY_S), (int)GetKey(GLFW_KEY_DOWN)) -
-			(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP));
+			(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP)) -
+			(float)std::max((int)GetKey(GLFW_KEY_S), (int)GetKey(GLFW_KEY_DOWN));
 	case Axis::MouseScrollWheel:
 		return (float)ScrollY;
 	default:
@@ -119,5 +119,5 @@ const float KeyInput::GetAxisRaw(Axis axis)
 
 const float KeyInput::GetCustomAxisRaw(int negative, int positive)
 {
-	return (float)((int)GetKey(negative) - (int)GetKey(positive));
+	return (float)((int)GetKey(positive) - (int)GetKey(negative));
 }
