@@ -101,8 +101,8 @@ const float KeyInput::GetAxisRaw(Axis axis)
 	{
 	case Axis::Horizontal:
 		return
-			(float)std::max((int)GetKey(GLFW_KEY_D), (int)GetKey(GLFW_KEY_RIGHT)) -
-			(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT));
+			(float)std::max((int)GetKey(GLFW_KEY_A), (int)GetKey(GLFW_KEY_LEFT)) -
+			(float)std::max((int)GetKey(GLFW_KEY_D), (int)GetKey(GLFW_KEY_RIGHT));
 	case Axis::Vertical:
 		return
 			(float)std::max((int)GetKey(GLFW_KEY_W), (int)GetKey(GLFW_KEY_UP)) -

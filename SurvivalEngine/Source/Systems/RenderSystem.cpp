@@ -13,33 +13,113 @@ struct Vertex
     glm::vec4 Color;
 };
 
-static Vertex* CreateSprite(Vertex* target, float x, float y, Renderable renderable)
+static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable renderable)
 {
+    if (transform.Rotation != 0.0f)
+    {
+        //// Apply Rotation
+        //glm::mat4 model = glm::mat4(1.0f);
+
+        //// Set Position
+        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+
+        //// Move prigin to center of quad
+        //model = glm::translate(model, glm::vec3(0.5f, 0.5f, 1.0f));
+
+        //// Rotate quad (from center)
+        //model = glm::rotate(model, glm::radians(transform.Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        //// Move origin back to top left
+        //model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
+
+        //// Then what?
+        //// gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 0.0, 1.0);
+        //// gl_Position is a vec4, so we do position * model which also applies rotation
+        //// so uhhh, maybe?
+        //glm::vec4 uhm = glm::vec4(transform.Position.x, transform.Position.y, 0.0f, 1.0f) * model;
+
+        //transform.Position *= glm::vec2(uhm.x, uhm.y);
+
+    } // Keep regular
+
+    // Sprite is not rotated from origin of the quad
+
+    //glm::mat4 model = glm::mat4(1.0f);
+
+   
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(transform.Position.x, transform.Position.y, 1.0f));
+
+    if (transform.Rotation != 0.0f)
+    {
+        // Move origin to center of quad
+        model = glm::translate(model, glm::vec3(0.5f, 0.5f, 1.0f));
+
+        // Rotate quad (from center)
+        model = glm::rotate(model, glm::radians(transform.Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // Move origin back to top left
+        model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
+
+        /*glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(transform.Position, 1.0f))
+        * glm::rotate(glm::mat4(1.0f), glm::radians(transform.Rotation), { 0.0f, 0.0f, 1.0f });*/
+    }
+    
     // Left Bottom
-    target->Position = { x, y + 1.0f };
-    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y }; // { 0.5f, 0.5f };
+    target->Position = model * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    //target->Position = { transform.Position.x, transform.Position.y + 1.0f };
+    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y };
     target->Color = renderable.Color; // { 0.0f, 0.0f, 1.0f, 1.0f };
     target++;
 
     // Right Bottom
-    target->Position = { x + 1.0f, y + 1.0f };
-    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y }; // { 0.75f, 0.5f };
+    target->Position = model * glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+    //target->Position = { transform.Position.x + 1.0f, transform.Position.y + 1.0f };
+    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y };
     target->Color = renderable.Color; // { 0.0f, 1.0f, 1.0f, 1.0f };
     target++;
 
     // Right Top
-    target->Position = { x + 1.0f, y + 0.0f };
-    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y }; // { 0.75f, 0.25f };
+    target->Position = model * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    //target->Position = { transform.Position.x + 1.0f, transform.Position.y + 0.0f };
+    target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y };
     target->Color = renderable.Color; // { 0.0f, 1.0f, 0.0f, 1.0f };
     target++;
 
     // Left Top
-    target->Position = { x, y };
-    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y }; // { 0.5f, 0.25f };
+    target->Position = model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    //target->Position = { transform.Position.x, transform.Position.y };
+    target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y };
     target->Color = renderable.Color; // { 1.0f, 0.0f, 0.0f, 1.0f };
     target++;
 
     return target;
+
+    // Sample for 45degree rotated quad
+    //// Left Bottom
+    //target->Position = { transform.Position.x - 0.25f, transform.Position.y + 0.5f };
+    //target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y }; // { 0.5f, 0.5f };
+    //target->Color = renderable.Color; // { 0.0f, 0.0f, 1.0f, 1.0f };
+    //target++;
+
+    //// Right Bottom
+    //target->Position = { transform.Position.x + 0.5f, transform.Position.y + 1.25f };
+    //target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y }; // { 0.75f, 0.5f };
+    //target->Color = renderable.Color; // { 0.0f, 1.0f, 1.0f, 1.0f };
+    //target++;
+
+    //// Right Top
+    //target->Position = { transform.Position.x + 1.25f, transform.Position.y + 0.5f };
+    //target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y }; // { 0.75f, 0.25f };
+    //target->Color = renderable.Color; // { 0.0f, 1.0f, 0.0f, 1.0f };
+    //target++;
+
+    //// Left Top
+    //target->Position = { transform.Position.x + 0.5f, transform.Position.y - 0.25f };
+    //target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y }; // { 0.5f, 0.25f };
+    //target->Color = renderable.Color; // { 1.0f, 0.0f, 0.0f, 1.0f };
+    //target++;
+
+    //return target;
 }
 
 const size_t maxBatch = 100; // 800+ is the max
@@ -84,10 +164,10 @@ void RenderSystem::Update(float dt)
 
     for (auto const& entity : mEntities)
     {
-        glm::vec2 position = _coordinator.GetComponent<Transform>(entity).Position;
         Renderable renderable = _coordinator.GetComponent<Renderable>(entity);
+        Transform transform = _coordinator.GetComponent<Transform>(entity);
 
-        buffer = CreateSprite(buffer, position.x, position.y, renderable);
+        buffer = CreateSprite(buffer, transform, renderable);
         indexCount += 6;
 
         if (indexCount == maxBatch * 6 || entity == mEntities.size() - 1)
@@ -139,47 +219,47 @@ void RenderSystem::Update(float dt)
 
 void RenderSystem::DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture)
 {
-    uint32_t indexCount = 0;
-    std::vector<Vertex> vertices(MaxQuadCount);
-    Vertex* buffer = vertices.data();
+    //uint32_t indexCount = 0;
+    //std::vector<Vertex> vertices(MaxQuadCount);
+    //Vertex* buffer = vertices.data();
 
-    buffer = CreateSprite(buffer, position.x, position.y, renderable);
-    indexCount += 6;
+    //buffer = CreateSprite(buffer, position.x, position.y, renderable);
+    //indexCount += 6;
 
-    glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+    //glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
+    //glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
 
-    this->_shader.Use();
+    //this->_shader.Use();
 
-    // Model
-    glm::mat4 model = glm::mat4(1.0f);
+    //// Model
+    //glm::mat4 model = glm::mat4(1.0f);
 
-    // Calculate Model
-    // Transformation order: scale, rotation, final translation happens; reversed order)
-    // Set Position
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+    //// Calculate Model
+    //// Transformation order: scale, rotation, final translation happens; reversed order)
+    //// Set Position
+    //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    // Move origin of rotation to center of the quad
-    model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f));
+    //// Move origin of rotation to center of the quad
+    //model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f));
 
-    // Rotate quad
-    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+    //// Rotate quad
+    //model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    // Move origin back
-    model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
+    //// Move origin back
+    //model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
 
-    // Apply scaling
-    model = glm::scale(model, glm::vec3(scale, 1.0f));
+    //// Apply scaling
+    //model = glm::scale(model, glm::vec3(scale, 1.0f));
 
-    // Apply model to Shader
-    this->_shader.SetMatrix4("u_Model", model);
+    //// Apply model to Shader
+    //this->_shader.SetMatrix4("u_Model", model);
 
-    // Bind Texture
-    glActiveTexture(GL_TEXTURE0);
-    texture.Bind();
+    //// Bind Texture
+    //glActiveTexture(GL_TEXTURE0);
+    //texture.Bind();
 
-    glBindVertexArray(this->_quadVAO);
-    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+    //glBindVertexArray(this->_quadVAO);
+    //glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
 void RenderSystem::DrawBatch()

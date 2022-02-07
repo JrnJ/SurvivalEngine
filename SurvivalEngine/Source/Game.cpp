@@ -152,7 +152,7 @@ void Game::Init()
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
 		{
-			.Position = glm::vec2(1.0f, 12.0f), //this->Width / 2.0f, this->Height / 2.0f
+			.Position = glm::vec2(2.0f, 21.0f), //this->Width / 2.0f, this->Height / 2.0f
 			.Scale = _resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
@@ -176,7 +176,7 @@ void Game::Init()
 
 // Speed of car in m/s
 float carSpeed = 0.0f;
-float carMinSpeed = -5.5f;
+float carMinSpeed = -3.5f;
 float carMaxSpeed = 11.1f;
 float carAcceleration = 8.0f;  // 40 / 2 / 3.6
 float carDecceleration = 8.0f; // 40 / 2 / 3.6
@@ -185,6 +185,8 @@ float carDecceleration = 8.0f; // 40 / 2 / 3.6
 float carBreakAcceleration = 10.1f;
 float carReverseAcceleration = 6.6f;
 float carMaxReverseSpeed = 3.5f;
+
+float steerSpeed = 180.0f; // Idea: 1second for 90 degrees
 
 /// <summary>
 /// Take user input each frame
@@ -201,6 +203,10 @@ void Game::ProcessInput(float dt)
 
 		// Car Physics
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
+		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+
+		// Move car
+		_coordinator.GetComponent<Transform>(Player).Rotation += horizontal * -1.0f * steerSpeed * dt;
 
 		//carSpeed = Math::Clamp(
 		//	vertical != 0 ? carSpeed + carAcceleration * vertical * dt : carSpeed - carDecceleration * dt,
@@ -208,7 +214,7 @@ void Game::ProcessInput(float dt)
 		//);
 
 		// Space is the brake
-		if (!KeyInput::GetKeyDown(GLFW_KEY_SPACE))
+		if (!KeyInput::GetKey(GLFW_KEY_SPACE))
 		{
 			if (vertical == 0)
 			{
@@ -251,18 +257,36 @@ void Game::ProcessInput(float dt)
 		}
 		else // Make car break
 		{
-			carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
-
+			if (carSpeed > 0)
+			{
+				carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+			}
+			else
+			{
+				carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+			}
+			
 			if (std::round(carSpeed) == 0)
 				carSpeed = 0;
 		}
 
-		std::cout << "Speed: " << carSpeed << std::endl;
+		//std::cout << "Speed: " << carSpeed << std::endl;
 
 		_coordinator.GetComponent<Rigidbody>(Player).Velocity = { 0.0f, carSpeed * dt };
 
 		// Display Speed
 		//std::cout << "RPM: " << " Velocity: " << std::endl;
+
+		// Click TP
+		if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			glm::vec2 newPos = {
+				std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
+				std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
+			};
+
+			_coordinator.GetComponent<Transform>(Player).Position = newPos;
+		}
 
 		// Load Levels
 		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
