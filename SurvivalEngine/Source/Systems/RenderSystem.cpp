@@ -46,7 +46,7 @@ static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable rend
 
     //glm::mat4 model = glm::mat4(1.0f);
 
-   
+    // Move model to topleft of origin quad
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(transform.Position.x, transform.Position.y, 1.0f));
 
     if (transform.Rotation != 0.0f)
@@ -66,7 +66,6 @@ static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable rend
     
     // Left Bottom
     target->Position = model * glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
-    //target->Position = { transform.Position.x, transform.Position.y + 1.0f };
     target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y };
     target->Color = renderable.Color; // { 0.0f, 0.0f, 1.0f, 1.0f };
     target++;

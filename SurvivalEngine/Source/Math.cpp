@@ -24,6 +24,17 @@ const float Math::Clamp(float value, float min, float max)
 	return value;
 }
 
+const float Math::ClampLerp(float value, float min, float max, float increaseMin, float decreaseMax)
+{
+	if (value < min)
+		return value + increaseMin;
+
+	if (value > max)
+		return value - decreaseMax;
+
+	return value;
+}
+
 const float Math::RadToDeg(float radians)
 {
 	return radians * 180.0f / Math::PI;

@@ -257,6 +257,7 @@
     <Text Include="Assets\Bugs.txt" />
     <Text Include="Assets\levels\cage.txt" />
     <Text Include="Assets\levels\test.txt" />
+    <Text Include="Assets\levels\track.txt" />
     <Text Include="Assets\levels\world.txt" />
     <Text Include="Worlds\test2\playerdata\player.txt" />
     <Text Include="Worlds\test2\world.txt" />

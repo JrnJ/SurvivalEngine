@@ -272,6 +272,7 @@
     <Text Include="Worlds\test\playerdata\player.txt" />
     <Text Include="Worlds\test2\playerdata\player.txt" />
     <Text Include="Worlds\test2\world.txt" />
+    <Text Include="Assets\levels\track.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\textures\background.png">

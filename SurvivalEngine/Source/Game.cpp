@@ -169,15 +169,30 @@ void Game::Init()
 		});
 
 	// Load Level
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/track.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 
 	CurrentLevel = test;
 }
 
 // Speed of car in m/s
 float carSpeed = 0.0f;
+//float carMinSpeed = -3.5f;
+//float carMaxSpeed = 11.1f;
+//float carAcceleration = 8.0f;  // 40 / 2 / 3.6
+//float carDecceleration = 8.0f; // 40 / 2 / 3.6
+
+// Others
+//float carBreakAcceleration = 10.1f;
+//float carReverseAcceleration = 6.6f;
+//float carMaxReverseSpeed = 3.5f;
+
+//float steerSpeed = 180.0f; // Idea: 1second for 90 degrees
+
+// New or Moved
+glm::vec2 carVelocity = glm::vec2(0.0f, 0.0f); // carSpeed
 float carMinSpeed = -3.5f;
 float carMaxSpeed = 11.1f;
+float carMaxSteerSpeed = 3.8f;
 float carAcceleration = 8.0f;  // 40 / 2 / 3.6
 float carDecceleration = 8.0f; // 40 / 2 / 3.6
 
@@ -202,29 +217,133 @@ void Game::ProcessInput(float dt)
 		//_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f * dt;
 
 		// Car Physics
-		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
+		float rotation = _coordinator.GetComponent<Transform>(Player).Rotation;
+		//std::cout << _coordinator.GetComponent<Transform>(Player).Rotation << std::endl;
 
-		// Move car
-		_coordinator.GetComponent<Transform>(Player).Rotation += horizontal * -1.0f * steerSpeed * dt;
+		// Steer Car
 
-		//carSpeed = Math::Clamp(
-		//	vertical != 0 ? carSpeed + carAcceleration * vertical * dt : carSpeed - carDecceleration * dt,
-		//	carMinSpeed, carMaxSpeed
-		//);
+		if (std::abs(carSpeed) > 0.25f)
+		{
+			_coordinator.GetComponent<Transform>(Player).Rotation += horizontal * -1.0f * steerSpeed * dt;
+		}
+
+		// For v2, need steering
+		// Use rotation of car to determine how much speed to add to both x and y
 
 		// Space is the brake
+		//if (!KeyInput::GetKey(GLFW_KEY_SPACE))
+		//{
+		//	// If nothing is pressed
+		//	if (vertical == 0)
+		//	{
+		//		if (std::round(std::abs(carVelocity.x) + std::abs(carVelocity.y)) == 0.0f)
+		//		{
+		//			carVelocity = glm::vec2(0.0f);
+		//		}
+		//		else
+		//		{
+		//			if (carSpeed > 0.0f)
+		//			{
+		//				// Deccelerate car
+		//				carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
+		//			}
+		//			else
+		//			{
+		//				// Accelerate car lol
+		//				carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
+		//			}
+		//		}		
+		//	}
+		//	else if (vertical == 1)
+		//	{
+		//		// Forward
+		//		carVelocity = Math::Normalize(glm::vec2(
+		//			-std::sin(Math::DegToRad(rotation)),
+		//			std::cos(Math::DegToRad(rotation))
+		//		)) * 5.0f;
+
+		//		carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
+		//	else // if (vertical == -1)
+		//	{
+		//		if (carSpeed > 0.0f)
+		//		{
+		//			// Break if Car is having speed
+		//			carSpeed = Math::Clamp(carSpeed - carAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//		}
+		//		else
+		//		{
+		//			// Reverse if car if speed is below 0
+		//			carSpeed = Math::Clamp(carSpeed - carReverseAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//		}
+		//	}
+		//}
+		//else // Make car break
+		//{
+		//	if (carSpeed > 0.0f)
+		//	{
+		//		carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
+		//	else
+		//	{
+		//		carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
+		//	
+		//	if (std::round(carVelocity.x + carVelocity.y) == 0.0f)
+		//		carVelocity = glm::vec2(0.0f);
+		//}
+
+		//std::cout << "Speed: " << carSpeed << std::endl;
+
+		//glm::vec2 carVelocity = glm::vec2(0.0f, 0.0f);
+
+		//if (KeyInput::GetKey(GLFW_KEY_W))
+		//{
+		//	/*carVelocity = Math::Normalize(glm::vec2(
+		//		-std::sin(Math::DegToRad(rotation)),
+		//		std::cos(Math::DegToRad(rotation))
+		//	)) * 5.0f;*/
+		//}
+		//else
+		//{
+		//	carVelocity = glm::vec2(0.0f);
+		//}
+
+		bool isSteering = horizontal != 0;
+
+		glm::vec2 carAxisSpeedDevider = Math::Normalize(glm::vec2(
+			-std::sin(Math::DegToRad(rotation)),
+			std::cos(Math::DegToRad(rotation))
+		));
+			 
 		if (!KeyInput::GetKey(GLFW_KEY_SPACE))
 		{
-			if (vertical == 0)
+			if (vertical == 1)
 			{
-				if (std::round(carSpeed) == 0)
+				// Move forward
+				// Check if user is steering
+				if (isSteering)
 				{
-					carSpeed = 0;
+					//carSpeed = Math::ClampLerp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSteerSpeed, 0.0f, dt);
+					carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed); // carMaxSteerSpeed
 				}
 				else
 				{
-					if (carSpeed > 0)
+					carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
+				}	
+			}
+			else if (vertical == 0)
+			{
+				// Deccelerate
+				if (std::round(carSpeed) == 0.0f)
+				{
+					carSpeed = 0.0f;
+				}
+				else
+				{
+					if (carSpeed > 0.0f)
 					{
 						// Deccelerate car
 						carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
@@ -234,15 +353,11 @@ void Game::ProcessInput(float dt)
 						// Accelerate car lol
 						carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
 					}
-				}		
+				}
 			}
-			else if (vertical == 1)
+			else // if vertical == -1
 			{
-				// Forward
-				carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
-			}
-			else // if (vertical == -1)
-			{
+				// Move backwards
 				if (carSpeed > 0)
 				{
 					// Break if Car is having speed
@@ -255,9 +370,10 @@ void Game::ProcessInput(float dt)
 				}
 			}
 		}
-		else // Make car break
+		else
 		{
-			if (carSpeed > 0)
+			// Brake
+			if (carSpeed > 0.0f)
 			{
 				carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
 			}
@@ -265,17 +381,69 @@ void Game::ProcessInput(float dt)
 			{
 				carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
 			}
-			
-			if (std::round(carSpeed) == 0)
-				carSpeed = 0;
 		}
 
-		//std::cout << "Speed: " << carSpeed << std::endl;
+		carVelocity = carAxisSpeedDevider * carSpeed;
 
-		_coordinator.GetComponent<Rigidbody>(Player).Velocity = { 0.0f, carSpeed * dt };
+		std::cout << "X: " << carVelocity.x << " Y: " << carVelocity.y << " | Combined: " << std::abs(carVelocity.x) + std::abs(carVelocity.y) << std::endl;
+
+		//_coordinator.GetComponent<Rigidbody>(Player).Velocity = { 0.0f, carSpeed * dt };
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = carVelocity * dt;
 
 		// Display Speed
 		//std::cout << "RPM: " << " Velocity: " << std::endl;
+
+		//if (!KeyInput::GetKey(GLFW_KEY_SPACE))
+		//{
+		//	if (vertical == 0)
+		//	{
+		//		if (std::round(carSpeed) == 0)
+		//		{
+		//			carSpeed = 0;
+		//		}
+		//		else
+		//		{
+		//			if (carSpeed > 0)
+		//			{
+		//				// Deccelerate car
+		//				carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
+		//			}
+		//			else
+		//			{
+		//				// Accelerate car lol
+		//				carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
+		//			}
+		//		}
+		//	}
+		//	else if (vertical == 1)
+		//	{
+		//		// Forward
+		//		carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
+		//	else // if (vertical == -1)
+		//	{
+		//		if (carSpeed > 0)
+		//		{
+		//			// Break if Car is having speed
+		//			carSpeed = Math::Clamp(carSpeed - carAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//		}
+		//		else
+		//		{
+		//			// Reverse if car if speed is below 0
+		//			carSpeed = Math::Clamp(carSpeed - carReverseAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//		}
+		//	}
+		//}
+		//else // Make car break
+		//{
+		//	if (carSpeed > 0)
+		//	{
+		//		carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
+		//	else
+		//	{
+		//		carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+		//	}
 
 		// Click TP
 		if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
