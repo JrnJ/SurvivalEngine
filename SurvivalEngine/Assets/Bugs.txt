@@ -2,3 +2,8 @@
 1. If GetKeyDown method is called twice within the same frame it will say false to every call after the first one
 Fix => Give every call its own reference so that a different call will ask his own state
 Problem => The sollution might result into memory leaking if key is never finished or free'ed in game
+
+// ResizeSystem
+1. Resizing not properly changing position after batch render system
+Fix => Change all positions of quads based on screen resizeing.
+Problem => Might take more than a 5.14 frames

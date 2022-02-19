@@ -7,7 +7,8 @@ extern Coordinator _coordinator;
 
 void ResizeSystem::Init(int width, int height)
 {
-	BlockSize = glm::vec2(width / 24.0f, height / 13.5f);
+	//BlockSize = glm::vec2(width / 24.0f, height / 13.5f);
+	ResizeSystem::WindowResized(width, height);
 }
 
 void ResizeSystem::WindowResized(int width, int height)
@@ -30,8 +31,8 @@ void ResizeSystem::WindowResized(int width, int height)
 
 	BlockSize = glm::vec2(x / 24.0f, y / 13.5f);
 
-	for (auto const& entity : mEntities)
-	{
-		_coordinator.GetComponent<Transform>(entity).Scale = BlockSize;
-	}
+	//for (auto const& entity : mEntities)
+	//{
+	//	_coordinator.GetComponent<Transform>(entity).Scale = BlockSize;
+	//}
 }

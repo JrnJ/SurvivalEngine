@@ -4,6 +4,8 @@
 #include "../ResourceManager.hpp"
 #include "../Renderer/SpriteRenderer.hpp"
 
+#include "../Math.hpp"
+
 extern Coordinator _coordinator;
 
 struct Vertex
@@ -15,50 +17,22 @@ struct Vertex
 
 static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable renderable)
 {
-    if (transform.Rotation != 0.0f)
-    {
-        //// Apply Rotation
-        //glm::mat4 model = glm::mat4(1.0f);
-
-        //// Set Position
-        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
-
-        //// Move prigin to center of quad
-        //model = glm::translate(model, glm::vec3(0.5f, 0.5f, 1.0f));
-
-        //// Rotate quad (from center)
-        //model = glm::rotate(model, glm::radians(transform.Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-
-        //// Move origin back to top left
-        //model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
-
-        //// Then what?
-        //// gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 0.0, 1.0);
-        //// gl_Position is a vec4, so we do position * model which also applies rotation
-        //// so uhhh, maybe?
-        //glm::vec4 uhm = glm::vec4(transform.Position.x, transform.Position.y, 0.0f, 1.0f) * model;
-
-        //transform.Position *= glm::vec2(uhm.x, uhm.y);
-
-    } // Keep regular
-
-    // Sprite is not rotated from origin of the quad
-
-    //glm::mat4 model = glm::mat4(1.0f);
-
     // Move model to topleft of origin quad
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(transform.Position.x, transform.Position.y, 1.0f));
 
-    if (transform.Rotation != 0.0f)
+    if (/*transform.Rotation != 0.0f*/ true)
     {
         // Move origin to center of quad
-        model = glm::translate(model, glm::vec3(0.5f, 0.5f, 1.0f));
+        model = glm::translate(model, glm::vec3(0.5f * transform.Scale.x, 0.5f * transform.Scale.y, 1.0f));
 
         // Rotate quad (from center)
         model = glm::rotate(model, glm::radians(transform.Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 
         // Move origin back to top left
-        model = glm::translate(model, glm::vec3(-0.5f, -0.5f, 0.0f));
+        model = glm::translate(model, glm::vec3(-0.5f * transform.Scale.x, -0.5f * transform.Scale.y, 0.0f));
+
+        // Scale model
+        model = glm::scale(model, glm::vec3(transform.Scale, 1.0f));
 
         /*glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(transform.Position, 1.0f))
         * glm::rotate(glm::mat4(1.0f), glm::radians(transform.Rotation), { 0.0f, 0.0f, 1.0f });*/
@@ -78,47 +52,20 @@ static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable rend
     target++;
 
     // Right Top
+    //target->Position = model * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // TEMP target->Position = model * glm::vec4(1.0f, 0.0f - 1.0f, 0.0f, 1.0f);
     target->Position = model * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-    //target->Position = { transform.Position.x + 1.0f, transform.Position.y + 0.0f };
     target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y };
     target->Color = renderable.Color; // { 0.0f, 1.0f, 0.0f, 1.0f };
     target++;
 
     // Left Top
+    //target->Position = model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // TEMP target->Position = model * glm::vec4(0.0f, 0.0f - 1.0f, 0.0f, 1.0f);
     target->Position = model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    //target->Position = { transform.Position.x, transform.Position.y };
     target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y };
     target->Color = renderable.Color; // { 1.0f, 0.0f, 0.0f, 1.0f };
     target++;
 
     return target;
-
-    // Sample for 45degree rotated quad
-    //// Left Bottom
-    //target->Position = { transform.Position.x - 0.25f, transform.Position.y + 0.5f };
-    //target->TexCoords = { renderable.TexLeftTop.x, renderable.TexRightBottom.y }; // { 0.5f, 0.5f };
-    //target->Color = renderable.Color; // { 0.0f, 0.0f, 1.0f, 1.0f };
-    //target++;
-
-    //// Right Bottom
-    //target->Position = { transform.Position.x + 0.5f, transform.Position.y + 1.25f };
-    //target->TexCoords = { renderable.TexRightBottom.x, renderable.TexRightBottom.y }; // { 0.75f, 0.5f };
-    //target->Color = renderable.Color; // { 0.0f, 1.0f, 1.0f, 1.0f };
-    //target++;
-
-    //// Right Top
-    //target->Position = { transform.Position.x + 1.25f, transform.Position.y + 0.5f };
-    //target->TexCoords = { renderable.TexRightBottom.x, renderable.TexLeftTop.y }; // { 0.75f, 0.25f };
-    //target->Color = renderable.Color; // { 0.0f, 1.0f, 0.0f, 1.0f };
-    //target++;
-
-    //// Left Top
-    //target->Position = { transform.Position.x + 0.5f, transform.Position.y - 0.25f };
-    //target->TexCoords = { renderable.TexLeftTop.x, renderable.TexLeftTop.y }; // { 0.5f, 0.25f };
-    //target->Color = renderable.Color; // { 1.0f, 0.0f, 0.0f, 1.0f };
-    //target++;
-
-    //return target;
 }
 
 const size_t maxBatch = 100; // 800+ is the max
@@ -151,7 +98,7 @@ void RenderSystem::Init()
 
 }
 
-void RenderSystem::Update(float dt)
+void RenderSystem::Update(float dt, float scale)
 {
 	// Loop through entities
 	// get entites from systems
@@ -171,8 +118,6 @@ void RenderSystem::Update(float dt)
 
         if (indexCount == maxBatch * 6 || entity == mEntities.size() - 1)
         {
-            float scale = _coordinator.GetComponent<Transform>(entity).Scale.x;
-
             glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
             glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
 

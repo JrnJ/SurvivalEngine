@@ -138,7 +138,7 @@ void Game::Init()
 	//	_coordinator.AddComponent(entity, Transform
 	//		{
 	//			.Position = glm::vec2(1.0f, 12.0f), //this->Width / 2.0f, this->Height / 2.0f
-	//			.Scale = _resizeSystem->BlockSize,
+	//			.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
 	//			.Rotation = 0.0f
 	//		});
 	//	_coordinator.AddComponent(entity, Renderable
@@ -153,7 +153,7 @@ void Game::Init()
 	_coordinator.AddComponent(Player, Transform
 		{
 			.Position = glm::vec2(2.0f, 21.0f), //this->Width / 2.0f, this->Height / 2.0f
-			.Scale = _resizeSystem->BlockSize,
+			.Scale = glm::vec2(1.0f, 2.0f), //_resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
 	_coordinator.AddComponent(Player, Collider{});
@@ -163,13 +163,13 @@ void Game::Init()
 		});
 	_coordinator.AddComponent(Player, Renderable
 		{
-			.TexLeftTop = GetSpriteInAtlas(4, 1),
-			.TexRightBottom = GetSpriteInAtlas(5, 2),
+			.TexLeftTop = GetSpriteInAtlas(4, 3), //GetSpriteInAtlas(4, 1), //glm::vec2(0.0f, 0.0f), 
+			.TexRightBottom = GetSpriteInAtlas(5, 5), //GetSpriteInAtlas(5, 2), //glm::vec2(1.0f, 1.0f), 
 			.Color = glm::vec4(1.0f)
 		});
 
 	// Load Level
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/track.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/track.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
 
 	CurrentLevel = test;
 }
@@ -373,13 +373,20 @@ void Game::ProcessInput(float dt)
 		else
 		{
 			// Brake
-			if (carSpeed > 0.0f)
+			if (std::round(carSpeed) == 0.0f)
 			{
-				carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+				carSpeed = 0.0f;
 			}
-			else
+			else 
 			{
-				carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+				if (carSpeed > 0.0f)
+				{
+					carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+				}
+				else
+				{
+					carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
+				}
 			}
 		}
 
@@ -578,7 +585,7 @@ void Game::Update(float dt)
 		_coordinator.AddComponent(entity, Transform
 			{
 				.Position = glm::vec2(newPos),
-				.Scale = _resizeSystem->BlockSize,
+				.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
 				.Rotation = 0.0f
 			});
 		_coordinator.AddComponent(entity, Renderable
@@ -638,7 +645,7 @@ void Game::Render(float dt)
 		//std::cout << "X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
 
 		// RenderSystem
-		_renderSystem->Update(dt);
+		_renderSystem->Update(dt, _resizeSystem->BlockSize.x);
 
 		// Layer 0 : Background / Skybox - NOW CLEAR COLOR IN Main.cpp
 		//Texture2D background = ResourceManager::GetTexture("background");

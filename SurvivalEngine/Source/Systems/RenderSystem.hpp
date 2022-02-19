@@ -21,7 +21,7 @@ public:
 
 	void Init();
 
-	void Update(float dt);
+	void Update(float dt, float scale);
     void DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture);
 
     void DrawBatch();
