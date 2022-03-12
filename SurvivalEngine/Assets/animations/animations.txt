@@ -1,0 +1,10 @@
+// Player animation
+_coordinator.AddComponent(Player, Animatable
+		{
+			.TimeBetweenAnimations = 1.0f,
+			.Sprites = { 
+				{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, // this data is from Renderable, that HAS to be changed so we only define it once
+				{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
+			},
+			.CurrentSprite = 0
+		});

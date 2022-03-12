@@ -11,7 +11,8 @@ struct Animatable
 	float TimeBetweenAnimations;
 	std::vector<Renderable> Sprites;
 
-	int CurrentSprite;
+	float UpdateAt = 0.0f;
+	int CurrentSprite = 0;
 };
 
 #endif

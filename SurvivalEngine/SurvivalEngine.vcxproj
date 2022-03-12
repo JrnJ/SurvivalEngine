@@ -257,6 +257,7 @@
     <None Include="CChromaEditorLibrary64.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Assets\animations\animations.txt" />
     <Text Include="Assets\Bugs.txt" />
     <Text Include="Assets\levels\cage.txt" />
     <Text Include="Assets\levels\test.txt" />

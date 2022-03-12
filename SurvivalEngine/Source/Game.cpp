@@ -171,20 +171,19 @@ void Game::Init()
 		{
 			.Velocity = glm::vec2(0.0f)
 		});
-	_coordinator.AddComponent(Player, Renderable
-		{
-			.TexLeftTop = GetSpriteInAtlas(3, 0), //GetSpriteInAtlas(4, 1), //glm::vec2(0.0f, 0.0f), 
-			.TexRightBottom = GetSpriteInAtlas(4, 1), //GetSpriteInAtlas(5, 2), //glm::vec2(1.0f, 1.0f), 
-			.Color = glm::vec4(1.0f)
-		});
+	_coordinator.AddComponent(Player, Renderable{});
+		//{ // YEEEEEEEEEEEEEEEEEEEEEEEEEEEE t
+		//	.TexLeftTop = GetSpriteInAtlas(3, 0),
+		//	.TexRightBottom = GetSpriteInAtlas(4, 1), 
+		//	.Color = glm::vec4(1.0f)
+		//});
 	_coordinator.AddComponent(Player, Animatable
 		{
-			.TimeBetweenAnimations = 1.0f,
+			.TimeBetweenAnimations = 0.5f,
 			.Sprites = { 
-				{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, 
+				{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, // this data is from Renderable, that HAS to be changed so we only define it once
 				{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
-			},
-			.CurrentSprite = 0
+			}
 		});
 
 	// Load Level
