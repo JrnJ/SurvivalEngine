@@ -153,7 +153,7 @@ void Game::Init()
 	_coordinator.AddComponent(Player, Transform
 		{
 			.Position = glm::vec2(2.0f, 21.0f), //this->Width / 2.0f, this->Height / 2.0f
-			.Scale = glm::vec2(1.0f, 2.0f), //_resizeSystem->BlockSize,
+			.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
 	_coordinator.AddComponent(Player, Collider{});

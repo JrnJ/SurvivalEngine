@@ -42,15 +42,17 @@ void PhysicsSystem::DoCollision(Entity rigidbody)
 		if (entity != rigidbody)
 		{
 			float push = 0.0f;
+			Transform rigidbodyTransform = _coordinator.GetComponent<Transform>(rigidbody);
+			Transform entityTransform = _coordinator.GetComponent<Transform>(entity);
 
-			float deltaX = _coordinator.GetComponent<Transform>(entity).Position.x - _coordinator.GetComponent<Transform>(rigidbody).Position.x;
-			float deltaY = _coordinator.GetComponent<Transform>(entity).Position.y - _coordinator.GetComponent<Transform>(rigidbody).Position.y;
+			float deltaX = entityTransform.Position.x - rigidbodyTransform.Position.x;
+			float deltaY = entityTransform.Position.y - rigidbodyTransform.Position.y;
 
 			// Something wrong with these calculations because of the new positioning system
 			//float intersectX2 = abs(deltaX) - (_coordinator.GetComponent<Transform>(entity).Scale.x / 2.0f + _coordinator.GetComponent<Transform>(rigidbody).Scale.x / 2.0f);
 			//float intersectY2 = abs(deltaY) - (_coordinator.GetComponent<Transform>(entity).Scale.y / 2.0f + _coordinator.GetComponent<Transform>(rigidbody).Scale.y / 2.0f);
-			float intersectX = abs(deltaX) - 1.0f;// - (_coordinator.GetComponent<Transform>(entity).Scale.x / 2.0f + _coordinator.GetComponent<Transform>(rigidbody).Scale.x / 2.0f);
-			float intersectY = abs(deltaY) - 1.0f;// -(_coordinator.GetComponent<Transform>(entity).Scale.y / 2.0f + _coordinator.GetComponent<Transform>(rigidbody).Scale.y / 2.0f);
+			float intersectX = abs(deltaX) - (entityTransform.Scale.x / 2.0f + rigidbodyTransform.Scale.x / 2.0f);
+			float intersectY = abs(deltaY) - (entityTransform.Scale.y / 2.0f + rigidbodyTransform.Scale.y / 2.0f);
 
 			if (intersectX < 0.0f && intersectY < 0.0f)
 			{
