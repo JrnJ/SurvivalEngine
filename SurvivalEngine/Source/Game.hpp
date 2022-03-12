@@ -16,6 +16,7 @@
 
 // Systems
 #include "Systems/RenderSystem.hpp"
+#include "Systems/AnimationSystem.hpp"
 #include "Systems/PhysicsSystem.hpp"
 #include "Systems/ResizeSystem.hpp"
 
@@ -58,6 +59,7 @@ private:
     Camera _camera;
 
     std::shared_ptr<RenderSystem> _renderSystem;
+    std::shared_ptr<AnimationSystem> _animationSystem;
     std::shared_ptr<PhysicsSystem> _physicsSystem;
     std::shared_ptr<ResizeSystem> _resizeSystem;
 

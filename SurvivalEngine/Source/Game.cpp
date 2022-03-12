@@ -62,7 +62,7 @@ float atlasCalcHeight = 1.0f / atlasHeight * textureHeight;
 
 glm::vec2 GetSpriteInAtlas(int x, int y)
 {
-	return glm::vec2(atlasCalcWidth * (x - 1), atlasCalcHeight * (y - 1));
+	return glm::vec2(atlasCalcWidth * x, atlasCalcHeight * y);
 }
 
 /// <summary>
@@ -93,6 +93,7 @@ void Game::Init()
 	_coordinator.RegisterComponent<Rigidbody>();
 
 	_coordinator.RegisterComponent<Renderable>();
+	_coordinator.RegisterComponent<Animatable>();
 
 	_coordinator.RegisterComponent<Camera2D>();
 
@@ -107,6 +108,15 @@ void Game::Init()
 		_coordinator.SetSystemSignature<RenderSystem>(signature);
 	}
 	_renderSystem->Init();
+
+	_animationSystem = _coordinator.RegisterSystem<AnimationSystem>();
+	{
+		Signature signature;
+		signature.set(_coordinator.GetComponentType<Renderable>());
+		signature.set(_coordinator.GetComponentType<Animatable>());
+		_coordinator.SetSystemSignature<AnimationSystem>(signature);
+	}
+	// init doesnt exist here bc no use atm
 
 	// Physics System
 	_physicsSystem = _coordinator.RegisterSystem<PhysicsSystem>();
@@ -152,7 +162,7 @@ void Game::Init()
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
 		{
-			.Position = glm::vec2(2.0f, 21.0f), //this->Width / 2.0f, this->Height / 2.0f
+			.Position = glm::vec2(9.0f, 5.0f), //this->Width / 2.0f, this->Height / 2.0f
 			.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
 			.Rotation = 0.0f
 		});
@@ -163,30 +173,28 @@ void Game::Init()
 		});
 	_coordinator.AddComponent(Player, Renderable
 		{
-			.TexLeftTop = GetSpriteInAtlas(4, 3), //GetSpriteInAtlas(4, 1), //glm::vec2(0.0f, 0.0f), 
-			.TexRightBottom = GetSpriteInAtlas(5, 5), //GetSpriteInAtlas(5, 2), //glm::vec2(1.0f, 1.0f), 
+			.TexLeftTop = GetSpriteInAtlas(3, 0), //GetSpriteInAtlas(4, 1), //glm::vec2(0.0f, 0.0f), 
+			.TexRightBottom = GetSpriteInAtlas(4, 1), //GetSpriteInAtlas(5, 2), //glm::vec2(1.0f, 1.0f), 
 			.Color = glm::vec4(1.0f)
+		});
+	_coordinator.AddComponent(Player, Animatable
+		{
+			.TimeBetweenAnimations = 1.0f,
+			.Sprites = { 
+				{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, 
+				{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
+			},
+			.CurrentSprite = 0
 		});
 
 	// Load Level
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/track.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
+	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
 
 	CurrentLevel = test;
 }
 
 // Speed of car in m/s
 float carSpeed = 0.0f;
-//float carMinSpeed = -3.5f;
-//float carMaxSpeed = 11.1f;
-//float carAcceleration = 8.0f;  // 40 / 2 / 3.6
-//float carDecceleration = 8.0f; // 40 / 2 / 3.6
-
-// Others
-//float carBreakAcceleration = 10.1f;
-//float carReverseAcceleration = 6.6f;
-//float carMaxReverseSpeed = 3.5f;
-
-//float steerSpeed = 180.0f; // Idea: 1second for 90 degrees
 
 // New or Moved
 glm::vec2 carVelocity = glm::vec2(0.0f, 0.0f); // carSpeed
@@ -212,104 +220,21 @@ void Game::ProcessInput(float dt)
 	if (this->State == GameState::GAME_ACTIVE)
 	{
 		// Player Movement
-		//float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
-		//float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
-		//_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f * dt;
+		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
+		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f * dt;
 
-		// Car Physics
+		/*// Car Physics
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
 		float rotation = _coordinator.GetComponent<Transform>(Player).Rotation;
 		//std::cout << _coordinator.GetComponent<Transform>(Player).Rotation << std::endl;
 
 		// Steer Car
-
 		if (std::abs(carSpeed) > 0.25f)
 		{
 			_coordinator.GetComponent<Transform>(Player).Rotation += horizontal * -1.0f * steerSpeed * dt;
 		}
-
-		// For v2, need steering
-		// Use rotation of car to determine how much speed to add to both x and y
-
-		// Space is the brake
-		//if (!KeyInput::GetKey(GLFW_KEY_SPACE))
-		//{
-		//	// If nothing is pressed
-		//	if (vertical == 0)
-		//	{
-		//		if (std::round(std::abs(carVelocity.x) + std::abs(carVelocity.y)) == 0.0f)
-		//		{
-		//			carVelocity = glm::vec2(0.0f);
-		//		}
-		//		else
-		//		{
-		//			if (carSpeed > 0.0f)
-		//			{
-		//				// Deccelerate car
-		//				carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
-		//			}
-		//			else
-		//			{
-		//				// Accelerate car lol
-		//				carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
-		//			}
-		//		}		
-		//	}
-		//	else if (vertical == 1)
-		//	{
-		//		// Forward
-		//		carVelocity = Math::Normalize(glm::vec2(
-		//			-std::sin(Math::DegToRad(rotation)),
-		//			std::cos(Math::DegToRad(rotation))
-		//		)) * 5.0f;
-
-		//		carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
-		//	else // if (vertical == -1)
-		//	{
-		//		if (carSpeed > 0.0f)
-		//		{
-		//			// Break if Car is having speed
-		//			carSpeed = Math::Clamp(carSpeed - carAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//		}
-		//		else
-		//		{
-		//			// Reverse if car if speed is below 0
-		//			carSpeed = Math::Clamp(carSpeed - carReverseAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//		}
-		//	}
-		//}
-		//else // Make car break
-		//{
-		//	if (carSpeed > 0.0f)
-		//	{
-		//		carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
-		//	else
-		//	{
-		//		carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
-		//	
-		//	if (std::round(carVelocity.x + carVelocity.y) == 0.0f)
-		//		carVelocity = glm::vec2(0.0f);
-		//}
-
-		//std::cout << "Speed: " << carSpeed << std::endl;
-
-		//glm::vec2 carVelocity = glm::vec2(0.0f, 0.0f);
-
-		//if (KeyInput::GetKey(GLFW_KEY_W))
-		//{
-		//	/*carVelocity = Math::Normalize(glm::vec2(
-		//		-std::sin(Math::DegToRad(rotation)),
-		//		std::cos(Math::DegToRad(rotation))
-		//	)) * 5.0f;*/
-		//}
-		//else
-		//{
-		//	carVelocity = glm::vec2(0.0f);
-		//}
 
 		bool isSteering = horizontal != 0;
 
@@ -391,66 +316,7 @@ void Game::ProcessInput(float dt)
 		}
 
 		carVelocity = carAxisSpeedDevider * carSpeed;
-
-		std::cout << "X: " << carVelocity.x << " Y: " << carVelocity.y << " | Combined: " << std::abs(carVelocity.x) + std::abs(carVelocity.y) << std::endl;
-
-		//_coordinator.GetComponent<Rigidbody>(Player).Velocity = { 0.0f, carSpeed * dt };
-		_coordinator.GetComponent<Rigidbody>(Player).Velocity = carVelocity * dt;
-
-		// Display Speed
-		//std::cout << "RPM: " << " Velocity: " << std::endl;
-
-		//if (!KeyInput::GetKey(GLFW_KEY_SPACE))
-		//{
-		//	if (vertical == 0)
-		//	{
-		//		if (std::round(carSpeed) == 0)
-		//		{
-		//			carSpeed = 0;
-		//		}
-		//		else
-		//		{
-		//			if (carSpeed > 0)
-		//			{
-		//				// Deccelerate car
-		//				carSpeed = Math::Clamp(carSpeed - carDecceleration * dt, carMinSpeed, carMaxSpeed);
-		//			}
-		//			else
-		//			{
-		//				// Accelerate car lol
-		//				carSpeed = Math::Clamp(carSpeed + carDecceleration * dt, carMinSpeed, carMaxSpeed);
-		//			}
-		//		}
-		//	}
-		//	else if (vertical == 1)
-		//	{
-		//		// Forward
-		//		carSpeed = Math::Clamp(carSpeed + carAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
-		//	else // if (vertical == -1)
-		//	{
-		//		if (carSpeed > 0)
-		//		{
-		//			// Break if Car is having speed
-		//			carSpeed = Math::Clamp(carSpeed - carAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//		}
-		//		else
-		//		{
-		//			// Reverse if car if speed is below 0
-		//			carSpeed = Math::Clamp(carSpeed - carReverseAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//		}
-		//	}
-		//}
-		//else // Make car break
-		//{
-		//	if (carSpeed > 0)
-		//	{
-		//		carSpeed = Math::Clamp(carSpeed - carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
-		//	else
-		//	{
-		//		carSpeed = Math::Clamp(carSpeed + carBreakAcceleration * dt, carMinSpeed, carMaxSpeed);
-		//	}
+		_coordinator.GetComponent<Rigidbody>(Player).Velocity = carVelocity * dt;*/
 
 		// Click TP
 		if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
@@ -590,8 +456,8 @@ void Game::Update(float dt)
 			});
 		_coordinator.AddComponent(entity, Renderable
 			{
-				.TexLeftTop = GetSpriteInAtlas(3, 2),
-				.TexRightBottom = GetSpriteInAtlas(4, 3),
+				.TexLeftTop = GetSpriteInAtlas(2, 1),
+				.TexRightBottom = GetSpriteInAtlas(3, 2),
 				.Color = glm::vec4(1.0f)
 			});
 	}
@@ -643,6 +509,10 @@ void Game::Render(float dt)
 		// Update Camera
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 		//std::cout << "X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
+
+		// AnimationSystem, this is called before render obviously
+		
+		_animationSystem->Update(dt);
 
 		// RenderSystem
 		_renderSystem->Update(dt, _resizeSystem->BlockSize.x);

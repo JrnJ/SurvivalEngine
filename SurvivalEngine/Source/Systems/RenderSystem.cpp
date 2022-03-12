@@ -151,6 +151,7 @@ void RenderSystem::Update(float dt, float scale)
             texture.Bind();
 
             glBindVertexArray(this->_quadVAO);
+            //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_quadIB); // remove if the nvlog error happens, than its useless
             glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 
             // Reset Some Things
@@ -302,6 +303,6 @@ void RenderSystem::initRenderData()
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // Wireframe
 
     // Unbind VBO/VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

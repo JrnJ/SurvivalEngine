@@ -163,6 +163,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Systems\AnimationSystem.cpp" />
     <ClCompile Include="Source\Systems\ResizeSystem.cpp" />
     <ClCompile Include="Source\Systems\ColliderSystem.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
@@ -197,6 +198,8 @@
     <ClCompile Include="Source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Systems\AnimationSystem.hpp" />
+    <ClInclude Include="Source\Components\Animatable.hpp" />
     <ClInclude Include="Source\Systems\ResizeSystem.hpp" />
     <ClInclude Include="Source\Systems\ColliderSystem.hpp" />
     <ClInclude Include="Source\Scene.hpp" />

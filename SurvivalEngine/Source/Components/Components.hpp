@@ -6,7 +6,9 @@
 #include "Collider.hpp"
 #include "Rigidbody.hpp"
 
+// Render Based
 #include "Renderable.hpp"
+#include "Animatable.hpp"
 
 #include "Camera2D.hpp"
 
