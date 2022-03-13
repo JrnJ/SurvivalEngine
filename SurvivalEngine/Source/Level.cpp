@@ -113,8 +113,8 @@ void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::ve
 				_coordinator.AddComponent(entity, Collider{});
 				_coordinator.AddComponent(entity, Renderable
 					{
-						.TexLeftTop = glm::vec2(0.0f, 0.5f),
-						.TexRightBottom = glm::vec2(0.25f, 0.75f),
+						.TexLeftTop = glm::vec2(0.25f, 0.25f),
+						.TexRightBottom = glm::vec2(0.5f, 0.5f),
 						.Color = glm::vec4(1.0f)
 					});
 				this->Blocks.push_back(entity);

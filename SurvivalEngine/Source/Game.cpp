@@ -30,6 +30,49 @@ int SelectedHotbarSlot = 0;
 
 glm::vec2 MoveDirection;
 
+// Player Animations
+const float atlasWidth = 128;
+const float atlasHeight = 128;
+const float textureWidth = 32;
+const float textureHeight = 32;
+
+float atlasCalcWidth = 1.0f / atlasWidth * textureWidth;
+float atlasCalcHeight = 1.0f / atlasHeight * textureHeight;
+
+glm::vec2 GetSpriteInAtlas(int x, int y)
+{
+	return glm::vec2(atlasCalcWidth * x, atlasCalcHeight * y);
+}
+
+std::string animationState = "normal";
+
+Animatable playerAnimationNormal {
+	.TimeBetweenAnimations = 0.5f,
+	.Sprites = {
+		{ GetSpriteInAtlas(0, 2), GetSpriteInAtlas(1, 3), glm::vec4(1.0f) },
+		{ GetSpriteInAtlas(1, 2), GetSpriteInAtlas(2, 3), glm::vec4(1.0f) }
+	}
+};
+
+Animatable playerAnimationLeft {
+	.TimeBetweenAnimations = 0.5f,
+	.Sprites = {
+		{ GetSpriteInAtlas(2, 2), GetSpriteInAtlas(3, 3), glm::vec4(1.0f) },
+		{ GetSpriteInAtlas(3, 2), GetSpriteInAtlas(4, 3), glm::vec4(1.0f) }
+	}
+};
+
+Animatable playerAnimationRight {
+	.TimeBetweenAnimations = 0.5f,
+	.Sprites = {
+		{ GetSpriteInAtlas(3, 2), GetSpriteInAtlas(2, 3), glm::vec4(1.0f) },
+		{ GetSpriteInAtlas(4, 2), GetSpriteInAtlas(3, 3), glm::vec4(1.0f) }
+	}
+};
+
+
+// Player Animations
+
 /// <summary>
 /// Constructor for Game class
 /// </summary>
@@ -50,19 +93,6 @@ Game::~Game()
 	delete Inventory;
 
 	std::cout << "Game Deconstrcuted!" << std::endl;
-}
-
-const float atlasWidth = 128;
-const float atlasHeight = 128;
-const float textureWidth = 32;
-const float textureHeight = 32;
-
-float atlasCalcWidth = 1.0f / atlasWidth * textureWidth;
-float atlasCalcHeight = 1.0f / atlasHeight * textureHeight;
-
-glm::vec2 GetSpriteInAtlas(int x, int y)
-{
-	return glm::vec2(atlasCalcWidth * x, atlasCalcHeight * y);
 }
 
 /// <summary>
@@ -172,19 +202,15 @@ void Game::Init()
 			.Velocity = glm::vec2(0.0f)
 		});
 	_coordinator.AddComponent(Player, Renderable{});
-		//{ // YEEEEEEEEEEEEEEEEEEEEEEEEEEEE t
-		//	.TexLeftTop = GetSpriteInAtlas(3, 0),
-		//	.TexRightBottom = GetSpriteInAtlas(4, 1), 
-		//	.Color = glm::vec4(1.0f)
-		//});
-	_coordinator.AddComponent(Player, Animatable
-		{
-			.TimeBetweenAnimations = 0.5f,
-			.Sprites = { 
-				{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, // this data is from Renderable, that HAS to be changed so we only define it once
-				{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
-			}
-		});
+	_coordinator.AddComponent(Player, playerAnimationNormal);
+	//_coordinator.AddComponent(Player, Animatable
+	//	{
+	//		.TimeBetweenAnimations = 0.5f,
+	//		.Sprites = { 
+	//			{ GetSpriteInAtlas(3, 0), GetSpriteInAtlas(4, 1), glm::vec4(1.0f) }, 
+	//			{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
+	//		}
+	//	});
 
 	// Load Level
 	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
@@ -222,6 +248,32 @@ void Game::ProcessInput(float dt)
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
 		float vertical = KeyInput::GetAxisRaw(Axis::Vertical);
 		_coordinator.GetComponent<Rigidbody>(Player).Velocity = Math::Normalize(glm::vec2(horizontal, vertical)) * 4.0f * dt;
+		
+		// Apply animation :: NEED A PLAYER CLASS ....
+		if (horizontal == 1.0f)
+		{
+			if (animationState != "left")
+			{
+				_coordinator.GetComponent<Animatable>(Player) = playerAnimationLeft;
+				animationState = "left";
+			}
+		}
+		else if (horizontal == -1.0f)
+		{
+			if (animationState != "right")
+			{
+				_coordinator.GetComponent<Animatable>(Player) = playerAnimationRight;
+				animationState = "right";
+			}
+		}
+		else
+		{
+			if (animationState != "normal")
+			{
+				_coordinator.GetComponent<Animatable>(Player) = playerAnimationNormal;
+				animationState = "normal";
+			}
+		}
 
 		/*// Car Physics
 		float horizontal = KeyInput::GetAxisRaw(Axis::Horizontal);
