@@ -163,6 +163,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Random.cpp" />
+    <ClCompile Include="Source\GameScripts\Entities\Hostile\Monster.cpp" />
+    <ClCompile Include="Source\GameScripts\Player.cpp" />
     <ClCompile Include="Source\Systems\AnimationSystem.cpp" />
     <ClCompile Include="Source\Systems\ResizeSystem.cpp" />
     <ClCompile Include="Source\Systems\ColliderSystem.cpp" />
@@ -198,6 +201,9 @@
     <ClCompile Include="Source\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Random.hpp" />
+    <ClInclude Include="Source\GameScripts\Entities\Hostile\Monster.hpp" />
+    <ClInclude Include="Source\GameScripts\Player.hpp" />
     <ClInclude Include="Source\Systems\AnimationSystem.hpp" />
     <ClInclude Include="Source\Components\Animatable.hpp" />
     <ClInclude Include="Source\Systems\ResizeSystem.hpp" />

@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Math.hpp"
+#include "Random.hpp"
 #include "KeyInput.hpp"
 
 #include "Razer/ChromaConnect.hpp"
@@ -80,7 +81,7 @@ Game::Game(unsigned int width, unsigned int height)
 	: State(GameState::GAME_ACTIVE), Width(width), Height(height), 
 		_camera(0.0f, width, height, 0.0f)
 {
-	
+	Random::Init();
 }
 
 /// <summary>
