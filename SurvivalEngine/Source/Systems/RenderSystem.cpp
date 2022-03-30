@@ -83,6 +83,7 @@ RenderSystem::RenderSystem()
 
 	// Load Sprite Sheet / Atlas
 	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
+    _texture = ResourceManager::GetTexture("Atlas");
 }
 
 RenderSystem::~RenderSystem()
@@ -106,8 +107,7 @@ void RenderSystem::Update(float dt, float scale)
     uint32_t indexCount = 0;
     std::vector<Vertex> vertices(MaxQuadCount);
     Vertex* buffer = vertices.data();
-    Texture2D texture = ResourceManager::GetTexture("Atlas");
-
+    
     for (auto const& entity : mEntities)
     {
         Renderable renderable = _coordinator.GetComponent<Renderable>(entity);
@@ -148,7 +148,7 @@ void RenderSystem::Update(float dt, float scale)
 
             // Bind Texture
             glActiveTexture(GL_TEXTURE0);
-            texture.Bind();
+            _texture.Bind();
 
             glBindVertexArray(this->_quadVAO);
             //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_quadIB); // remove if the nvlog error happens, than its useless

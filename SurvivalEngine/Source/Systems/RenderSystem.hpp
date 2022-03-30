@@ -27,6 +27,9 @@ public:
     void DrawBatch();
 
 private:
+    // Texture Atlas
+    Texture2D _texture;
+
 	//Entity _camera;
     const size_t MaxQuadCount;// = 576
     const size_t MaxVertexCount;// = MaxQuadCount * 4;
