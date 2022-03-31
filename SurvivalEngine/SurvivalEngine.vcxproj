@@ -259,6 +259,8 @@
     <None Include="Assets\shaders\sprite.vs.glsl" />
     <None Include="Assets\shaders\sprite_old.fs.glsl" />
     <None Include="Assets\shaders\sprite_old.vs.glsl" />
+    <None Include="Assets\shaders\temp.fs.glsl" />
+    <None Include="Assets\shaders\temp.vs.glsl" />
     <None Include="CChromaEditorLibrary.dll" />
     <None Include="CChromaEditorLibrary64.dll" />
   </ItemGroup>

@@ -8,13 +8,6 @@
 
 extern Coordinator _coordinator;
 
-struct Vertex
-{
-    glm::vec2 Position;
-    glm::vec2 TexCoords;
-    glm::vec4 Color;
-};
-
 static Vertex* CreateSprite(Vertex* target, Transform transform, Renderable renderable)
 {
     // Move model to topleft of origin quad
@@ -76,14 +69,14 @@ RenderSystem::RenderSystem()
 	// Load Shaders
 	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
     ResourceManager::GetShader("sprite").Use();// .SetInteger("image", 0);Tot 
-    this->_shader = ResourceManager::GetShader("sprite");
+    this->_spriteShader = ResourceManager::GetShader("sprite");
+
+    // Load Textures
+    ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
+    _mainAtlasTexture = ResourceManager::GetTexture("Atlas");
 
     // Initialize Render Data
     this->initRenderData();
-
-	// Load Sprite Sheet / Atlas
-	ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
-    _texture = ResourceManager::GetTexture("Atlas");
 }
 
 RenderSystem::~RenderSystem()
@@ -99,7 +92,7 @@ void RenderSystem::Init()
 
 }
 
-void RenderSystem::Update(float dt, float scale)
+void RenderSystem::Update(float dt)
 {
 	// Loop through entities
 	// get entites from systems
@@ -118,43 +111,10 @@ void RenderSystem::Update(float dt, float scale)
 
         if (indexCount == maxBatch * 6 || entity == mEntities.size() - 1)
         {
-            glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+            // Draw the Batch
+            DrawBatch(vertices, indexCount, &_spriteShader, &_mainAtlasTexture);
 
-            this->_shader.Use();
-
-            // Model
-            glm::mat4 model = glm::mat4(1.0f);
-
-            // Calculate Model
-            // Transformation order: scale, rotation, final translation happens; reversed order)
-            // Set Position
-            model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
-
-            // Move origin of rotation to center of the quad
-            model = glm::translate(model, glm::vec3(0.5f * scale, 0.5f * scale, 0.0f));
-
-            // Rotate quad
-            model = glm::rotate(model, glm::radians(0.0f /* Rotation */), glm::vec3(0.0f, 0.0f, 1.0f));
-
-            // Move origin back
-            model = glm::translate(model, glm::vec3(-0.5f * scale, -0.5f * scale, 0.0f));
-
-            // Apply scaling
-            model = glm::scale(model, glm::vec3(scale, scale, 1.0f));
-
-            // Apply model to Shader
-            this->_shader.SetMatrix4("u_Model", model);
-
-            // Bind Texture
-            glActiveTexture(GL_TEXTURE0);
-            _texture.Bind();
-
-            glBindVertexArray(this->_quadVAO);
-            //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_quadIB); // remove if the nvlog error happens, than its useless
-            glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
-
-            // Reset Some Things
+            // Reset stuff
             indexCount = 0;
             vertices.empty();
             buffer = vertices.data();
@@ -207,49 +167,54 @@ void RenderSystem::DrawSprite(glm::vec2 position, Renderable renderable, glm::ve
     //glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
-void RenderSystem::DrawBatch()
+/// <summary>
+/// Draws a Batch of GameObjects in one draw call
+/// </summary>
+/// <param name="vertices">Vertex data of batch</param>
+/// <param name="indexCount">Amount of indices</param>
+/// <param name="shader">Shader to use</param>
+/// <param name="texture">Texture to use</param>
+void RenderSystem::DrawBatch(std::vector<Vertex> vertices, uint32_t indexCount, Shader* shader, Texture2D* texture)
 {
-    //uint32_t indexCount = 0;
-    //std::vector<Vertex> vertices(MaxQuadCount);
-    //Vertex* buffer = vertices.data();
+    // Bind vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+    
+    // Set Shader
+    shader->Use();
 
-    //buffer = CreateSprite(buffer, position.x, position.y, renderable);
-    //indexCount += 6;
+    // Create a Model
+    glm::mat4 model = glm::mat4(1.0f);
 
-    //glBindBuffer(GL_ARRAY_BUFFER, _quadVBO);
-    //glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+    // Calculate Model
+    // Transformation order: scale, rotation, final translation happens; reversed order)
+    
+    // Set Position
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    //this->_shader.Use();
+    // Move origin of rotation to center of the quad
+    model = glm::translate(model, glm::vec3(0.5f * _scale, 0.5f * _scale, 0.0f));
 
-    //// Model
-    //glm::mat4 model = glm::mat4(1.0f);
+    // Rotate quad
+    model = glm::rotate(model, glm::radians(0.0f /* Rotation */), glm::vec3(0.0f, 0.0f, 1.0f));
 
-    //// Calculate Model
-    //// Transformation order: scale, rotation, final translation happens; reversed order)
-    //// Set Position
-    //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.0f));
+    // Move origin back
+    model = glm::translate(model, glm::vec3(-0.5f * _scale, -0.5f * _scale, 0.0f));
 
-    //// Move origin of rotation to center of the quad
-    //model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.0f));
+    // Apply scaling
+    model = glm::scale(model, glm::vec3(_scale, _scale, 1.0f));
 
-    //// Rotate quad
-    //model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+    // Apply Model to Shader
+    shader->SetMatrix4("u_Model", model);
 
-    //// Move origin back
-    //model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, 0.0f));
+    // Bind Texture
+    glActiveTexture(GL_TEXTURE0);
+    texture->Bind();
 
-    //// Apply scaling
-    //model = glm::scale(model, glm::vec3(scale, 1.0f));
-
-    //// Apply model to Shader
-    //this->_shader.SetMatrix4("u_Model", model);
-
-    //// Bind Texture
-    //glActiveTexture(GL_TEXTURE0);
-    //texture.Bind();
-
-    //glBindVertexArray(this->_quadVAO);
-    //glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+    // Draw Vertices
+    glBindVertexArray(this->_quadVAO);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_quadIB); // remove if the nvlog error happens, than its useless
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
 /// <summary>

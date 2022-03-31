@@ -13,6 +13,13 @@
 #include "../Renderer/Texture2D.hpp"
 #include "../Renderer/Shader.hpp"
 
+struct Vertex
+{
+    glm::vec2 Position;
+    glm::vec2 TexCoords;
+    glm::vec4 Color;
+};
+
 class RenderSystem : public System
 {
 public:
@@ -21,14 +28,20 @@ public:
 
 	void Init();
 
-	void Update(float dt, float scale);
+	void Update(float dt);
     void DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture);
 
-    void DrawBatch();
+    void DrawBatch(std::vector<Vertex> vertices, uint32_t indexCount, Shader* shader, Texture2D* texture);
+
+    const float GetScale() const { return _scale; }
+    void SetScale(const float scale) { _scale = scale; }
 
 private:
-    // Texture Atlas
-    Texture2D _texture;
+    // 
+    float _scale = 0.0f;
+
+    // Textures
+    Texture2D _mainAtlasTexture;
 
 	//Entity _camera;
     const size_t MaxQuadCount;// = 576
@@ -36,7 +49,8 @@ private:
     const size_t MaxIndexCount;// = MaxQuadCount * 6;
 
     // Render state
-    Shader _shader;
+    Shader _spriteShader;
+    Shader _texturelessShader;
     unsigned int _quadVBO; // Vertex Buffer
     unsigned int _quadVAO; // Vertex Array
     unsigned int _quadIB;  // Indices Buffer

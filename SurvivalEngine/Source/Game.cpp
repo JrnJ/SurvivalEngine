@@ -169,6 +169,7 @@ void Game::Init()
 		_coordinator.SetSystemSignature<ResizeSystem>(signature);
 	}
 	_resizeSystem->Init(this->Width, this->Height);
+	_renderSystem->SetScale(_resizeSystem->BlockSize.x);
 
 	std::vector<Entity> entities(MAX_ENTITIES - 200);
 
@@ -562,12 +563,11 @@ void Game::Render(float dt)
 		ResourceManager::GetShader("sprite").SetMatrix4("u_ViewProjection", _camera.GetViewProjectionMatrix());
 		//std::cout << "X: " << _camera.GetPosition().x << " Y: " << _camera.GetPosition().y << std::endl;
 
-		// AnimationSystem, this is called before render obviously
-		
+		// AnimationSystem, this is called before the RenderSystem!
 		_animationSystem->Update(dt);
 
 		// RenderSystem
-		_renderSystem->Update(dt, _resizeSystem->BlockSize.x);
+		_renderSystem->Update(dt);
 
 		// Layer 0 : Background / Skybox - NOW CLEAR COLOR IN Main.cpp
 		//Texture2D background = ResourceManager::GetTexture("background");
@@ -581,6 +581,7 @@ void Game::WindowResized(int width, int height)
 	this->Height = height;
 
 	_resizeSystem->WindowResized(width, height);
+	_renderSystem->SetScale(_resizeSystem->BlockSize.x);
 	_camera.SetProjectionMatrix(0.0f, width, height, 0.0f);
 
 	// Load Levels
