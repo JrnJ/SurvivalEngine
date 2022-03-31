@@ -51,6 +51,7 @@ private:
     // Render state
     Shader _spriteShader;
     Shader _texturelessShader;
+    Shader _lineShader;
     unsigned int _quadVBO; // Vertex Buffer
     unsigned int _quadVAO; // Vertex Array
     unsigned int _quadIB;  // Indices Buffer
