@@ -69,13 +69,13 @@ RenderSystem::RenderSystem()
 	// Load Shaders
     // Sprite Shader
     //ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
-    ResourceManager::LoadShader("./Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
+    ResourceManager::LoadShader("./Assets/shaders/sprite.vs.glsl", "./Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
     ResourceManager::GetShader("sprite").Use();// .SetInteger("image", 0);Tot 
     this->_spriteShader = ResourceManager::GetShader("sprite");
 
     // Textureless Shader
     //ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.fs.glsl", nullptr, "noTexture");
-    ResourceManager::LoadShader("./Assets/shaders/temp.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.fs.glsl", nullptr, "noTexture");
+    ResourceManager::LoadShader("./Assets/shaders/temp.vs.glsl", "./Assets/shaders/temp.fs.glsl", nullptr, "noTexture");
     ResourceManager::GetShader("noTexture").Use();
     this->_texturelessShader = ResourceManager::GetShader("noTexture");
 
