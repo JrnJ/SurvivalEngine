@@ -68,16 +68,19 @@ RenderSystem::RenderSystem()
 {
 	// Load Shaders
     // Sprite Shader
-	ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
+    //ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
+    ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/sprite.fs.glsl", nullptr, "sprite");
     ResourceManager::GetShader("sprite").Use();// .SetInteger("image", 0);Tot 
     this->_spriteShader = ResourceManager::GetShader("sprite");
 
     // Textureless Shader
+    //ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.fs.glsl", nullptr, "noTexture");
     ResourceManager::LoadShader("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.vs.glsl", "C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/shaders/temp.fs.glsl", nullptr, "noTexture");
     ResourceManager::GetShader("noTexture").Use();
     this->_texturelessShader = ResourceManager::GetShader("noTexture");
 
     // Load Textures
+    //ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
     ResourceManager::LoadTexture("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/textures/atlas.png", "Atlas", true);
     _mainAtlasTexture = ResourceManager::GetTexture("Atlas");
 
@@ -279,7 +282,7 @@ void RenderSystem::initRenderData()
 
     glGenBuffers(1, &_quadIB);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _quadIB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(Vertex), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(Vertex), indices.data(), GL_STATIC_DRAW);
 
     // Draw Mode - Optional
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Fill
