@@ -128,6 +128,7 @@ void RenderSystem::Update(float dt)
     }
 }
 
+// Not in use!!! dont use
 void RenderSystem::DrawSprite(glm::vec2 position, Renderable renderable, glm::vec2 scale, float rotation, Texture2D texture)
 {
     //uint32_t indexCount = 0;
@@ -265,9 +266,9 @@ void RenderSystem::initRenderData()
         offset += 4;
     }
 
-    /* NVLOG error fixing
+    /* NVLOG error fixing attempts
         bug in the code
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices)–wrong variable issue here—, indices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices)ï¿½wrong variable issue hereï¿½, indices.data(), GL_STATIC_DRAW);
 
         fixed code
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
