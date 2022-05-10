@@ -14,9 +14,6 @@ public:
 	// Properties
 	std::vector<Entity> Blocks;
 
-	// Constructor
-	Level() {}
-
 	// Functions
 	void Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize);
 

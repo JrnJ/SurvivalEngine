@@ -218,12 +218,12 @@ void RenderSystem::DrawBatch(std::vector<Vertex> vertices, uint32_t indexCount, 
     shader->SetMatrix4("u_Model", model);
 
     // Bind Texture
+    //glBindTextureUnit(GL_TEXTURE0, 0);
     glActiveTexture(GL_TEXTURE0);
     texture->Bind();
 
     // Draw Vertices
     glBindVertexArray(this->_quadVAO);
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->_quadIB); // remove if the nvlog error happens, than its useless
     glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 }
 
@@ -269,20 +269,9 @@ void RenderSystem::initRenderData()
         offset += 4;
     }
 
-    /* NVLOG error fixing attempts
-        bug in the code
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices)�wrong variable issue here�, indices.data(), GL_STATIC_DRAW);
-
-        fixed code
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray() is only meant to be called when creating the VAO. After that you should not touch that at all, binding the proper VAO will do that.
-        By enabling/disabling things I was altering the currently attached VAO, which caused issues down the line.
-    */
-
     glGenBuffers(1, &_quadIB);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _quadIB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(Vertex), indices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
 
     // Draw Mode - Optional
     //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // Fill

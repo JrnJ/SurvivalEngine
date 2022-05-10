@@ -20,9 +20,13 @@ public:
 	// Players in the World
 	Entity Player;
 
-	void Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize);
-	void Unload();
-	void Save();
+	void _Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize);
+	void _Unload();
+	void _Save();
+
+	void Generate();
+	void Load2D(int blocks[5][5]);
+	void Load3D(int blocks[10][10][3]);
 };
 
 #endif

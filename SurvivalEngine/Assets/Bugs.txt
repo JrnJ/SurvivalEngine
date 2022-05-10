@@ -6,4 +6,10 @@ Problem => The sollution might result into memory leaking if key is never finish
 // ResizeSystem
 1. Resizing not properly changing position after batch render system
 Fix => Change all positions of quads based on screen resizeing.
-Problem => Might take more than a 5.14 frames
+Problem => Might take more than a 5.14 frames, what?
+
+// Texture atlas quads not being uv mapped properly
+1. On specific x coordinates the UV mapping for cubes
+Problem => They now take UV mappings of pixel a sprite below themselfs
+Fix => Maybe the screensize is messed up
+https://gyazo.com/cb65f2a1c7d6c786b14d72280a0015d9

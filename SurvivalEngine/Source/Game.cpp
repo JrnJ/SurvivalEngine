@@ -191,6 +191,12 @@ void Game::Init()
 	//		});
 	//}
 
+		// Load World
+	World world;
+	world.Generate();
+
+	GameWorld = world;
+
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
 		{
@@ -215,9 +221,9 @@ void Game::Init()
 	//	});
 
 	// Load Level
-	Level test; test.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
+	//Level test; test.Load("./Assets/levels/test.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
 
-	CurrentLevel = test;
+	//CurrentLevel = test;
 }
 
 // Speed of car in m/s
@@ -383,26 +389,26 @@ void Game::ProcessInput(float dt)
 		}
 
 		// Load Levels
-		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
+		/*if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+			this->CurrentLevel.Load("./Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_F2))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+			this->CurrentLevel.Load("./Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_F3))
 		{
-			this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/world.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+			this->CurrentLevel.Load("./Assets/levels/world.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
 			this->ResetPlayer();
 			std::cout << "Level Loaded!" << std::endl;
-		}
+		}*/
 
 		// Check for Inventory things
 		//if (KeyInput::GetKeyDown(GLFW_KEY_1))
@@ -585,7 +591,7 @@ void Game::WindowResized(int width, int height)
 	_camera.SetProjectionMatrix(0.0f, width, height, 0.0f);
 
 	// Load Levels
-	this->CurrentLevel.Load("C:/Dev/cpp/SurvivalEngine/SurvivalEngine/SurvivalEngine/Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
+	//this->CurrentLevel.Load("./Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f));
 	this->ResetPlayer();
 	std::cout << "Level Loaded!" << std::endl;
 }

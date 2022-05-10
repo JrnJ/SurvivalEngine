@@ -12,9 +12,9 @@ std::map<std::string, Texture2D> ResourceManager::Textures;
 
 void ResourceManager::Clear()
 {
-    // Delete Shaders	
-    for (auto iS : Shaders)
-        glDeleteProgram(iS.second.Id);
+	// Delete Shaders	
+	for (auto iS : Shaders)
+		glDeleteProgram(iS.second.Id);
 
 	// Delete Textures
 	// But not like this, i thnk
@@ -24,24 +24,24 @@ void ResourceManager::Clear()
 
 Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
-    Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-    return Shaders[name];
+	Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+	return Shaders[name];
 }
 
 Shader ResourceManager::GetShader(std::string name)
 {
-    return Shaders[name];
+	return Shaders[name];
 }
 
 Texture2D ResourceManager::LoadTexture(const char* file, std::string name, bool alpha)
 {
-    Textures[name] = loadTextureFromFile(file, alpha);
-    return Textures[name];
+	Textures[name] = loadTextureFromFile(file, alpha);
+	return Textures[name];
 }
 
 Texture2D ResourceManager::GetTexture(std::string name)
 {
-    return Textures[name];
+	return Textures[name];
 }
 
 // Privates // 
