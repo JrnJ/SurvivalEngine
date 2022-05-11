@@ -13,3 +13,6 @@ Problem => Might take more than a 5.14 frames, what?
 Problem => They now take UV mappings of pixel a sprite below themselfs
 Fix => Maybe the screensize is messed up
 https://gyazo.com/cb65f2a1c7d6c786b14d72280a0015d9
+
+// When deleting an item from the world vector, the last entity in the list is also removed
+1. Right clicking an block deletes last entity in list

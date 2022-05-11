@@ -27,6 +27,7 @@ Coordinator _coordinator;
 // Player things
 Entity Player;
 PlayerInventory* Inventory;
+World GameWorld;
 int SelectedHotbarSlot = 0;
 
 glm::vec2 MoveDirection;
@@ -171,7 +172,7 @@ void Game::Init()
 	_resizeSystem->Init(this->Width, this->Height);
 	_renderSystem->SetScale(_resizeSystem->BlockSize.x);
 
-	std::vector<Entity> entities(MAX_ENTITIES - 200);
+	//std::vector<Entity> entities(MAX_ENTITIES - 200);
 
 	//for (auto& entity : entities)
 	//{
@@ -191,11 +192,8 @@ void Game::Init()
 	//		});
 	//}
 
-		// Load World
-	World world;
-	world.Generate();
-
-	GameWorld = world;
+	// Load World
+	//GameWorld.Generate();
 
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
@@ -386,9 +384,45 @@ void Game::ProcessInput(float dt)
 			};
 
 			_coordinator.GetComponent<Transform>(Player).Position = newPos;
+
+			std::cout << "MouseX: " << KeyInput::MouseX << " CamX: " << _camera.GetPosition().x << " BSx: " << _resizeSystem->BlockSize.x << " WorldPosX: " << newPos.x << std::endl;
+			std::cout << "MouseY: " << KeyInput::MouseY << " CamY: " << _camera.GetPosition().y << " BSy: " << _resizeSystem->BlockSize.y << " WorldPosY: " << newPos.y << std::endl;
+		}
+
+		// Break Bock
+		if (KeyInput::GetMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT))
+		{
+			glm::vec2 newPos = {
+				std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
+				std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
+			};
+
+			int z = (int)newPos.x;
+			int x = (int)newPos.y;
+
+			//_coordinator.DestroyEntity(35);
+			GameWorld.SetBlock(x, (GameWorld.WorldVector[z][x].size() - 1), z);
+
+			//for (int y = GameWorld->WorldVector[z][x].size(); y >= 0; --y)
+			//{
+			//	// If any block is not air, set to air
+			//	if ((GameWorld->WorldVector[z][x][y]) != 0)
+			//	{
+			//		// Set block to air
+			//		//GameWorld->WorldVector[(int)newPos.x][(int)newPos.y][z] = 0;
+			//		GameWorld->SetBlock(x, y, z);
+			//		break;
+			//	}
+			//}
 		}
 
 		// Load Levels
+		//if (KeyInput::GetKeyDown(GLFW_KEY_F1))
+		//{
+		//	GameWorld->Generate();
+		//	std::cout << "World Generated!" << std::endl;
+		//}
+
 		/*if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
 			this->CurrentLevel.Load("./Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
@@ -455,6 +489,29 @@ void Game::ProcessInput(float dt)
 			glm::vec2 pos = _coordinator.GetComponent<Transform>(Player).Position;
 			std::cout << "PlayerPosition: X: " << pos.x << " Y: " << pos.y << std::endl;
 		}
+
+		if (KeyInput::GetKeyDown(GLFW_KEY_U))
+		{
+			glm::vec2 newPos = {
+				std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
+				std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
+			};
+
+			// Try create a rail
+			Entity entity = _coordinator.CreateEntity();
+			_coordinator.AddComponent(entity, Transform
+				{
+					.Position = glm::vec2(newPos),
+					.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
+					.Rotation = 0.0f
+				});
+			_coordinator.AddComponent(entity, Renderable
+				{
+					.TexLeftTop = GetSpriteInAtlas(2, 1),
+					.TexRightBottom = GetSpriteInAtlas(3, 2),
+					.Color = glm::vec4(1.0f)
+				});
+		}
 	}
 }
 
@@ -500,25 +557,25 @@ void Game::Update(float dt)
 		//	std::floor((KeyInput::MouseY + _camera.GetPosition().y) / BlockSize.y) * BlockSize.y
 		//};
 
-		glm::vec2 newPos = {
-			std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
-			std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
-		};
+		//glm::vec2 newPos = {
+		//	std::floor((KeyInput::MouseX + _camera.GetPosition().x) / _resizeSystem->BlockSize.x),
+		//	std::floor((KeyInput::MouseY + _camera.GetPosition().y) / _resizeSystem->BlockSize.y)
+		//};
 
-		// Try create a rail
-		Entity entity = _coordinator.CreateEntity();
-		_coordinator.AddComponent(entity, Transform
-			{
-				.Position = glm::vec2(newPos),
-				.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
-				.Rotation = 0.0f
-			});
-		_coordinator.AddComponent(entity, Renderable
-			{
-				.TexLeftTop = GetSpriteInAtlas(2, 1),
-				.TexRightBottom = GetSpriteInAtlas(3, 2),
-				.Color = glm::vec4(1.0f)
-			});
+		//// Try create a rail
+		//Entity entity = _coordinator.CreateEntity();
+		//_coordinator.AddComponent(entity, Transform
+		//	{
+		//		.Position = glm::vec2(newPos),
+		//		.Scale = glm::vec2(1.0f, 1.0f), //_resizeSystem->BlockSize,
+		//		.Rotation = 0.0f
+		//	});
+		//_coordinator.AddComponent(entity, Renderable
+		//	{
+		//		.TexLeftTop = GetSpriteInAtlas(2, 1),
+		//		.TexRightBottom = GetSpriteInAtlas(3, 2),
+		//		.Color = glm::vec4(1.0f)
+		//	});
 	}
 
 	// Camera Controls

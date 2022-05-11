@@ -11,22 +11,27 @@
 class World
 {
 public:
-	// Entities without a Rigidbody
-	std::vector<Entity> Blocks;
-
 	// Entities with a Rigidbody
-	std::vector<Entity> Entities;
+	//std::vector<Entity> Entities;
 
 	// Players in the World
-	Entity Player;
+	//Entity Player;
 
-	void _Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize);
-	void _Unload();
-	void _Save();
+	//              z  x  y
+	//             [z] [x] [y]
+	//int WorldBlocks[10][10][3];
+	const int x = 10;
+	const int y = 3;
+	const int z = 10;
+
+	std::vector<std::vector<std::vector<Entity>>> WorldVector;
+
+	World();
 
 	void Generate();
-	void Load2D(int blocks[5][5]);
-	void Load3D(int blocks[10][10][3]);
+	void Load3D(std::vector<std::vector<std::vector<int>>> world);
+
+	void SetBlock(int x, int y, int z);
 };
 
 #endif

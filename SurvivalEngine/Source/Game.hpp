@@ -33,7 +33,6 @@ class Game
 public:    
     // Game State
     GameState State;
-    World GameWorld;
     //Level CurrentLevel;
 
     // Window Dimensions
