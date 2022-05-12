@@ -16,3 +16,4 @@ https://gyazo.com/cb65f2a1c7d6c786b14d72280a0015d9
 
 // When deleting an item from the world vector, the last entity in the list is also removed
 1. Right clicking an block deletes last entity in list
+There as a bug in the deleting of an entity inside the ECS

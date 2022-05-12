@@ -193,8 +193,16 @@ void Game::Init()
 	//}
 
 	// Load World
-	//GameWorld.Generate();
+	// GameWorld.Generate();
 
+	// Load Level
+	Level test; 
+	test.Load("./Assets/levels/test.txt", glm::vec2(1.0f, 1.0f));
+
+	CurrentLevel = test;
+
+
+	// Load Player
 	Player = _coordinator.CreateEntity();
 	_coordinator.AddComponent(Player, Transform
 		{
@@ -217,11 +225,6 @@ void Game::Init()
 	//			{ GetSpriteInAtlas(0, 1), GetSpriteInAtlas(1, 2), glm::vec4(1.0f) }
 	//		}
 	//	});
-
-	// Load Level
-	//Level test; test.Load("./Assets/levels/test.txt", glm::vec2(this->Width, this->Height), glm::vec2(1.0f, 1.0f)/*_resizeSystem->BlockSize*/);
-
-	//CurrentLevel = test;
 }
 
 // Speed of car in m/s
@@ -423,13 +426,12 @@ void Game::ProcessInput(float dt)
 		//	std::cout << "World Generated!" << std::endl;
 		//}
 
-		/*if (KeyInput::GetKeyDown(GLFW_KEY_F1))
+		if (KeyInput::GetKeyDown(GLFW_KEY_F1))
 		{
-			this->CurrentLevel.Load("./Assets/levels/test.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
-			this->ResetPlayer();
+			this->CurrentLevel.Load("./Assets/levels/cage.txt", glm::vec2(1.0f, 1.0f));
 			std::cout << "Level Loaded!" << std::endl;
 		}
-
+		/*
 		if (KeyInput::GetKeyDown(GLFW_KEY_F2))
 		{
 			this->CurrentLevel.Load("./Assets/levels/cage.txt", glm::vec2(this->Width, this->Height), _resizeSystem->BlockSize);
@@ -476,12 +478,14 @@ void Game::ProcessInput(float dt)
 		}
 		if (KeyInput::GetKeyDown(GLFW_KEY_N))
 		{
-			Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
+			//Inventory->AddItem(new ItemInstance(new StoneAxe(), 1));
+			this->CurrentLevel.Load("./Assets/levels/test.txt", glm::vec2(1.0f, 1.0f));
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_E))
 		{
-			Inventory->DisplayInventory(SelectedHotbarSlot);
+			//Inventory->DisplayInventory(SelectedHotbarSlot);
+			CurrentLevel.Clear();
 		}
 
 		if (KeyInput::GetKeyDown(GLFW_KEY_O))

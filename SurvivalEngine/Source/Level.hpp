@@ -15,10 +15,11 @@ public:
 	std::vector<Entity> Blocks;
 
 	// Functions
-	void Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize);
+	void Load(const char* file, glm::vec2 blockSize);
+	void Clear();
 
 private:
-	void Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 screenSize, glm::vec2 blockSize);
+	void Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 blockSize);
 };
 
 #endif

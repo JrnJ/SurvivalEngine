@@ -7,14 +7,9 @@
 
 extern Coordinator _coordinator;
 
-void Level::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
+void Level::Load(const char* file, glm::vec2 blockSize)
 {
-	// Clear old Level data
-	for (auto& entity : this->Blocks)
-	{
-		_coordinator.DestroyEntity(entity);
-	}
-	this->Blocks.clear();
+	this->Clear();
 
 	// Load Level from file
 	std::string blockCode;
@@ -74,11 +69,21 @@ void Level::Load(const char* file, glm::vec2 screenSize, glm::vec2 blockSize)
 		}
 
 		if (blockData.size() > 0)
-			this->Initialize(blockData, screenSize, blockSize);
+			this->Initialize(blockData, blockSize);
 	}
 }
 
-void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 screenSize, glm::vec2 blockSize)
+void Level::Clear()
+{
+	// Clear old Level data
+	for (auto& entity : this->Blocks)
+	{
+		_coordinator.DestroyEntity(entity);
+	}
+	this->Blocks.clear();
+}
+
+void Level::Initialize(std::vector<std::vector<unsigned int>> blockData, glm::vec2 blockSize)
 {
 	// blockData is just a 2D array, so two loops
 	for (unsigned int y = 0; y < blockData.size(); ++y)

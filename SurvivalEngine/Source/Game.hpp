@@ -8,7 +8,7 @@
 
 #include <glm/glm.hpp>
 
-//#include "Level.hpp"
+#include "Level.hpp"
 #include "World.hpp"
 #include "KeyInput.hpp"
 #include "Renderer/Camera.hpp"
@@ -33,7 +33,7 @@ class Game
 public:    
     // Game State
     GameState State;
-    //Level CurrentLevel;
+    Level CurrentLevel;
 
     // Window Dimensions
     unsigned int Width, Height;

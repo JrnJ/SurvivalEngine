@@ -12,16 +12,14 @@ class World
 {
 public:
 	// Entities with a Rigidbody
-	//std::vector<Entity> Entities;
+	std::vector<Entity> Entities;
 
 	// Players in the World
 	//Entity Player;
 
-	//              z  x  y
-	//             [z] [x] [y]
-	//int WorldBlocks[10][10][3];
+	// z  x  y
 	const int x = 10;
-	const int y = 3;
+	const int y = 1;
 	const int z = 10;
 
 	std::vector<std::vector<std::vector<Entity>>> WorldVector;

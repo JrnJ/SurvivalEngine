@@ -62,7 +62,7 @@ void World::Generate()
 		}
 	}
 
-	//Load3D(newWorld);
+	Load3D(newWorld);
 }
 
 /// <summary>
@@ -71,36 +71,38 @@ void World::Generate()
 /// <param name="world">3D World to load</param>
 void World::Load3D(std::vector<std::vector<std::vector<int>>> world)
 {
+	int totalPushes = 0;
+
 	for (int z = 0; z < this->z; ++z)
 	{
 		for (int x = 0; x < this->x; ++x)
 		{
 			for (int y = 0; y < this->y; ++y)
 			{
-				if (world[z][x][y] > 0)
-				{
-					glm::vec2 ttl{};
-					glm::vec2 trb{};
+				//if (world[z][x][y] > 0)
+				//{
+					//glm::vec2 ttl{};
+					//glm::vec2 trb{};
 
-					switch (world[z][x][y])
-					{
-					case 1:
-						ttl = glm::vec2(0.25f, 0.0f);
-						trb = glm::vec2(0.5f, 0.25f);
-						break;
-					case 2:
-						ttl = glm::vec2(0.0f, 0.0f);
-						trb = glm::vec2(0.25f, 0.25f);
-						break;
-					case 3:
-						ttl = glm::vec2(0.75f, 0.0f);
-						trb = glm::vec2(1.0f, 0.25f);
-						break;
-					default:
-						ttl = glm::vec2(0.25f, 0.25f);
-						trb = glm::vec2(0.5f, 0.5f);
-						break;
-					}
+					//switch (world[z][x][y])
+					//{
+					//case 1:
+					//	ttl = glm::vec2(0.25f, 0.0f);
+					//	trb = glm::vec2(0.5f, 0.25f);
+					//	break;
+					//case 2:
+					//	ttl = glm::vec2(0.0f, 0.0f);
+					//	trb = glm::vec2(0.25f, 0.25f);
+					//	break;
+					//case 3:
+					//	ttl = glm::vec2(0.75f, 0.0f);
+					//	trb = glm::vec2(1.0f, 0.25f);
+					//	break;
+					//default:
+					//	ttl = glm::vec2(0.25f, 0.25f);
+					//	trb = glm::vec2(0.5f, 0.5f);
+					//	break;
+					//}
 
 					Entity entity = _coordinator.CreateEntity();
 					_coordinator.AddComponent(entity, Transform
@@ -111,18 +113,21 @@ void World::Load3D(std::vector<std::vector<std::vector<int>>> world)
 						});
 					_coordinator.AddComponent(entity, Renderable
 						{
-							.TexLeftTop = ttl,
-							.TexRightBottom = trb,
+							.TexLeftTop = glm::vec2(0.75f, 0.0f),
+							.TexRightBottom = glm::vec2(1.0f, 0.25f),
 							.Color = glm::vec4(1.0f)
 						});
-					_coordinator.AddComponent(entity, Collider{});
 
 					this->WorldVector[z][x].push_back(entity);
+					totalPushes++;
 					//this->Blocks.push_back(entity);
-				}
+				//}
 			}
 		}
 	}
+
+	std::vector<std::vector<std::vector<Entity>>> vec3d = this->WorldVector;
+	std::cout << "Pushes: " << totalPushes << std::endl;
 }
 
 void World::SetBlock(int x, int y, int z)
@@ -147,6 +152,7 @@ void World::SetBlock(int x, int y, int z)
 
 	//_coordinator.DestroyEntity(WorldVector[z][x][y]);
 	//_coordinator.DestroyEntity(35);
+
 	_coordinator.DestroyEntity(WorldVector[z][x][y]);
 	this->WorldVector[z][x].pop_back();
 }
